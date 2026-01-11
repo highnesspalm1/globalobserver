@@ -31,7 +31,6 @@ import { useI18n } from '../../i18n';
 import { CATEGORY_CONFIG, SEVERITY_CONFIG } from '../../types/database';
 import type { EventCategory, SeverityLevel } from '../../types/database';
 import { Button, IconButton } from '../ui/Button';
-import { Logo } from '../ui/Logo';
 import { exportToGeoJSON, exportToCSV, exportToKML, getExportFilename } from '../../utils/exportUtils';
 import { notify } from '../../stores/notificationStore';
 import { useSwipeGestures, useEdgeSwipe } from '../../hooks/useSwipeGestures';
@@ -218,7 +217,7 @@ export const Sidebar: React.FC = () => {
     <aside ref={sidebarRef} className={styles.sidebar}>
       {/* Header */}
       <div className={styles.header}>
-        <Logo variant="full" />
+        <span className={styles.sidebarTitle}>{t.sidebar.events}</span>
         <IconButton
           aria-label={t.sidebar.close}
           icon={<X size={18} />}

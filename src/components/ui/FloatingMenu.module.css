@@ -1,8 +1,8 @@
 .container {
   position: fixed;
-  bottom: 80px;
-  right: 340px;
-  z-index: 1000;
+  bottom: 120px;
+  right: 20px;
+  z-index: 100;
   display: flex;
   flex-direction: column-reverse;
   align-items: center;
@@ -160,13 +160,6 @@
   .container {
     bottom: 70px;
     right: 12px;
-  }
-}
-
-/* Anpassung wenn Dashboard sichtbar ist */
-@media (min-width: 1201px) {
-  .container {
-    right: 340px;
   }
 }
 
