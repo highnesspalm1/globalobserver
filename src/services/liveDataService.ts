@@ -36,12 +36,32 @@ const RSS_FEEDS: Record<string, string> = {
     guardian_world: 'https://www.theguardian.com/world/rss',
     npr_world: 'https://feeds.npr.org/1004/rss.xml',
     reuters_world: 'https://www.reutersagency.com/feed/?best-topics=world-news&post_type=best',
-    // Russia/Ukraine
-    kyivindependent: 'https://kyivindependent.com/feed/',
-    tass_world: 'https://tass.com/rss/v2.xml',
-    // Middle East
+
+    // === TURKEY / KURDISTAN ===
+    dailysabah: 'https://www.dailysabah.com/rss',
+    ahvalnews: 'https://ahvalnews.com/rss.xml',
+    bianet: 'https://bianet.org/english.rss',
+    kurdistan24: 'https://www.kurdistan24.net/en/rss',
+    rudaw: 'https://www.rudaw.net/english/rss',
+
+    // === MIDDLE EAST EXPANDED ===
     timesofisrael: 'https://www.timesofisrael.com/feed/',
     middleeasteye: 'https://www.middleeasteye.net/rss',
+    almonitor: 'https://www.al-monitor.com/rss',
+    memo: 'https://www.middleeastmonitor.com/feed/',
+    arabnews: 'https://www.arabnews.com/rss.xml',
+    jpost: 'https://www.jpost.com/rss/rssfeedsfrontpage.aspx',
+    mag972: 'https://www.972mag.com/feed/',
+    syriadirect: 'https://syriadirect.org/feed/',
+    iranintl: 'https://www.iranintl.com/en/rss',
+
+    // === RUSSIA / UKRAINE EXPANDED ===
+    kyivindependent: 'https://kyivindependent.com/feed/',
+    tass_world: 'https://tass.com/rss/v2.xml',
+    ukrinform: 'https://www.ukrinform.net/rss/block-lastnews',
+    meduza: 'https://meduza.io/rss/en/all',
+    moscowtimes: 'https://www.themoscowtimes.com/rss/news',
+
     // Asia
     japantimes: 'https://www.japantimes.co.jp/feed/',
     scmp: 'https://www.scmp.com/rss/91/feed',
@@ -56,7 +76,7 @@ const RSS_FEEDS: Record<string, string> = {
 
 // Keywords for filtering relevant events - expanded
 const CONFLICT_KEYWORDS = [
-    // English
+    // English - General
     'war', 'conflict', 'attack', 'explosion', 'bomb', 'missile', 'rocket',
     'terrorism', 'terror', 'protest', 'demonstration', 'riot', 'unrest',
     'military', 'soldier', 'weapons', 'armed', 'combat', 'strike',
@@ -66,8 +86,41 @@ const CONFLICT_KEYWORDS = [
     'hostage', 'kidnap', 'assassination', 'shooting', 'gunfire',
     'sanctions', 'nuclear', 'chemical', 'biological', 'troops',
     'navy', 'army', 'air force', 'border', 'frontline', 'occupation',
+
+    // Major Groups & Leaders
     'hamas', 'hezbollah', 'isis', 'taliban', 'al-qaeda', 'wagner',
-    'putin', 'zelenskyy', 'netanyahu', 'khamenei', 'erdogan',
+    'putin', 'zelenskyy', 'netanyahu', 'khamenei', 'erdogan', 'assad',
+    'idf', 'irgc', 'quds', 'houthi', 'pyd', 'ypg', 'sdf',
+
+    // Turkey / Kurdistan specific
+    'pkk', 'kurdish', 'kurdistan', 'ankara', 'istanbul', 'diyarbakir',
+    'afrin', 'kobani', 'rojava', 'hdp', 'akp', 'mhp', 'chp',
+    'türkiye', 'turkish', 'lira crisis', 'earthquake turkey',
+    'gaziantep', 'hatay', 'mardin', 'sirnak', 'hakkari', 'van',
+
+    // Iran / Persian specific
+    'tehran', 'isfahan', 'natanz', 'khamenei', 'raisi', 'basij',
+    'mahsa', 'hijab protest', 'revolutionary guard', 'pasdaran',
+    'shiraz', 'tabriz', 'mashhad', 'qom', 'persian gulf',
+
+    // Israel / Gaza / Palestine specific
+    'gaza', 'rafah', 'khan younis', 'tel aviv', 'west bank', 'jenin',
+    'nablus', 'ramallah', 'settler', 'intifada', 'iron dome',
+    'mossad', 'shin bet', 'fatah', 'islamic jihad',
+
+    // Ukraine / Russia specific
+    'kyiv', 'kharkiv', 'odesa', 'donetsk', 'luhansk', 'crimea',
+    'mariupol', 'bakhmut', 'avdiivka', 'zaporizhzhia', 'kursk',
+    'belgorod', 'moscow', 'azov', 'dnipro', 'kherson', 'mykolaiv',
+    'sumy', 'chernihiv', 'counter-offensive', 'wagner', 'drones',
+
+    // Syria specific
+    'damascus', 'aleppo', 'idlib', 'homs', 'raqqa', 'deir ez-zor',
+    'al-nusra', 'hayat tahrir', 'white helmets', 'barrel bomb',
+
+    // Yemen specific
+    'sanaa', 'aden', 'houthi', 'marib', 'hodeidah', 'saudi coalition',
+
     // German
     'krieg', 'angriff', 'explosion', 'bombe', 'rakete',
     'terrorismus', 'demonstration', 'protest', 'gewalt', 'konflikt',
@@ -77,7 +130,11 @@ const CONFLICT_KEYWORDS = [
     'terrorismo', 'protesta', 'violencia', 'conflicto', 'militar',
     // French
     'guerre', 'attaque', 'explosion', 'bombe', 'missile',
-    'terrorisme', 'manifestation', 'violence', 'conflit', 'militaire'
+    'terrorisme', 'manifestation', 'violence', 'conflit', 'militaire',
+    // Turkish
+    'savaş', 'çatışma', 'patlama', 'bomba', 'şehit', 'terör',
+    // Arabic transliterated
+    'harb', 'qital', 'intifada', 'jihad', 'shahid', 'mujahid'
 ];
 
 
@@ -407,18 +464,45 @@ export async function fetchRSSEvents(): Promise<MapEvent[]> {
         'damascus': [36.28, 33.51],
         'aleppo': [37.16, 36.21],
         'idlib': [36.63, 35.93],
+        'homs': [36.72, 34.73],
+        'raqqa': [38.99, 35.95],
+        'deir ez-zor': [40.14, 35.34],
+        'latakia': [35.79, 35.52],
 
-        // Iran
+        // Iran - Expanded
         'iran': [51.42, 35.69],
         'tehran': [51.42, 35.69],
         'isfahan': [51.67, 32.65],
+        'mashhad': [59.61, 36.30],
+        'tabriz': [46.30, 38.08],
+        'shiraz': [52.53, 29.59],
+        'qom': [50.88, 34.64],
+        'natanz': [51.92, 33.51],
+        'ahvaz': [48.68, 31.32],
+        'persian gulf': [51.50, 27.00],
 
-        // Turkey
+        // Turkey - Expanded with Kurdish regions
         'turkey': [32.86, 39.93],
         'türkei': [32.86, 39.93],
+        'türkiye': [32.86, 39.93],
         'ankara': [32.86, 39.93],
         'istanbul': [28.98, 41.01],
         'kurdish': [43.00, 37.00],
+        'diyarbakir': [40.21, 37.92],
+        'diyarbakır': [40.21, 37.92],
+        'gaziantep': [37.38, 37.06],
+        'hatay': [36.20, 36.40],
+        'mardin': [40.74, 37.31],
+        'van': [43.38, 38.50],
+        'şırnak': [42.46, 37.52],
+        'sirnak': [42.46, 37.52],
+        'hakkari': [43.74, 37.58],
+        'kobani': [38.35, 36.89],
+        'afrin': [36.87, 36.51],
+        'cizre': [42.19, 37.33],
+        'nusaybin': [41.22, 37.07],
+        'izmir': [27.14, 38.42],
+        'incirlik': [35.43, 37.00],
 
         // Europe
         'europe': [10.45, 51.17],
@@ -818,7 +902,7 @@ export async function fetchUSGSEarthquakes(): Promise<MapEvent[]> {
 // Fetch Wikipedia Current Events for additional context
 export async function fetchWikipediaCurrentEvents(): Promise<MapEvent[]> {
     const events: MapEvent[] = [];
-    
+
     // Conflict locations mapping
     const conflictLocations: Record<string, [number, number]> = {
         'ukraine': [31.16, 48.38], 'russia': [37.62, 55.75], 'kyiv': [30.52, 50.45],
@@ -837,19 +921,19 @@ export async function fetchWikipediaCurrentEvents(): Promise<MapEvent[]> {
     try {
         const response = await fetch(WIKIPEDIA_API);
         if (!response.ok) return events;
-        
+
         const html = await response.text();
-        
+
         // Extract headlines from Armed conflicts section
         const armedConflictsMatch = html.match(/Armed conflicts[^<]*<\/[^>]+>([\s\S]*?)(?:<h[23]|$)/i);
         if (armedConflictsMatch) {
             const section = armedConflictsMatch[1];
             const liMatches = section.matchAll(/<li[^>]*>([\s\S]*?)<\/li>/gi);
-            
+
             for (const match of liMatches) {
                 const text = match[1].replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
                 if (text.length < 20) continue;
-                
+
                 // Find location
                 let coords: [number, number] | null = null;
                 const lowerText = text.toLowerCase();
@@ -860,7 +944,7 @@ export async function fetchWikipediaCurrentEvents(): Promise<MapEvent[]> {
                     }
                 }
                 if (!coords) continue;
-                
+
                 events.push({
                     id: generateId(),
                     title: text.substring(0, 100),
@@ -879,7 +963,7 @@ export async function fetchWikipediaCurrentEvents(): Promise<MapEvent[]> {
     } catch (error) {
         console.error('Error fetching Wikipedia current events:', error);
     }
-    
+
     return events;
 }
 
@@ -887,7 +971,7 @@ export async function fetchWikipediaCurrentEvents(): Promise<MapEvent[]> {
 async function fetchWithTimeout<T>(fetchFn: () => Promise<T>, timeoutMs: number = 10000): Promise<T> {
     return Promise.race([
         fetchFn(),
-        new Promise<T>((_, reject) => 
+        new Promise<T>((_, reject) =>
             setTimeout(() => reject(new Error('Timeout')), timeoutMs)
         )
     ]);
@@ -1183,10 +1267,10 @@ export async function fetchAllLiveEvents(): Promise<MapEvent[]> {
         }, 20000); // 20 second timeout
 
         const allEvents = [
-            ...results.gdeltEvents, 
-            ...results.reliefWebEvents, 
-            ...results.rssEvents, 
-            ...results.eonetEvents, 
+            ...results.gdeltEvents,
+            ...results.reliefWebEvents,
+            ...results.rssEvents,
+            ...results.eonetEvents,
             ...results.earthquakeEvents,
             ...results.wikiEvents
         ];
@@ -1195,7 +1279,7 @@ export async function fetchAllLiveEvents(): Promise<MapEvent[]> {
         if (allEvents.length > 0) {
             // Use advanced similarity-based deduplication
             const uniqueEvents = fastDeduplicateEvents(allEvents, 0.65);
-            
+
             // Get deduplication stats for logging
             const clusters = findDuplicateClusters(allEvents, 0.65);
             const stats = getDeduplicationStats(allEvents, uniqueEvents, clusters);
