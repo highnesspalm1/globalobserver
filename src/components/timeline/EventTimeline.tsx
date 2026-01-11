@@ -56,19 +56,39 @@ export const EventTimeline: React.FC = () => {
   const events = useMapStore(state => state.events);
   const setSelectedEventId = useMapStore(state => state.setSelectedEventId);
 
+  // Define event type for casting
+  type EventData = {
+    id?: string;
+    title?: string;
+    date?: string | number;
+    timestamp?: string | number;
+    category?: string;
+    severity?: string;
+    location?: string;
+    country?: string;
+    lat?: number;
+    latitude?: number;
+    lng?: number;
+    longitude?: number;
+  };
+
   // Convert and sort events
   const timelineEvents = useMemo((): TimelineEvent[] => {
+    const fallbackDate = new Date();
     return events
-      .map(event => ({
-        id: (event as any).id || Math.random().toString(),
-        title: (event as any).title || 'Unbekanntes Ereignis',
-        date: new Date((event as any).date || (event as any).timestamp || Date.now()),
-        category: (event as any).category || 'unknown',
-        severity: (event as any).severity || 'unknown',
-        location: (event as any).location || (event as any).country || 'Unbekannt',
-        lat: (event as any).lat || (event as any).latitude || 0,
-        lng: (event as any).lng || (event as any).longitude || 0,
-      }))
+      .map((event, index) => {
+        const e = event as EventData;
+        return {
+          id: e.id || `event-${index}`,
+          title: e.title || 'Unbekanntes Ereignis',
+          date: new Date(e.date || e.timestamp || fallbackDate),
+          category: e.category || 'unknown',
+          severity: e.severity || 'unknown',
+          location: e.location || e.country || 'Unbekannt',
+          lat: e.lat || e.latitude || 0,
+          lng: e.lng || e.longitude || 0,
+        };
+      })
       .filter(e => {
         if (selectedRegion !== 'all' && !e.location.toLowerCase().includes(selectedRegion.toLowerCase())) {
           return false;
@@ -99,9 +119,9 @@ export const EventTimeline: React.FC = () => {
       groups[dateKey].push(event);
     });
 
-    return Object.entries(groups).map(([date, events]) => ({
+    return Object.entries(groups).map(([date, evts]) => ({
       date,
-      events,
+      events: evts,
     }));
   }, [timelineEvents]);
 
@@ -109,7 +129,8 @@ export const EventTimeline: React.FC = () => {
   const regions = useMemo(() => {
     const uniqueRegions = new Set<string>();
     events.forEach(event => {
-      const loc = (event as any).location || (event as any).country;
+      const e = event as EventData;
+      const loc = e.location || e.country;
       if (loc) uniqueRegions.add(loc);
     });
     return Array.from(uniqueRegions).sort();
@@ -118,7 +139,8 @@ export const EventTimeline: React.FC = () => {
   const categories = useMemo(() => {
     const uniqueCategories = new Set<string>();
     events.forEach(event => {
-      const cat = (event as any).category;
+      const e = event as EventData;
+      const cat = e.category;
       if (cat) uniqueCategories.add(cat);
     });
     return Array.from(uniqueCategories).sort();

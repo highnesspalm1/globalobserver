@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect, useCallback } from 'react';
+import React, { useState, useRef, useEffect, useCallback, useMemo } from 'react';
 import { ChevronDown, Check, Search, X } from 'lucide-react';
 import styles from './Dropdown.module.css';
 
@@ -68,7 +68,10 @@ export const Dropdown: React.FC<DropdownProps> = ({
   }, {} as Record<string, DropdownOption[]>);
 
   // Get selected options
-  const selectedValues = Array.isArray(value) ? value : value ? [value] : [];
+  const selectedValues = useMemo(() => 
+    Array.isArray(value) ? value : value ? [value] : [],
+    [value]
+  );
   const selectedOptions = options.filter(opt => selectedValues.includes(opt.value));
 
   // Display value

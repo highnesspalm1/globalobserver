@@ -175,10 +175,12 @@ export const PushNotifications: React.FC = () => {
     return () => clearInterval(interval);
   }, [settings.enabled, checkForNewEvents]);
 
-  // Check immediately when events change
+  // Check immediately when events change (debounced to avoid rapid calls)
   useEffect(() => {
-    checkForNewEvents();
-  }, [events, checkForNewEvents]);
+    if (!settings.enabled) return;
+    const timeoutId = setTimeout(checkForNewEvents, 100);
+    return () => clearTimeout(timeoutId);
+  }, [events, checkForNewEvents, settings.enabled]);
 
   const toggleEnabled = async () => {
     if (!settings.enabled) {

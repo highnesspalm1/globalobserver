@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useRef } from 'react';
+import React, { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import { 
   Flame, X, Play, Pause, SkipBack, SkipForward, 
   Calendar, Rewind, FastForward
@@ -25,13 +25,18 @@ export const HeatmapTimelapse: React.FC = () => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentDate, setCurrentDate] = useState<Date>(DEFAULT_CONFIG.startDate);
   const [config, setConfig] = useState<TimelapseConfig>(DEFAULT_CONFIG);
-  const [progress, setProgress] = useState(0);
   const [showConfig, setShowConfig] = useState(false);
   const [speed, setSpeed] = useState(1);
   const [isHeatmapActive, setIsHeatmapActive] = useState(false);
 
   const playIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const events = useMapStore(state => state.events);
+
+  // Define event type for casting
+  type EventData = {
+    date?: string | number;
+    timestamp?: string | number;
+  };
 
   // Get events count for current date
   const getEventsForDate = useCallback((date: Date): number => {
@@ -41,7 +46,8 @@ export const HeatmapTimelapse: React.FC = () => {
     dayEnd.setHours(23, 59, 59, 999);
 
     return events.filter(event => {
-      const eventDate = new Date((event as any).date || (event as any).timestamp || 0);
+      const e = event as EventData;
+      const eventDate = new Date(e.date || e.timestamp || 0);
       return eventDate >= dayStart && eventDate <= dayEnd;
     }).length;
   }, [events]);
@@ -62,11 +68,11 @@ export const HeatmapTimelapse: React.FC = () => {
   const histogramData = histogram();
   const maxEvents = Math.max(...histogramData, 1);
 
-  // Update progress based on current date
-  useEffect(() => {
+  // Calculate progress based on current date
+  const progress = useMemo(() => {
     const elapsed = currentDate.getTime() - config.startDate.getTime();
     const total = config.endDate.getTime() - config.startDate.getTime();
-    setProgress((elapsed / total) * 100);
+    return (elapsed / total) * 100;
   }, [currentDate, config.startDate, config.endDate]);
 
   // Playback logic

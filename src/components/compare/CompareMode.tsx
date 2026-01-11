@@ -74,8 +74,16 @@ export const CompareMode: React.FC = () => {
 
   const events = useMapStore(state => state.events);
 
+  // Define event type for casting
+  type EventData = {
+    date?: string | number;
+    timestamp?: string | number;
+    category?: string;
+    severity?: string;
+  };
+
   // Filter events by date
-  const getEventsForDate = useCallback((date: Date, dayRange: number = 1): any[] => {
+  const getEventsForDate = useCallback((date: Date, dayRange: number = 1): EventData[] => {
     const startOfDay = new Date(date);
     startOfDay.setHours(0, 0, 0, 0);
     
@@ -84,9 +92,10 @@ export const CompareMode: React.FC = () => {
     endOfDay.setHours(23, 59, 59, 999);
 
     return events.filter(event => {
-      const eventDate = new Date((event as any).date || (event as any).timestamp);
+      const e = event as EventData;
+      const eventDate = new Date(e.date || e.timestamp || 0);
       return eventDate >= startOfDay && eventDate <= endOfDay;
-    });
+    }) as EventData[];
   }, [events]);
 
   // Calculate comparison stats
@@ -94,15 +103,15 @@ export const CompareMode: React.FC = () => {
     const leftEvents = getEventsForDate(leftDate, 1);
     const rightEvents = getEventsForDate(rightDate, 1);
 
-    const getStats = (events: any[]) => ({
-      total: events.length,
-      byCategory: events.reduce((acc, e) => {
-        const cat = (e as any).category || 'unknown';
+    const getStats = (evts: EventData[]) => ({
+      total: evts.length,
+      byCategory: evts.reduce((acc, e) => {
+        const cat = e.category || 'unknown';
         acc[cat] = (acc[cat] || 0) + 1;
         return acc;
       }, {} as Record<string, number>),
-      bySeverity: events.reduce((acc, e) => {
-        const sev = (e as any).severity || 'unknown';
+      bySeverity: evts.reduce((acc, e) => {
+        const sev = e.severity || 'unknown';
         acc[sev] = (acc[sev] || 0) + 1;
         return acc;
       }, {} as Record<string, number>),

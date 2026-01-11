@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { Share2, Link2, Copy, Check, Twitter, Mail, MapPin, X, QrCode } from 'lucide-react';
 import { useMapStore } from '../../stores/mapStore';
 import styles from './SharePanel.module.css';
@@ -14,24 +14,13 @@ interface ShareConfig {
 export const SharePanel: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [shareConfig, setShareConfig] = useState<ShareConfig>({ type: 'view' });
-  const [shareUrl, setShareUrl] = useState('');
   const [copied, setCopied] = useState(false);
   const [showQR, setShowQR] = useState(false);
 
   const mapStyle = useMapStore(state => state.mapStyle);
   const selectedEventId = useMapStore(state => state.selectedEventId);
   const events = useMapStore(state => state.events);
-  const selectedEvent = events.find((e: any) => e.id === selectedEventId);
-
-  // Parse URL params on mount
-  useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    const hasShareParams = params.has('lat') || params.has('event');
-
-    if (hasShareParams) {
-      applySharedState(params);
-    }
-  }, []);
+  const selectedEvent = events.find((e) => (e as { id?: string }).id === selectedEventId);
 
   const applySharedState = useCallback((params: URLSearchParams) => {
     const lat = params.get('lat');
@@ -43,39 +32,49 @@ export const SharePanel: React.FC = () => {
     // Apply map position if provided
     if (lat && lng && zoom) {
       // The map will need to fly to this position
-      const event = new CustomEvent('flyToLocation', {
+      const customEvent = new CustomEvent('flyToLocation', {
         detail: {
           lat: parseFloat(lat),
           lng: parseFloat(lng),
           zoom: parseFloat(zoom),
         }
       });
-      window.dispatchEvent(event);
+      window.dispatchEvent(customEvent);
     }
 
     // Apply style if provided
     if (style) {
       const setMapStyle = useMapStore.getState().setMapStyle;
-      setMapStyle(style as any);
+      setMapStyle(style as 'dark' | 'satellite' | 'terrain' | 'tactical');
     }
 
     // Select event if provided
     if (eventId) {
       // Event selection would be handled by the data service
-      const event = new CustomEvent('selectEventById', { detail: { eventId } });
-      window.dispatchEvent(event);
+      const customEvent = new CustomEvent('selectEventById', { detail: { eventId } });
+      window.dispatchEvent(customEvent);
     }
 
     // Clear URL params after applying
     window.history.replaceState({}, '', window.location.pathname);
   }, []);
 
+  // Parse URL params on mount
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const hasShareParams = params.has('lat') || params.has('event');
+
+    if (hasShareParams) {
+      applySharedState(params);
+    }
+  }, [applySharedState]);
+
   const generateShareUrl = useCallback((config: ShareConfig): string => {
     const baseUrl = window.location.origin + window.location.pathname;
     const params = new URLSearchParams();
 
     // Get current map state from the map instance
-    const mapState = (window as any).__mapInstance;
+    const mapState = (window as { __mapInstance?: { getCenter: () => { lat: number; lng: number }; getZoom: () => number } }).__mapInstance;
     if (mapState) {
       const center = mapState.getCenter();
       const zoom = mapState.getZoom();
@@ -93,23 +92,18 @@ export const SharePanel: React.FC = () => {
     return `${baseUrl}?${params.toString()}`;
   }, [mapStyle]);
 
-  const updateShareUrl = useCallback(() => {
-    const url = generateShareUrl(shareConfig);
-    setShareUrl(url);
-  }, [generateShareUrl, shareConfig]);
-
-  useEffect(() => {
-    if (isOpen) {
-      updateShareUrl();
-    }
-  }, [isOpen, updateShareUrl]);
+  // Generate share URL - derived state instead of effect
+  const shareUrl = useMemo(() => {
+    if (!isOpen) return '';
+    return generateShareUrl(shareConfig);
+  }, [isOpen, generateShareUrl, shareConfig]);
 
   const copyToClipboard = useCallback(async () => {
     try {
       await navigator.clipboard.writeText(shareUrl);
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
-    } catch (error) {
+    } catch {
       // Fallback for older browsers
       const textArea = document.createElement('textarea');
       textArea.value = shareUrl;
@@ -160,14 +154,15 @@ export const SharePanel: React.FC = () => {
 
   // Listen for share event requests
   useEffect(() => {
-    const handleShareRequest = (e: CustomEvent) => {
-      if (e.detail) {
-        handleShareEvent(e.detail.eventId, e.detail.eventTitle);
+    const handleShareRequest = (e: Event) => {
+      const customEvent = e as CustomEvent<{ eventId: string; eventTitle: string }>;
+      if (customEvent.detail) {
+        handleShareEvent(customEvent.detail.eventId, customEvent.detail.eventTitle);
       }
     };
 
-    window.addEventListener('shareEvent' as any, handleShareRequest);
-    return () => window.removeEventListener('shareEvent' as any, handleShareRequest);
+    window.addEventListener('shareEvent', handleShareRequest);
+    return () => window.removeEventListener('shareEvent', handleShareRequest);
   }, [handleShareEvent]);
 
   // Generate QR code URL (using a free API)
@@ -221,8 +216,8 @@ export const SharePanel: React.FC = () => {
                   className={`${styles.toggleButton} ${shareConfig.type === 'event' ? styles.active : ''}`}
                   onClick={() => setShareConfig({
                     type: 'event',
-                    eventId: (selectedEvent as any).id,
-                    eventTitle: (selectedEvent as any).title,
+                    eventId: (selectedEvent as { id?: string }).id || '',
+                    eventTitle: (selectedEvent as { title?: string }).title || '',
                   })}
                 >
                   Aktuelles Event
@@ -306,13 +301,6 @@ export const SharePanel: React.FC = () => {
       )}
     </>
   );
-};
-
-// Helper function to trigger share from anywhere
-export const shareEvent = (eventId: string, eventTitle: string) => {
-  window.dispatchEvent(new CustomEvent('shareEvent', {
-    detail: { eventId, eventTitle }
-  }));
 };
 
 export default SharePanel;
