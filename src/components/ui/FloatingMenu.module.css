@@ -1,7 +1,7 @@
 .container {
   position: fixed;
   bottom: 80px;
-  right: 20px;
+  right: 340px;
   z-index: 1000;
   display: flex;
   flex-direction: column-reverse;
@@ -160,6 +160,19 @@
   .container {
     bottom: 70px;
     right: 12px;
+  }
+}
+
+/* Anpassung wenn Dashboard sichtbar ist */
+@media (min-width: 1201px) {
+  .container {
+    right: 340px;
+  }
+}
+
+@media (max-width: 1200px) {
+  .container {
+    right: 20px;
   }
 
   .toggleButton {
