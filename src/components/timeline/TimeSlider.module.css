@@ -1,7 +1,7 @@
 .container {
   position: fixed;
   bottom: 36px;
-  left: 50%;
+  left: calc(50% + 30px);
   transform: translateX(-50%);
   display: flex;
   align-items: center;
@@ -12,6 +12,7 @@
   padding: 8px 14px;
   box-shadow: var(--shadow-md);
   z-index: 100;
+  max-width: calc(100% - 660px);
 }
 
 @keyframes slideUp {
@@ -226,6 +227,8 @@
     bottom: 60px;
     padding: 6px 10px;
     gap: 8px;
+    left: 50%;
+    max-width: calc(100% - 20px);
   }
 
   .sliderContainer {
@@ -236,6 +239,13 @@
     bottom: 70px;
     padding: 8px 14px;
     min-height: 44px;
+  }
+}
+
+@media (min-width: 769px) and (max-width: 1400px) {
+  .container {
+    left: calc(50% + 50px);
+    max-width: calc(100% - 420px);
   }
 }
 

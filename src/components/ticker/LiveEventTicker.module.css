@@ -10,8 +10,8 @@
     border: 1px solid var(--border-default);
     border-radius: var(--radius-lg);
     overflow: hidden;
-    max-width: 900px;
-    width: 90%;
+    max-width: calc(100% - 660px);
+    width: 700px;
     z-index: 90;
     box-shadow: var(--shadow-lg);
     backdrop-filter: blur(10px);
@@ -177,5 +177,20 @@
 @media (max-width: 768px) {
     .container {
         display: none;
+    }
+}
+
+/* Adjust for screens where sidebar is visible */
+@media (min-width: 769px) and (max-width: 1400px) {
+    .container {
+        max-width: calc(100% - 400px);
+        left: calc(50% + 50px);
+    }
+}
+
+@media (min-width: 1401px) {
+    .container {
+        max-width: 700px;
+        left: calc(50% + 30px);
     }
 }
