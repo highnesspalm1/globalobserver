@@ -1,0 +1,38 @@
+.apiError {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    padding: 1.5rem;
+    background: var(--bg-tertiary);
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border-subtle);
+    text-align: center;
+}
+
+.errorIcon {
+    font-size: 1.5rem;
+    opacity: 0.7;
+}
+
+.message {
+    color: var(--text-secondary);
+    font-size: 0.8rem;
+    margin: 0;
+}
+
+.retryButton {
+    padding: 0.4rem 0.8rem;
+    background: var(--bg-elevated);
+    color: var(--text-primary);
+    border: 1px solid var(--border-default);
+    border-radius: var(--radius-sm);
+    font-size: 0.75rem;
+    cursor: pointer;
+    transition: background-color var(--transition-fast);
+}
+
+.retryButton:hover {
+    background: var(--camo-medium);
+}

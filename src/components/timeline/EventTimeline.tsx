@@ -112,7 +112,7 @@ export const EventTimeline: React.FC = () => {
         return true;
       })
       .sort((a, b) => b.date.getTime() - a.date.getTime());
-  }, [events, selectedRegion, selectedCategory]);
+  }, [events, selectedRegion, selectedCategory, t.app.unknown, t.events.unknown]);
 
   // Group events by date
   const groupedEvents = useMemo((): GroupedEvents[] => {

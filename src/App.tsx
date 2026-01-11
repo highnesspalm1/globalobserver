@@ -6,6 +6,7 @@ import { LayerPanel } from './components/layers/LayerPanel';
 import { StatsBar } from './components/stats/StatsBar';
 import { NotificationCenter } from './components/notifications/NotificationCenter';
 import { QuickActions } from './components/map/QuickActions';
+import { MapErrorBoundary, ApiErrorBoundary } from './components/ErrorBoundary/index';
 import { useMapStore } from './stores/mapStore';
 import { useKeyboardShortcuts } from './hooks/useKeyboardShortcuts';
 import { notify } from './stores/notificationStore';
@@ -143,6 +144,7 @@ function AppContent() {
     } finally {
       useMapStore.getState().setIsLoading(false);
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [setEvents, setTerritories]);
 
   // Load live data on mount
@@ -176,7 +178,7 @@ function AppContent() {
       <a href="#main-map" className="skip-link">
         {t.map.skipToMap}
       </a>
-      
+
       <div className={styles.backgroundPattern} aria-hidden="true" />
 
       {/* Header Bar */}
@@ -190,7 +192,9 @@ function AppContent() {
       </Suspense>
 
       <main id="main-map" className={styles.mapWrapper} role="main" aria-label={t.map.interactiveMap}>
-        <MapView />
+        <MapErrorBoundary onReset={() => window.location.reload()}>
+          <MapView />
+        </MapErrorBoundary>
       </main>
 
       <StatsBar />
@@ -200,13 +204,15 @@ function AppContent() {
 
       {/* Premium Dashboard Panel */}
       <div className={styles.dashboardPanel}>
-        <Suspense fallback={null}>
-          <ThreatLevel />
-          <ConflictStats />
-          <HotspotAlerts />
-          <RegionHighlights />
-          <DataSourceStatus />
-        </Suspense>
+        <ApiErrorBoundary fallbackMessage="Dashboard-Daten konnten nicht geladen werden">
+          <Suspense fallback={null}>
+            <ThreatLevel />
+            <ConflictStats />
+            <HotspotAlerts />
+            <RegionHighlights />
+            <DataSourceStatus />
+          </Suspense>
+        </ApiErrorBoundary>
       </div>
 
       {/* Search Bar */}

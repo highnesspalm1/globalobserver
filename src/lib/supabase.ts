@@ -1,27 +1,25 @@
 import { createClient, SupabaseClient } from '@supabase/supabase-js';
+import { env, hasSupabaseConfig } from './env';
 
-// Supabase Configuration
-// In production, these should be environment variables
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || 'https://your-project.supabase.co';
-const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || 'your-anon-key';
+// Supabase Configuration - uses validated environment variables
+const supabaseUrl = env.VITE_SUPABASE_URL || 'https://your-project.supabase.co';
+const supabaseAnonKey = env.VITE_SUPABASE_ANON_KEY || 'your-anon-key';
 
-// Check if Supabase is properly configured
-const isConfigured = 
-  supabaseUrl !== 'https://your-project.supabase.co' && 
-  supabaseAnonKey !== 'your-anon-key';
+// Check if Supabase is properly configured using validated env
+const isConfigured = hasSupabaseConfig();
 
-export const supabase: SupabaseClient | null = isConfigured 
+export const supabase: SupabaseClient | null = isConfigured
   ? createClient(supabaseUrl, supabaseAnonKey, {
-      auth: {
-        persistSession: true,
-        autoRefreshToken: true,
+    auth: {
+      persistSession: true,
+      autoRefreshToken: true,
+    },
+    realtime: {
+      params: {
+        eventsPerSecond: 10,
       },
-      realtime: {
-        params: {
-          eventsPerSecond: 10,
-        },
-      },
-    })
+    },
+  })
   : null;
 
 export const isSupabaseConfigured = () => isConfigured;
@@ -38,7 +36,7 @@ export const db = {
       limit?: number;
     }) {
       if (!supabase) return { data: null, error: new Error('Supabase not configured') };
-      
+
       let query = supabase
         .from('events')
         .select('*')
@@ -98,7 +96,7 @@ export const db = {
   territories: {
     async getAll(options?: { actor?: string; date?: Date }) {
       if (!supabase) return { data: null, error: new Error('Supabase not configured') };
-      
+
       let query = supabase.from('territory_history').select('*');
 
       if (options?.actor) {
@@ -170,7 +168,7 @@ export const subscribeToEvents = (callback: (payload: unknown) => void) => {
     console.warn('Supabase not configured, real-time disabled');
     return null;
   }
-  
+
   return supabase
     .channel('events-channel')
     .on(
@@ -191,7 +189,7 @@ export const subscribeToTerritories = (callback: (payload: unknown) => void) => 
     console.warn('Supabase not configured, real-time disabled');
     return null;
   }
-  
+
   return supabase
     .channel('territories-channel')
     .on(

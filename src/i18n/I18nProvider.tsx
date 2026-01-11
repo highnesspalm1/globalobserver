@@ -1,22 +1,14 @@
 // i18n Context and Provider for Global Observer
-import React, { createContext, useContext, useState, useCallback, useEffect, useMemo } from 'react';
+import React, { useState, useCallback, useEffect, useMemo } from 'react';
 import type { Language, TranslationKeys } from './types';
 import { de } from './de';
 import { en } from './en';
 import { tr } from './tr';
+import { LANGUAGE_STORAGE_KEY } from './constants';
+import { I18nContext } from './context';
 
 // All translations
 const translations: Record<Language, TranslationKeys> = { de, en, tr };
-
-// Language metadata
-export const LANGUAGES: { code: Language; name: string; nativeName: string; flag: string }[] = [
-  { code: 'de', name: 'German', nativeName: 'Deutsch', flag: '🇩🇪' },
-  { code: 'en', name: 'English', nativeName: 'English', flag: '🇬🇧' },
-  { code: 'tr', name: 'Turkish', nativeName: 'Türkçe', flag: '🇹🇷' },
-];
-
-// Storage key
-const LANGUAGE_STORAGE_KEY = 'globalobserver-language';
 
 // Detect browser language
 function detectBrowserLanguage(): Language {
@@ -40,19 +32,6 @@ function getInitialLanguage(): Language {
   }
   return detectBrowserLanguage();
 }
-
-// Context type
-interface I18nContextType {
-  language: Language;
-  setLanguage: (lang: Language) => void;
-  t: TranslationKeys;
-  // Helper function for interpolation
-  translate: (key: string, params?: Record<string, string | number>) => string;
-  // Format relative time
-  formatRelativeTime: (date: Date) => string;
-}
-
-const I18nContext = createContext<I18nContextType | null>(null);
 
 // Provider component
 export function I18nProvider({ children }: { children: React.ReactNode }) {
@@ -137,21 +116,3 @@ export function I18nProvider({ children }: { children: React.ReactNode }) {
     </I18nContext.Provider>
   );
 }
-
-// Hook to use i18n
-export function useI18n() {
-  const context = useContext(I18nContext);
-  if (!context) {
-    throw new Error('useI18n must be used within I18nProvider');
-  }
-  return context;
-}
-
-// Hook for just translations (lighter)
-export function useTranslation() {
-  const { t, translate } = useI18n();
-  return { t, translate };
-}
-
-// Export types
-export type { Language, TranslationKeys };

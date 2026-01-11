@@ -159,7 +159,7 @@ export const SharePanel: React.FC = () => {
         }
         break;
     }
-  }, [shareUrl, shareConfig]);
+  }, [shareUrl, shareConfig, t.share.shareEventText, t.share.shareTitle, t.share.shareViewText]);
 
   const handleShareEvent = useCallback((eventId: string, eventTitle: string) => {
     setShareConfig({ type: 'event', eventId, eventTitle });
