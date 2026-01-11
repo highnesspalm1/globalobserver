@@ -1,6 +1,9 @@
 /* Global Observer - Military Premium Design System */
 @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700;800&display=swap');
 
+/* Mobile & Accessibility Styles */
+@import './styles/mobile-accessibility.css';
+
 :root {
   /* Military Color Palette */
   --olive-50: #f7f8f3;

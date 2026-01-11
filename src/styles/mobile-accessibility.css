@@ -1,0 +1,527 @@
+/* ===========================================
+   Global Observer - Mobile & Accessibility
+   =========================================== */
+
+/* ==========================================
+   1. MOBILE RESPONSIVE BREAKPOINTS
+   ========================================== */
+
+/* Large Tablet */
+@media (max-width: 1024px) {
+  :root {
+    --header-height: 48px;
+    --footer-height: 24px;
+  }
+}
+
+/* Small Tablet */
+@media (max-width: 768px) {
+  :root {
+    --header-height: 44px;
+    --footer-height: 0px;
+  }
+  
+  /* Basis-Schriftgrößen für Mobile */
+  html {
+    font-size: 14px;
+  }
+}
+
+/* Mobile Phone */
+@media (max-width: 480px) {
+  html {
+    font-size: 13px;
+  }
+}
+
+/* ==========================================
+   2. TOUCH-FRIENDLY TARGETS (WCAG 2.5.5)
+   Minimum Touch Target: 44x44px
+   ========================================== */
+
+@media (hover: none) and (pointer: coarse) {
+  /* Alle interaktiven Elemente vergrößern */
+  button,
+  [role="button"],
+  input[type="checkbox"],
+  input[type="radio"],
+  select,
+  .clickable {
+    min-height: 44px;
+    min-width: 44px;
+  }
+  
+  /* Links in Listen */
+  a {
+    display: inline-block;
+    padding: 8px 4px;
+  }
+  
+  /* Abstände zwischen Touch-Targets */
+  button + button,
+  [role="button"] + [role="button"] {
+    margin-left: 8px;
+  }
+}
+
+/* ==========================================
+   3. SAFE AREAS (Notch, Home Indicator)
+   ========================================== */
+
+@supports (padding: env(safe-area-inset-top)) {
+  .app {
+    padding-top: env(safe-area-inset-top);
+    padding-bottom: env(safe-area-inset-bottom);
+    padding-left: env(safe-area-inset-left);
+    padding-right: env(safe-area-inset-right);
+  }
+}
+
+/* ==========================================
+   4. ACCESSIBILITY - FOCUS STATES
+   ========================================== */
+
+/* Sichtbare Focus-Indikatoren */
+:focus-visible {
+  outline: 3px solid var(--camo-accent);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* Buttons mit besserem Focus */
+button:focus-visible,
+[role="button"]:focus-visible {
+  outline: 3px solid var(--camo-accent);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 6px rgba(139, 163, 111, 0.2);
+}
+
+/* Links */
+a:focus-visible {
+  outline: 2px solid var(--camo-accent);
+  outline-offset: 2px;
+  text-decoration: underline;
+}
+
+/* Form Elements */
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: 2px solid var(--camo-accent);
+  outline-offset: 0;
+  border-color: var(--camo-accent);
+}
+
+/* Skip-to-content Link */
+.skip-link {
+  position: absolute;
+  top: -100px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--camo-accent);
+  color: var(--tactical-black);
+  padding: 12px 24px;
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  z-index: 10000;
+  transition: top 0.2s ease;
+}
+
+.skip-link:focus {
+  top: 10px;
+}
+
+/* ==========================================
+   5. ACCESSIBILITY - REDUCED MOTION
+   ========================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  
+  /* Radar sweep und andere kontinuierliche Animationen deaktivieren */
+  .radar-sweep::after,
+  .shimmer,
+  .floating,
+  .glitch-text,
+  .scanline-overlay {
+    animation: none !important;
+  }
+  
+  /* Status-Puls beibehalten aber vereinfachen */
+  .status-dot--live {
+    animation: none;
+    opacity: 1;
+  }
+}
+
+/* ==========================================
+   6. ACCESSIBILITY - HIGH CONTRAST
+   ========================================== */
+
+@media (prefers-contrast: high) {
+  :root {
+    --border-subtle: rgba(255, 255, 255, 0.4);
+    --border-default: rgba(255, 255, 255, 0.6);
+    --border-strong: rgba(255, 255, 255, 0.8);
+    --text-secondary: #d0d0d0;
+    --text-muted: #a0a0a0;
+  }
+  
+  button,
+  [role="button"] {
+    border: 2px solid currentColor;
+  }
+  
+  .glass,
+  .glass-dark,
+  .glass-light {
+    background: var(--bg-secondary);
+    border-width: 2px;
+  }
+}
+
+/* ==========================================
+   7. ACCESSIBILITY - COLOR BLIND SUPPORT
+   ========================================== */
+
+/* Zusätzliche visuelle Indikatoren neben Farbe */
+.status-critical::before,
+.severity-critical::before {
+  content: "⚠ ";
+}
+
+.status-warning::before,
+.severity-high::before {
+  content: "⚡ ";
+}
+
+.status-success::before,
+.verified-badge::before {
+  content: "✓ ";
+}
+
+/* ==========================================
+   8. MOBILE SIDEBAR & PANELS
+   ========================================== */
+
+@media (max-width: 768px) {
+  /* Full-screen Panels auf Mobile */
+  .mobile-fullscreen {
+    position: fixed !important;
+    inset: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    height: 100% !important;
+    max-height: 100% !important;
+    border-radius: 0 !important;
+    z-index: 1000 !important;
+  }
+  
+  /* Bottom Sheet Pattern */
+  .mobile-bottom-sheet {
+    position: fixed !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    top: auto !important;
+    max-height: 70vh;
+    border-radius: 16px 16px 0 0 !important;
+    transform: translateY(0);
+    transition: transform 0.3s ease;
+  }
+  
+  .mobile-bottom-sheet.collapsed {
+    transform: translateY(calc(100% - 60px));
+  }
+  
+  /* Drag Handle für Bottom Sheets */
+  .mobile-drag-handle {
+    width: 40px;
+    height: 4px;
+    background: var(--border-default);
+    border-radius: 2px;
+    margin: 8px auto;
+  }
+}
+
+/* ==========================================
+   9. MOBILE NAVIGATION
+   ========================================== */
+
+@media (max-width: 768px) {
+  /* Mobile Tab Bar (Bottom Navigation) */
+  .mobile-tab-bar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 56px;
+    background: var(--bg-secondary);
+    border-top: 1px solid var(--border-default);
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding-bottom: env(safe-area-inset-bottom, 0);
+    z-index: 900;
+  }
+  
+  .mobile-tab-bar button {
+    flex: 1;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+    color: var(--text-muted);
+    font-size: 10px;
+    transition: color 0.2s ease;
+  }
+  
+  .mobile-tab-bar button.active {
+    color: var(--camo-accent);
+  }
+  
+  .mobile-tab-bar button svg {
+    width: 24px;
+    height: 24px;
+  }
+}
+
+/* ==========================================
+   10. MOBILE MAP CONTROLS
+   ========================================== */
+
+@media (max-width: 768px) {
+  /* MapLibre Controls größer machen */
+  .maplibregl-ctrl-group {
+    margin: 8px !important;
+  }
+  
+  .maplibregl-ctrl-group button {
+    width: 44px !important;
+    height: 44px !important;
+  }
+  
+  /* Zoom Controls unten links */
+  .maplibregl-ctrl-bottom-left {
+    bottom: 70px !important;
+  }
+  
+  /* Attribution kleiner */
+  .maplibregl-ctrl-attrib {
+    font-size: 9px !important;
+    padding: 2px 4px !important;
+  }
+}
+
+/* ==========================================
+   11. MOBILE TYPOGRAPHY
+   ========================================== */
+
+@media (max-width: 768px) {
+  h1 {
+    font-size: 1.5rem;
+    line-height: 1.3;
+  }
+  
+  h2 {
+    font-size: 1.25rem;
+    line-height: 1.35;
+  }
+  
+  h3 {
+    font-size: 1.1rem;
+    line-height: 1.4;
+  }
+  
+  /* Längere Texte besser lesbar */
+  p, li {
+    line-height: 1.6;
+  }
+}
+
+/* ==========================================
+   12. MOBILE GESTURES SUPPORT
+   ========================================== */
+
+/* Touch Action Hints */
+.swipeable {
+  touch-action: pan-x;
+}
+
+.scrollable-y {
+  touch-action: pan-y;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+}
+
+.pinch-zoomable {
+  touch-action: pinch-zoom;
+}
+
+/* Disable Text Selection auf interaktiven Elementen */
+button,
+[role="button"],
+.no-select {
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+}
+
+/* ==========================================
+   13. LANDSCAPE MODE
+   ========================================== */
+
+@media (max-width: 768px) and (orientation: landscape) {
+  /* Header schmaler in Landscape */
+  .header {
+    height: 40px !important;
+  }
+  
+  /* Panels an der Seite statt unten */
+  .mobile-bottom-sheet {
+    top: 0;
+    bottom: 0;
+    left: auto;
+    right: 0;
+    width: 320px;
+    max-width: 50vw;
+    max-height: 100%;
+    border-radius: 0 !important;
+  }
+  
+  /* Tab Bar ausblenden in Landscape */
+  .mobile-tab-bar {
+    display: none;
+  }
+}
+
+/* ==========================================
+   14. DARK MODE (Default) / LIGHT MODE
+   ========================================== */
+
+@media (prefers-color-scheme: light) {
+  /* Optional: Light Mode Support wenn gewünscht */
+  /* Aktuell ist Dark Mode der Standard */
+}
+
+/* ==========================================
+   15. SCREEN READER ONLY (SR-ONLY)
+   ========================================== */
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Visible on focus for keyboard users */
+.sr-only-focusable:focus,
+.sr-only-focusable:active {
+  position: static;
+  width: auto;
+  height: auto;
+  margin: 0;
+  overflow: visible;
+  clip: auto;
+  white-space: normal;
+}
+
+/* ==========================================
+   16. PRINT STYLES
+   ========================================== */
+
+@media print {
+  .no-print,
+  .mobile-tab-bar,
+  .floating-menu,
+  button,
+  .maplibregl-ctrl {
+    display: none !important;
+  }
+  
+  body {
+    background: white;
+    color: black;
+  }
+  
+  .glass,
+  .glass-dark,
+  .glass-light {
+    background: white;
+    border: 1px solid #ccc;
+  }
+}
+
+/* ==========================================
+   17. ARIA LIVE REGIONS
+   ========================================== */
+
+[aria-live="polite"],
+[aria-live="assertive"] {
+  /* Ensure screen readers announce updates */
+}
+
+/* Status Messages */
+.status-message {
+  position: fixed;
+  bottom: 80px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 12px 20px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-lg);
+  z-index: 1001;
+  animation: slideUp 0.3s ease;
+}
+
+/* ==========================================
+   18. LOADING STATES
+   ========================================== */
+
+[aria-busy="true"] {
+  cursor: wait;
+  pointer-events: none;
+  opacity: 0.7;
+}
+
+/* Skeleton Loading für Mobile */
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    var(--bg-tertiary) 0%,
+    var(--tactical-slate) 50%,
+    var(--bg-tertiary) 100%
+  );
+  background-size: 200% 100%;
+  animation: skeleton-loading 1.5s infinite;
+  border-radius: var(--radius-sm);
+}
+
+@keyframes skeleton-loading {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .skeleton {
+    animation: none;
+    background: var(--bg-tertiary);
+  }
+}

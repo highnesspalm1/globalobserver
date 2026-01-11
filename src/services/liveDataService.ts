@@ -1161,6 +1161,9 @@ function getFallbackEvents(): MapEvent[] {
     ];
 }
 
+// Import advanced deduplication
+import { fastDeduplicateEvents, getDeduplicationStats, findDuplicateClusters } from './deduplicationService';
+
 // Main function to fetch all live events
 export async function fetchAllLiveEvents(): Promise<MapEvent[]> {
     console.log('🌍 Fetching live events from all sources...');
@@ -1190,23 +1193,21 @@ export async function fetchAllLiveEvents(): Promise<MapEvent[]> {
 
         // If we got some events, use them
         if (allEvents.length > 0) {
-            // Remove duplicates based on similar titles and proximity
-            const uniqueEvents = allEvents.filter((event, index, self) =>
-                index === self.findIndex(e =>
-                    e.title.substring(0, 30) === event.title.substring(0, 30) ||
-                    (Math.abs(e.coordinates[0] - event.coordinates[0]) < 0.1 &&
-                        Math.abs(e.coordinates[1] - event.coordinates[1]) < 0.1 &&
-                        e.title.substring(0, 20) === event.title.substring(0, 20))
-                )
-            );
+            // Use advanced similarity-based deduplication
+            const uniqueEvents = fastDeduplicateEvents(allEvents, 0.65);
+            
+            // Get deduplication stats for logging
+            const clusters = findDuplicateClusters(allEvents, 0.65);
+            const stats = getDeduplicationStats(allEvents, uniqueEvents, clusters);
 
-            console.log(`✅ Fetched ${uniqueEvents.length} unique events:`);
+            console.log(`✅ Fetched ${uniqueEvents.length} unique events (${stats.removedCount} duplicates removed):`);
             console.log(`   - GDELT: ${results.gdeltEvents.length}`);
             console.log(`   - ReliefWeb: ${results.reliefWebEvents.length}`);
             console.log(`   - RSS: ${results.rssEvents.length}`);
             console.log(`   - NASA EONET: ${results.eonetEvents.length}`);
             console.log(`   - USGS Earthquakes: ${results.earthquakeEvents.length}`);
             console.log(`   - Wikipedia: ${results.wikiEvents.length}`);
+            console.log(`   📊 Dedup Stats: ${stats.clusterCount} clusters, avg size ${stats.averageClusterSize.toFixed(1)}`);
 
             // If we have very few events, supplement with fallback
             if (uniqueEvents.length < 20) {

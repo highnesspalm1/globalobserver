@@ -168,8 +168,13 @@ function App() {
   }, [loadLiveData]);
 
   return (
-    <div className={styles.app}>
-      <div className={styles.backgroundPattern} />
+    <div className={styles.app} role="application" aria-label="Global Observer - Konflikt-Monitor">
+      {/* Skip Navigation Link für Accessibility */}
+      <a href="#main-map" className="skip-link">
+        Zum Karteninhalt springen
+      </a>
+      
+      <div className={styles.backgroundPattern} aria-hidden="true" />
 
       {/* Header Bar */}
       <Suspense fallback={null}>
@@ -181,7 +186,7 @@ function App() {
         />
       </Suspense>
 
-      <main className={styles.mapWrapper}>
+      <main id="main-map" className={styles.mapWrapper} role="main" aria-label="Interaktive Weltkarte">
         <MapView />
       </main>
 
