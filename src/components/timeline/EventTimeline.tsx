@@ -56,6 +56,17 @@ export const EventTimeline: React.FC = () => {
   const events = useMapStore(state => state.events);
   const setSelectedEventId = useMapStore(state => state.setSelectedEventId);
 
+  // Listen for toggle event from FloatingMenu
+  useEffect(() => {
+    const handleToggle = (e: CustomEvent) => {
+      if (e.detail.toolId === 'timeline') {
+        setIsOpen(prev => !prev);
+      }
+    };
+    window.addEventListener('toggleMapTool', handleToggle as EventListener);
+    return () => window.removeEventListener('toggleMapTool', handleToggle as EventListener);
+  }, []);
+
   // Define event type for casting
   type EventData = {
     id?: string;
@@ -232,16 +243,7 @@ export const EventTimeline: React.FC = () => {
 
   return (
     <>
-      {/* Toggle Button */}
-      <button
-        className={`${styles.toggleButton} ${isOpen ? styles.active : ''}`}
-        onClick={() => setIsOpen(!isOpen)}
-        title="Event-Timeline"
-      >
-        <Clock size={18} />
-      </button>
-
-      {/* Timeline Panel */}
+      {/* Panel - no toggle button, controlled by FloatingMenu */}
       {isOpen && (
         <div className={styles.panel}>
           <div className={styles.header}>

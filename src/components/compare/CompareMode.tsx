@@ -74,6 +74,17 @@ export const CompareMode: React.FC = () => {
 
   const events = useMapStore(state => state.events);
 
+  // Listen for toggle event from FloatingMenu
+  useEffect(() => {
+    const handleToggle = (e: CustomEvent) => {
+      if (e.detail.toolId === 'compare') {
+        setIsOpen(prev => !prev);
+      }
+    };
+    window.addEventListener('toggleMapTool', handleToggle as EventListener);
+    return () => window.removeEventListener('toggleMapTool', handleToggle as EventListener);
+  }, []);
+
   // Define event type for casting
   type EventData = {
     date?: string | number;
@@ -200,16 +211,7 @@ export const CompareMode: React.FC = () => {
 
   return (
     <>
-      {/* Toggle Button */}
-      <button
-        className={`${styles.toggleButton} ${isActive ? styles.active : ''}`}
-        onClick={() => setIsOpen(true)}
-        title="Zeitvergleich"
-      >
-        <GitCompare size={18} />
-      </button>
-
-      {/* Compare Panel */}
+      {/* Panel - no toggle button, controlled by FloatingMenu */}
       {isOpen && (
         <div className={styles.overlay} onClick={() => setIsOpen(false)}>
           <div className={styles.panel} onClick={(e) => e.stopPropagation()}>

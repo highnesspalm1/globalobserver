@@ -40,6 +40,17 @@ export const Bookmarks: React.FC = () => {
   const selectedEventId = useMapStore((state) => state.selectedEventId);
   const events = useMapStore((state) => state.events);
 
+  // Listen for toggle event from FloatingMenu
+  useEffect(() => {
+    const handleToggle = (e: CustomEvent) => {
+      if (e.detail.toolId === 'bookmarks') {
+        setIsOpen(prev => !prev);
+      }
+    };
+    window.addEventListener('toggleMapTool', handleToggle as EventListener);
+    return () => window.removeEventListener('toggleMapTool', handleToggle as EventListener);
+  }, []);
+
   useEffect(() => {
     saveBookmarks(bookmarks);
   }, [bookmarks]);
@@ -99,19 +110,9 @@ export const Bookmarks: React.FC = () => {
     }
   };
 
+  // Panel only - toggle button removed, controlled by FloatingMenu
   if (!isOpen) {
-    return (
-      <button
-        className={styles.toggleButton}
-        onClick={() => setIsOpen(true)}
-        title="Lesezeichen"
-      >
-        <Bookmark size={18} />
-        {bookmarks.length > 0 && (
-          <span className={styles.badge}>{bookmarks.length}</span>
-        )}
-      </button>
-    );
+    return null;
   }
 
   return (

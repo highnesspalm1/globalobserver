@@ -22,6 +22,18 @@ export const SharePanel: React.FC = () => {
   const events = useMapStore(state => state.events);
   const selectedEvent = events.find((e) => (e as { id?: string }).id === selectedEventId);
 
+  // Listen for toggle event from FloatingMenu
+  useEffect(() => {
+    const handleToggle = (e: CustomEvent) => {
+      if (e.detail.toolId === 'share') {
+        setShareConfig({ type: 'view' });
+        setIsOpen(prev => !prev);
+      }
+    };
+    window.addEventListener('toggleMapTool', handleToggle as EventListener);
+    return () => window.removeEventListener('toggleMapTool', handleToggle as EventListener);
+  }, []);
+
   const applySharedState = useCallback((params: URLSearchParams) => {
     const lat = params.get('lat');
     const lng = params.get('lng');
@@ -170,19 +182,7 @@ export const SharePanel: React.FC = () => {
 
   return (
     <>
-      {/* Share Button */}
-      <button
-        className={styles.shareButton}
-        onClick={() => {
-          setShareConfig({ type: 'view' });
-          setIsOpen(true);
-        }}
-        title="Ansicht teilen"
-      >
-        <Share2 size={18} />
-      </button>
-
-      {/* Share Panel */}
+      {/* Panel - no toggle button, controlled by FloatingMenu */}
       {isOpen && (
         <div className={styles.overlay} onClick={() => setIsOpen(false)}>
           <div className={styles.panel} onClick={(e) => e.stopPropagation()}>

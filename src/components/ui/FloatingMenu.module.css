@@ -1,0 +1,186 @@
+.container {
+  position: fixed;
+  bottom: 80px;
+  right: 20px;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column-reverse;
+  align-items: center;
+  gap: 12px;
+}
+
+/* Toggle Button */
+.toggleButton {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--olive-700) 0%, var(--olive-800) 100%);
+  border: 2px solid var(--olive-500);
+  color: var(--sand-300);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 
+    0 4px 12px rgba(0, 0, 0, 0.4),
+    0 0 0 0 rgba(var(--olive-500-rgb), 0.4);
+}
+
+.toggleButton:hover {
+  background: linear-gradient(135deg, var(--olive-600) 0%, var(--olive-700) 100%);
+  transform: scale(1.08);
+  box-shadow: 
+    0 6px 20px rgba(0, 0, 0, 0.5),
+    0 0 0 4px rgba(139, 149, 109, 0.2);
+}
+
+.toggleButton.open {
+  background: linear-gradient(135deg, var(--olive-600) 0%, var(--olive-700) 100%);
+  border-color: var(--sand-400);
+  transform: rotate(90deg);
+}
+
+/* Menu Items Container */
+.menuItems {
+  display: flex;
+  flex-direction: column-reverse;
+  gap: 10px;
+  pointer-events: none;
+}
+
+.menuItems.open {
+  pointer-events: auto;
+}
+
+/* Individual Menu Item */
+.menuItem {
+  position: relative;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--olive-800);
+  border: 2px solid var(--olive-600);
+  color: var(--sand-300);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.menuItem:hover {
+  background: var(--olive-700);
+  border-color: var(--sand-400);
+  transform: scale(1.1) !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+}
+
+.menuItem.active {
+  background: var(--status-active);
+  border-color: var(--status-active);
+  color: white;
+}
+
+.menuItem.active:hover {
+  background: #45a049;
+}
+
+/* Badge */
+.badge {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 5px;
+  border-radius: 9px;
+  background: var(--alert-critical);
+  color: white;
+  font-size: 10px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+/* Tooltip */
+.tooltip {
+  position: absolute;
+  right: calc(100% + 12px);
+  top: 50%;
+  transform: translateY(-50%);
+  background: var(--olive-900);
+  border: 1px solid var(--olive-600);
+  color: var(--sand-200);
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 500;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.tooltip::after {
+  content: '';
+  position: absolute;
+  right: -6px;
+  top: 50%;
+  transform: translateY(-50%);
+  border: 6px solid transparent;
+  border-left-color: var(--olive-600);
+}
+
+.menuItem:hover .tooltip {
+  opacity: 1;
+}
+
+/* Animation for menu opening */
+@keyframes popIn {
+  0% {
+    transform: scale(0) translateX(20px);
+    opacity: 0;
+  }
+  70% {
+    transform: scale(1.1) translateX(-5px);
+  }
+  100% {
+    transform: scale(1) translateX(0);
+    opacity: 1;
+  }
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  .container {
+    bottom: 70px;
+    right: 12px;
+  }
+
+  .toggleButton {
+    width: 48px;
+    height: 48px;
+  }
+
+  .menuItem {
+    width: 40px;
+    height: 40px;
+  }
+
+  .tooltip {
+    display: none;
+  }
+}
+
+/* Reduce motion */
+@media (prefers-reduced-motion: reduce) {
+  .toggleButton,
+  .menuItem {
+    transition: none;
+  }
+}

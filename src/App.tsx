@@ -53,6 +53,9 @@ const CompareMode = lazy(() => import('./components/compare/CompareMode'));
 const EventTimeline = lazy(() => import('./components/timeline/EventTimeline'));
 const HeatmapTimelapse = lazy(() => import('./components/heatmap/HeatmapTimelapse'));
 
+// Lazy load Floating Menu
+const FloatingMenu = lazy(() => import('./components/ui/FloatingMenu').then(m => ({ default: m.MapToolsMenu })));
+
 // Loading fallback component
 const LoadingFallback = () => (
   <div className={styles.loadingFallback}>
@@ -227,9 +230,18 @@ function App() {
       <TimeSlider />
       <NotificationCenter />
 
-      {/* Bookmarks */}
+      {/* Floating Action Menu - central control for tools */}
+      <Suspense fallback={null}>
+        <FloatingMenu />
+      </Suspense>
+
+      {/* Tool Panels (controlled by FloatingMenu) */}
       <Suspense fallback={null}>
         <Bookmarks />
+        <SharePanel />
+        <CompareMode />
+        <EventTimeline />
+        <HeatmapTimelapse />
       </Suspense>
 
       {/* Push Notifications */}
@@ -260,26 +272,6 @@ function App() {
       {/* Onboarding Tour */}
       <Suspense fallback={null}>
         <OnboardingTour />
-      </Suspense>
-
-      {/* Share Panel */}
-      <Suspense fallback={null}>
-        <SharePanel />
-      </Suspense>
-
-      {/* Compare Mode */}
-      <Suspense fallback={null}>
-        <CompareMode />
-      </Suspense>
-
-      {/* Event Timeline */}
-      <Suspense fallback={null}>
-        <EventTimeline />
-      </Suspense>
-
-      {/* Heatmap Timelapse */}
-      <Suspense fallback={null}>
-        <HeatmapTimelapse />
       </Suspense>
 
       {isLoading && (
