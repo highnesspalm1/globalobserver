@@ -1,8 +1,7 @@
 .container {
-  position: absolute;
-  right: 300px;
-  top: 50%;
-  transform: translateY(-50%);
+  position: fixed;
+  right: 270px;
+  top: 120px;
   z-index: 100;
 }
 
