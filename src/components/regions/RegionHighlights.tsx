@@ -7,6 +7,7 @@ import {
     Globe
 } from 'lucide-react';
 import { useMapStore } from '../../stores/mapStore';
+import { useI18n } from '../../i18n';
 import styles from './RegionHighlights.module.css';
 
 interface RegionData {
@@ -59,6 +60,7 @@ const REGION_CONFIGS = [
 ];
 
 export const RegionHighlights: React.FC = () => {
+    const { t } = useI18n();
     const events = useMapStore((state) => state.events);
     const setViewState = useMapStore((state) => state.setViewState);
 
@@ -127,7 +129,7 @@ export const RegionHighlights: React.FC = () => {
                     <Globe size={14} />
                     <span className={styles.title}>REGIONEN</span>
                 </div>
-                <span className={styles.totalBadge}>{totalEvents} Events</span>
+                <span className={styles.totalBadge}>{totalEvents} {t.events.title}</span>
             </div>
 
             {topRegion && topRegion.eventCount > 0 && (
@@ -139,7 +141,7 @@ export const RegionHighlights: React.FC = () => {
                     <span className={styles.topFlag}>{topRegion.flag}</span>
                     <div className={styles.topInfo}>
                         <span className={styles.topName}>{topRegion.name}</span>
-                        <span className={styles.topLabel}>Aktivste Region</span>
+                        <span className={styles.topLabel}>{t.regions.mostActive}</span>
                     </div>
                     <div className={styles.topCount}>
                         <span>{topRegion.eventCount}</span>

@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Bell, BellOff, AlertTriangle, X, Check } from 'lucide-react';
+import { useI18n } from '../../i18n';
 import { useMapStore } from '../../stores/mapStore';
 import { notify } from '../../stores/notificationStore';
 import { IconButton } from '../ui/Button';
@@ -15,14 +16,14 @@ interface NotificationSettings {
 const STORAGE_KEY = 'globalobserver-notifications';
 const CHECK_INTERVAL = 60000; // Check every minute
 
-const REGIONS = [
-  { id: 'ukraine', name: 'Ukraine/Russland', coords: [31.16, 48.38] },
-  { id: 'gaza', name: 'Gaza/Israel', coords: [34.44, 31.50] },
-  { id: 'syria', name: 'Syrien', coords: [38.99, 34.80] },
-  { id: 'yemen', name: 'Jemen', coords: [44.21, 15.37] },
-  { id: 'sudan', name: 'Sudan', coords: [32.53, 15.59] },
-  { id: 'iran', name: 'Iran', coords: [51.39, 35.69] },
-];
+const REGION_COORDS: Record<string, number[]> = {
+  ukraine: [31.16, 48.38],
+  gaza: [34.44, 31.50],
+  syria: [38.99, 34.80],
+  yemen: [44.21, 15.37],
+  sudan: [32.53, 15.59],
+  iran: [51.39, 35.69],
+};
 
 function loadSettings(): NotificationSettings {
   try {
@@ -87,6 +88,7 @@ function sendBrowserNotification(title: string, body: string, onClick?: () => vo
 }
 
 export const PushNotifications: React.FC = () => {
+  const { t } = useI18n();
   const [isOpen, setIsOpen] = useState(false);
   const [settings, setSettings] = useState<NotificationSettings>(loadSettings);
   const [lastCheckedEvents, setLastCheckedEvents] = useState<Set<string>>(new Set());
@@ -94,6 +96,15 @@ export const PushNotifications: React.FC = () => {
   const events = useMapStore((state) => state.events);
   const setViewState = useMapStore((state) => state.setViewState);
   const setSelectedEventId = useMapStore((state) => state.setSelectedEventId);
+
+  const REGIONS = [
+    { id: 'ukraine', name: t.regions.ukraineRussia, coords: REGION_COORDS.ukraine },
+    { id: 'gaza', name: t.regions.gazaIsrael, coords: REGION_COORDS.gaza },
+    { id: 'syria', name: t.regions.syria, coords: REGION_COORDS.syria },
+    { id: 'yemen', name: t.regions.yemen, coords: REGION_COORDS.yemen },
+    { id: 'sudan', name: t.regions.sudan, coords: REGION_COORDS.sudan },
+    { id: 'iran', name: t.regions.iran, coords: REGION_COORDS.iran },
+  ];
 
   // Save settings when changed
   useEffect(() => {
@@ -114,12 +125,12 @@ export const PushNotifications: React.FC = () => {
       // Region filter
       if (settings.regions.length > 0) {
         const inRegion = settings.regions.some(regionId => {
-          const region = REGIONS.find(r => r.id === regionId);
-          if (!region) return false;
+          const coords = REGION_COORDS[regionId];
+          if (!coords) return false;
           
           // Simple distance check (within ~500km)
-          const dx = event.coordinates[0] - region.coords[0];
-          const dy = event.coordinates[1] - region.coords[1];
+          const dx = event.coordinates[0] - coords[0];
+          const dy = event.coordinates[1] - coords[1];
           return Math.sqrt(dx * dx + dy * dy) < 5;
         });
         
@@ -221,13 +232,13 @@ export const PushNotifications: React.FC = () => {
       <div className={styles.header}>
         <div className={styles.headerTitle}>
           <Bell size={16} />
-          <span>BENACHRICHTIGUNGEN</span>
+          <span>{t.notifications.title.toUpperCase()}</span>
         </div>
         <IconButton
           icon={<X size={16} />}
           onClick={() => setIsOpen(false)}
           size="sm"
-          aria-label="Schließen"
+          aria-label={t.app.close}
         />
       </div>
 
@@ -235,9 +246,9 @@ export const PushNotifications: React.FC = () => {
         {/* Main Toggle */}
         <div className={styles.mainToggle}>
           <div className={styles.toggleInfo}>
-            <span className={styles.toggleLabel}>Push-Benachrichtigungen</span>
+            <span className={styles.toggleLabel}>{t.settings.pushNotifications}</span>
             <span className={styles.toggleDesc}>
-              Erhalten Sie Alarme für kritische Events
+              {t.settings.criticalEventsAlert}
             </span>
           </div>
           <button

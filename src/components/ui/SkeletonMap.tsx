@@ -1,8 +1,12 @@
 import React from 'react';
 import { Skeleton, SkeletonListItem } from './Skeleton';
+import { useI18n } from '../../i18n';
 import styles from './SkeletonMap.module.css';
 
-export const SkeletonMap: React.FC = () => (
+export const SkeletonMap: React.FC = () => {
+  const { t } = useI18n();
+  
+  return (
   <div className={styles.container}>
     {/* Header Skeleton */}
     <div className={styles.header}>
@@ -96,9 +100,10 @@ export const SkeletonMap: React.FC = () => (
     {/* Loading text */}
     <div className={styles.loadingText}>
       <div className={styles.loadingSpinner} />
-      <span>Lade Live-Daten...</span>
+      <span>{t.ui.loadingLiveData}</span>
     </div>
   </div>
 );
+};
 
 export default SkeletonMap;

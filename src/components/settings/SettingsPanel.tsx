@@ -5,7 +5,6 @@ import {
     Clock,
     Bell,
     Map,
-    Globe,
     Palette,
     Volume2,
     VolumeX,
@@ -13,6 +12,8 @@ import {
     Monitor
 } from 'lucide-react';
 import { useMapStore } from '../../stores/mapStore';
+import { useI18n, LANGUAGES } from '../../i18n';
+import type { Language } from '../../i18n';
 import styles from './SettingsPanel.module.css';
 
 interface AppSettings {
@@ -20,7 +21,6 @@ interface AppSettings {
     refreshInterval: number;
     notifications: boolean;
     soundEffects: boolean;
-    language: 'de' | 'en';
     defaultMapStyle: 'dark' | 'satellite' | 'terrain' | 'tactical';
     showWelcomeOnStart: boolean;
 }
@@ -30,12 +30,12 @@ const DEFAULT_SETTINGS: AppSettings = {
     refreshInterval: 5,
     notifications: true,
     soundEffects: false,
-    language: 'de',
     defaultMapStyle: 'dark',
     showWelcomeOnStart: true
 };
 
 const SettingsPanel: React.FC = () => {
+    const { t, language, setLanguage } = useI18n();
     const [isOpen, setIsOpen] = useState(false);
     const setMapStyle = useMapStore((state) => state.setMapStyle);
 
@@ -70,7 +70,7 @@ const SettingsPanel: React.FC = () => {
             <button
                 className={styles.toggleButton}
                 onClick={() => setIsOpen(true)}
-                title="Einstellungen"
+                title={t.settings.title}
             >
                 <Settings size={16} />
             </button>
@@ -84,7 +84,7 @@ const SettingsPanel: React.FC = () => {
                 <div className={styles.header}>
                     <div className={styles.headerTitle}>
                         <Settings size={18} />
-                        <span>EINSTELLUNGEN</span>
+                        <span>{t.settings.title}</span>
                     </div>
                     <button className={styles.closeButton} onClick={() => setIsOpen(false)}>
                         <X size={18} />
@@ -97,13 +97,13 @@ const SettingsPanel: React.FC = () => {
                     <div className={styles.section}>
                         <h3 className={styles.sectionTitle}>
                             <RefreshCw size={14} />
-                            Auto-Aktualisierung
+                            {t.settings.autoRefresh}
                         </h3>
 
                         <div className={styles.settingRow}>
                             <div className={styles.settingInfo}>
-                                <span className={styles.settingLabel}>Auto-Refresh</span>
-                                <span className={styles.settingDescription}>Automatische Datenaktualisierung</span>
+                                <span className={styles.settingLabel}>{t.settings.autoRefresh}</span>
+                                <span className={styles.settingDescription}>{t.settings.autoRefreshDesc}</span>
                             </div>
                             <label className={styles.toggle}>
                                 <input
@@ -118,7 +118,7 @@ const SettingsPanel: React.FC = () => {
                         <div className={styles.settingRow}>
                             <div className={styles.settingInfo}>
                                 <Clock size={14} />
-                                <span className={styles.settingLabel}>Interval</span>
+                                <span className={styles.settingLabel}>{t.settings.refreshInterval}</span>
                             </div>
                             <select
                                 value={settings.refreshInterval}
@@ -126,10 +126,10 @@ const SettingsPanel: React.FC = () => {
                                 className={styles.select}
                                 disabled={!settings.autoRefresh}
                             >
-                                <option value={1}>1 Minute</option>
-                                <option value={5}>5 Minuten</option>
-                                <option value={10}>10 Minuten</option>
-                                <option value={30}>30 Minuten</option>
+                                <option value={1}>1 {t.time.minute}</option>
+                                <option value={5}>5 {t.time.minutes}</option>
+                                <option value={10}>10 {t.time.minutes}</option>
+                                <option value={30}>30 {t.time.minutes}</option>
                             </select>
                         </div>
                     </div>
@@ -138,13 +138,13 @@ const SettingsPanel: React.FC = () => {
                     <div className={styles.section}>
                         <h3 className={styles.sectionTitle}>
                             <Bell size={14} />
-                            Benachrichtigungen
+                            {t.notifications.title}
                         </h3>
 
                         <div className={styles.settingRow}>
                             <div className={styles.settingInfo}>
-                                <span className={styles.settingLabel}>Push-Benachrichtigungen</span>
-                                <span className={styles.settingDescription}>Bei kritischen Ereignissen</span>
+                                <span className={styles.settingLabel}>{t.settings.pushNotifications}</span>
+                                <span className={styles.settingDescription}>{t.settings.pushNotificationsDesc}</span>
                             </div>
                             <label className={styles.toggle}>
                                 <input
@@ -159,7 +159,7 @@ const SettingsPanel: React.FC = () => {
                         <div className={styles.settingRow}>
                             <div className={styles.settingInfo}>
                                 {settings.soundEffects ? <Volume2 size={14} /> : <VolumeX size={14} />}
-                                <span className={styles.settingLabel}>Sound-Effekte</span>
+                                <span className={styles.settingLabel}>{t.settings.soundEffects}</span>
                             </div>
                             <label className={styles.toggle}>
                                 <input
@@ -176,45 +176,47 @@ const SettingsPanel: React.FC = () => {
                     <div className={styles.section}>
                         <h3 className={styles.sectionTitle}>
                             <Monitor size={14} />
-                            Anzeige
+                            {t.settings.display}
                         </h3>
 
                         <div className={styles.settingRow}>
                             <div className={styles.settingInfo}>
-                                <Globe size={14} />
-                                <span className={styles.settingLabel}>Sprache</span>
+                                <span className={styles.settingLabel}>{t.settings.language}</span>
                             </div>
                             <select
-                                value={settings.language}
-                                onChange={e => updateSetting('language', e.target.value as 'de' | 'en')}
+                                value={language}
+                                onChange={e => setLanguage(e.target.value as Language)}
                                 className={styles.select}
                             >
-                                <option value="de">Deutsch</option>
-                                <option value="en">English</option>
+                                {LANGUAGES.map(lang => (
+                                    <option key={lang.code} value={lang.code}>
+                                        {lang.flag} {lang.nativeName}
+                                    </option>
+                                ))}
                             </select>
                         </div>
 
                         <div className={styles.settingRow}>
                             <div className={styles.settingInfo}>
                                 <Palette size={14} />
-                                <span className={styles.settingLabel}>Standard-Kartenstil</span>
+                                <span className={styles.settingLabel}>{t.settings.defaultMapStyle}</span>
                             </div>
                             <select
                                 value={settings.defaultMapStyle}
                                 onChange={e => updateSetting('defaultMapStyle', e.target.value as AppSettings['defaultMapStyle'])}
                                 className={styles.select}
                             >
-                                <option value="dark">Dark</option>
-                                <option value="satellite">Satellit</option>
-                                <option value="terrain">Terrain</option>
-                                <option value="tactical">Taktisch</option>
+                                <option value="dark">{t.layers.styles.dark}</option>
+                                <option value="satellite">{t.layers.styles.satellite}</option>
+                                <option value="terrain">{t.layers.styles.terrain}</option>
+                                <option value="tactical">{t.layers.styles.tactical}</option>
                             </select>
                         </div>
 
                         <div className={styles.settingRow}>
                             <div className={styles.settingInfo}>
                                 <Map size={14} />
-                                <span className={styles.settingLabel}>Willkommens-Screen</span>
+                                <span className={styles.settingLabel}>{t.settings.showWelcome}</span>
                             </div>
                             <label className={styles.toggle}>
                                 <input
@@ -229,7 +231,7 @@ const SettingsPanel: React.FC = () => {
 
                     {/* Reset Button */}
                     <button className={styles.resetButton} onClick={resetSettings}>
-                        Einstellungen zurücksetzen
+                        {t.settings.reset}
                     </button>
 
                     {/* Version Info */}

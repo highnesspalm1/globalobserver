@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { 
   Menu, X, Flame, Clock, GitCompare, Share2, Bookmark
 } from 'lucide-react';
+import { useI18n } from '../../i18n';
 import styles from './FloatingMenu.module.css';
 
 interface FloatingMenuItem {
@@ -18,6 +19,7 @@ interface FloatingMenuProps {
 }
 
 export const FloatingMenu: React.FC<FloatingMenuProps> = ({ items }) => {
+  const { t } = useI18n();
   const [isOpen, setIsOpen] = useState(false);
   
   // Close on escape
@@ -80,7 +82,7 @@ export const FloatingMenu: React.FC<FloatingMenuProps> = ({ items }) => {
       <button
         className={`${styles.toggleButton} ${isOpen ? styles.open : ''}`}
         onClick={() => setIsOpen(!isOpen)}
-        title={isOpen ? 'Menü schließen' : 'Werkzeuge öffnen'}
+        title={isOpen ? t.app.close : t.app.open}
       >
         {isOpen ? <X size={22} /> : <Menu size={22} />}
       </button>
@@ -90,6 +92,7 @@ export const FloatingMenu: React.FC<FloatingMenuProps> = ({ items }) => {
 
 // Pre-configured menu for map tools
 export const MapToolsMenu: React.FC = () => {
+  const { t } = useI18n();
   const [activeTools, setActiveTools] = useState<Set<string>>(new Set());
 
   const toggleTool = useCallback((toolId: string) => {
@@ -113,35 +116,35 @@ export const MapToolsMenu: React.FC = () => {
     {
       id: 'heatmap',
       icon: <Flame size={20} />,
-      label: 'Heatmap Timelapse',
+      label: t.heatmap.title,
       onClick: () => toggleTool('heatmap'),
       isActive: activeTools.has('heatmap')
     },
     {
       id: 'timeline',
       icon: <Clock size={20} />,
-      label: 'Event Timeline',
+      label: t.timeline.eventTimeline,
       onClick: () => toggleTool('timeline'),
       isActive: activeTools.has('timeline')
     },
     {
       id: 'compare',
       icon: <GitCompare size={20} />,
-      label: 'Vergleichsmodus',
+      label: t.compare.title,
       onClick: () => toggleTool('compare'),
       isActive: activeTools.has('compare')
     },
     {
       id: 'share',
       icon: <Share2 size={20} />,
-      label: 'Teilen',
+      label: t.share.title,
       onClick: () => toggleTool('share'),
       isActive: activeTools.has('share')
     },
     {
       id: 'bookmarks',
       icon: <Bookmark size={20} />,
-      label: 'Lesezeichen',
+      label: t.bookmarks.title,
       onClick: () => toggleTool('bookmarks'),
       isActive: activeTools.has('bookmarks')
     }

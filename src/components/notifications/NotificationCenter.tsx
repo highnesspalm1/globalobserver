@@ -8,6 +8,7 @@ import {
   X,
   MapPin,
 } from 'lucide-react';
+import { useI18n } from '../../i18n';
 import { useNotificationStore } from '../../stores/notificationStore';
 import type { Notification, NotificationType } from '../../stores/notificationStore';
 import { useMapStore } from '../../stores/mapStore';
@@ -27,6 +28,7 @@ interface NotificationItemProps {
 }
 
 const NotificationItem: React.FC<NotificationItemProps> = ({ notification, onClose }) => {
+  const { t } = useI18n();
   const setViewState = useMapStore((state) => state.setViewState);
 
   const handleFlyTo = useCallback(() => {
@@ -63,12 +65,12 @@ const NotificationItem: React.FC<NotificationItemProps> = ({ notification, onClo
         {notification.coordinates && (
           <button className={styles.flyToButton} onClick={handleFlyTo}>
             <MapPin size={12} />
-            <span>Zur Position</span>
+            <span>{t.app.goToLocation}</span>
           </button>
         )}
       </div>
       
-      <button className={styles.closeButton} onClick={onClose} aria-label="Schließen">
+      <button className={styles.closeButton} onClick={onClose} aria-label={t.app.close}>
         <X size={14} />
       </button>
     </div>
@@ -76,6 +78,7 @@ const NotificationItem: React.FC<NotificationItemProps> = ({ notification, onClo
 };
 
 export const NotificationCenter: React.FC = () => {
+  const { t } = useI18n();
   const notifications = useNotificationStore((state) => state.notifications);
   const removeNotification = useNotificationStore((state) => state.removeNotification);
   const clearAll = useNotificationStore((state) => state.clearAll);
@@ -88,7 +91,7 @@ export const NotificationCenter: React.FC = () => {
     <div className={styles.container}>
       {notifications.length > 2 && (
         <button className={styles.clearAllButton} onClick={clearAll}>
-          Alle löschen ({notifications.length})
+          {t.notifications.clearAll} ({notifications.length})
         </button>
       )}
       

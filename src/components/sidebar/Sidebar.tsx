@@ -1,6 +1,7 @@
 import React, { useMemo, useState, useCallback } from 'react';
 import { format } from 'date-fns';
-import { de } from 'date-fns/locale';
+import type { Locale } from 'date-fns';
+import { de, enGB, tr } from 'date-fns/locale';
 import {
   X,
   Search,
@@ -26,6 +27,7 @@ import {
   Globe,
 } from 'lucide-react';
 import { useMapStore } from '../../stores/mapStore';
+import { useI18n } from '../../i18n';
 import { CATEGORY_CONFIG, SEVERITY_CONFIG } from '../../types/database';
 import type { EventCategory, SeverityLevel } from '../../types/database';
 import { Button, IconButton } from '../ui/Button';
@@ -48,6 +50,9 @@ const CATEGORY_ICONS: Record<string, React.ReactNode> = {
 };
 
 export const Sidebar: React.FC = () => {
+  const { t, language } = useI18n();
+  const dateLocale = language === 'de' ? de : language === 'tr' ? tr : enGB;
+  
   const {
     sidebarOpen,
     setSidebarOpen,
@@ -155,12 +160,12 @@ export const Sidebar: React.FC = () => {
           exportToKML(filteredEvents, filename);
           break;
       }
-      notify.success('Export erfolgreich', `${filteredEvents.length} Events als ${type.toUpperCase()} exportiert`);
+      notify.success(t.export.success, t.export.successDetail.replace('{count}', String(filteredEvents.length)).replace('{format}', type.toUpperCase()));
       setShowExport(false);
     } catch {
-      notify.error('Export fehlgeschlagen', 'Daten konnten nicht exportiert werden');
+      notify.error(t.export.error, t.export.errorDetail);
     }
-  }, [filteredEvents]);
+  }, [filteredEvents, t]);
 
   // Apply search with debounce
   React.useEffect(() => {
@@ -175,12 +180,39 @@ export const Sidebar: React.FC = () => {
       <button
         className={styles.toggleButton}
         onClick={() => setSidebarOpen(true)}
-        aria-label="Sidebar öffnen"
+        aria-label={t.sidebar.open}
       >
         <ChevronDown size={20} />
       </button>
     );
   }
+
+  // Get category label with i18n
+  const getCategoryLabel = (key: string) => {
+    const categoryLabels: Record<string, string> = {
+      shelling: t.categories.shelling,
+      air_raid: t.categories.airRaid,
+      movement: t.categories.movement,
+      combat: t.categories.combat,
+      drone: t.categories.drone,
+      naval: t.categories.naval,
+      political: t.categories.political,
+      humanitarian: t.categories.humanitarian,
+      infrastructure: t.categories.infrastructure,
+    };
+    return categoryLabels[key] || key;
+  };
+
+  // Get severity label with i18n
+  const getSeverityLabel = (key: string) => {
+    const severityLabels: Record<string, string> = {
+      low: t.severity.low,
+      medium: t.severity.medium,
+      high: t.severity.high,
+      critical: t.severity.critical,
+    };
+    return severityLabels[key] || key;
+  };
 
   return (
     <aside ref={sidebarRef} className={styles.sidebar}>
@@ -188,7 +220,7 @@ export const Sidebar: React.FC = () => {
       <div className={styles.header}>
         <Logo variant="full" />
         <IconButton
-          aria-label="Sidebar schließen"
+          aria-label={t.sidebar.close}
           icon={<X size={18} />}
           onClick={() => setSidebarOpen(false)}
           size="sm"
@@ -200,7 +232,7 @@ export const Sidebar: React.FC = () => {
         <Search size={16} className={styles.searchIcon} />
         <input
           type="text"
-          placeholder="Events durchsuchen..."
+          placeholder={t.search.placeholder}
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
           className={styles.searchInput}
@@ -221,7 +253,7 @@ export const Sidebar: React.FC = () => {
         onClick={() => setShowFilters(!showFilters)}
       >
         <Filter size={14} />
-        <span>Filter</span>
+        <span>{t.filters.title}</span>
         {(filters.categories.length > 0 || filters.severities.length > 0) && (
           <span className={styles.filterCount}>
             {filters.categories.length + filters.severities.length}
@@ -235,7 +267,7 @@ export const Sidebar: React.FC = () => {
         <div className={styles.filtersPanel}>
           {/* Categories */}
           <div className={styles.filterSection}>
-            <h4 className={styles.filterTitle}>Kategorien</h4>
+            <h4 className={styles.filterTitle}>{t.filters.categories}</h4>
             <div className={styles.filterGrid}>
               {Object.entries(CATEGORY_CONFIG).map(([key, config]) => (
                 <button
@@ -250,7 +282,7 @@ export const Sidebar: React.FC = () => {
                   } as React.CSSProperties}
                 >
                   {CATEGORY_ICONS[key]}
-                  <span>{config.label}</span>
+                  <span>{getCategoryLabel(key)}</span>
                 </button>
               ))}
             </div>
@@ -258,7 +290,7 @@ export const Sidebar: React.FC = () => {
 
           {/* Severity */}
           <div className={styles.filterSection}>
-            <h4 className={styles.filterTitle}>Schweregrad</h4>
+            <h4 className={styles.filterTitle}>{t.filters.severity}</h4>
             <div className={styles.filterGrid}>
               {Object.entries(SEVERITY_CONFIG).map(([key, config]) => (
                 <button
@@ -272,7 +304,7 @@ export const Sidebar: React.FC = () => {
                     '--chip-color': config.color,
                   } as React.CSSProperties}
                 >
-                  <span>{config.label}</span>
+                  <span>{getSeverityLabel(key)}</span>
                 </button>
               ))}
             </div>
@@ -280,10 +312,10 @@ export const Sidebar: React.FC = () => {
 
           {/* Date Range Filter */}
           <div className={styles.filterSection}>
-            <h4 className={styles.filterTitle}>Zeitraum</h4>
+            <h4 className={styles.filterTitle}>{t.filters.dateRange}</h4>
             <div className={styles.dateRangeInputs}>
               <div className={styles.dateInputGroup}>
-                <label>Von</label>
+                <label>{t.filters.from}</label>
                 <input
                   type="date"
                   value={filters.dateRange.start?.toISOString().split('T')[0] || ''}
@@ -297,7 +329,7 @@ export const Sidebar: React.FC = () => {
                 />
               </div>
               <div className={styles.dateInputGroup}>
-                <label>Bis</label>
+                <label>{t.filters.to}</label>
                 <input
                   type="date"
                   value={filters.dateRange.end?.toISOString().split('T')[0] || ''}
@@ -322,13 +354,13 @@ export const Sidebar: React.FC = () => {
                 onChange={(e) => setFilters({ verifiedOnly: e.target.checked })}
                 className={styles.checkbox}
               />
-              <span>Nur verifizierte Events</span>
+              <span>{t.filters.verifiedOnly}</span>
             </label>
           </div>
 
           {/* Reset Button */}
           <Button variant="ghost" size="sm" onClick={resetFilters} fullWidth>
-            Filter zurücksetzen
+            {t.filters.reset}
           </Button>
         </div>
       )}
@@ -339,14 +371,14 @@ export const Sidebar: React.FC = () => {
         onClick={() => setShowExport(!showExport)}
       >
         <Download size={14} />
-        <span>Export</span>
+        <span>{t.export.title}</span>
         {showExport ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
       </button>
 
       {/* Export Panel */}
       {showExport && (
         <div className={styles.filtersPanel}>
-          <p className={styles.exportHint}>{filteredEvents.length} Events werden exportiert</p>
+          <p className={styles.exportHint}>{filteredEvents.length} {t.events.title}</p>
           <div className={styles.exportButtons}>
             <button className={styles.exportButton} onClick={() => handleExport('geojson')}>
               <FileJson size={16} />
@@ -368,29 +400,29 @@ export const Sidebar: React.FC = () => {
       <div className={styles.stats}>
         <div className={styles.statItem}>
           <span className={styles.statValue}>{stats.total}</span>
-          <span className={styles.statLabel}>Events</span>
+          <span className={styles.statLabel}>{t.events.title}</span>
         </div>
         <div className={styles.statDivider} />
         <div className={styles.statItem}>
           <span className={styles.statValue}>{stats.verified}</span>
-          <span className={styles.statLabel}>Verifiziert</span>
+          <span className={styles.statLabel}>{t.events.verified}</span>
         </div>
         <div className={styles.statDivider} />
         <div className={styles.statItem}>
           <span className={styles.statValue}>
             {stats.byCategory['shelling'] || 0}
           </span>
-          <span className={styles.statLabel}>Beschuss</span>
+          <span className={styles.statLabel}>{t.categories.shelling}</span>
         </div>
       </div>
 
       {/* Event List */}
       <div className={styles.eventList}>
-        <h3 className={styles.listTitle}>Aktuelle Events</h3>
+        <h3 className={styles.listTitle}>{t.events.recent}</h3>
         {filteredEvents.length === 0 ? (
           <div className={styles.emptyState}>
             <MapPin size={32} />
-            <p>Keine Events gefunden</p>
+            <p>{t.events.noEvents}</p>
           </div>
         ) : (
           <div className={styles.events}>
@@ -400,6 +432,9 @@ export const Sidebar: React.FC = () => {
                 event={event}
                 isSelected={selectedEventId === event.id}
                 onClick={() => setSelectedEventId(event.id)}
+                getCategoryLabel={getCategoryLabel}
+                getSeverityLabel={getSeverityLabel}
+                dateLocale={dateLocale}
               />
             ))}
           </div>
@@ -422,12 +457,18 @@ interface EventListItemProps {
   };
   isSelected: boolean;
   onClick: () => void;
+  getCategoryLabel: (key: string) => string;
+  getSeverityLabel: (key: string) => string;
+  dateLocale: Locale;
 }
 
 const EventListItem: React.FC<EventListItemProps> = ({
   event,
   isSelected,
   onClick,
+  getCategoryLabel,
+  getSeverityLabel,
+  dateLocale,
 }) => {
   const categoryConfig = CATEGORY_CONFIG[event.category];
   const severityConfig = SEVERITY_CONFIG[event.severity];
@@ -448,7 +489,7 @@ const EventListItem: React.FC<EventListItemProps> = ({
             style={{ color: categoryConfig.color }}
           >
             {CATEGORY_ICONS[event.category]}
-            {categoryConfig.label}
+            {getCategoryLabel(event.category)}
           </span>
           {event.verified ? (
             <CheckCircle size={12} className={styles.verifiedBadge} />
@@ -463,13 +504,13 @@ const EventListItem: React.FC<EventListItemProps> = ({
         <div className={styles.eventMeta}>
           <span className={styles.eventTime}>
             <Clock size={10} />
-            {format(event.eventDate, 'dd.MM. HH:mm', { locale: de })}
+            {format(event.eventDate, 'dd.MM. HH:mm', { locale: dateLocale })}
           </span>
           <span
             className={styles.eventSeverity}
             style={{ color: severityConfig.color }}
           >
-            {severityConfig.label}
+            {getSeverityLabel(event.severity)}
           </span>
         </div>
       </div>

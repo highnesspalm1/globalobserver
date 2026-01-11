@@ -11,6 +11,7 @@ import {
   XCircle 
 } from 'lucide-react';
 import { CATEGORY_CONFIG, SEVERITY_CONFIG } from '../../types/database';
+import { useI18n } from '../../i18n';
 import styles from './EventPopup.module.css';
 
 interface EventPopupProps {
@@ -37,6 +38,7 @@ export const EventPopup: React.FC<EventPopupProps> = ({
 }) => {
   const popupRef = useRef<maplibregl.Popup | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
+  const { t } = useI18n();
 
   const categoryConfig = CATEGORY_CONFIG[event.category as keyof typeof CATEGORY_CONFIG];
   const severityConfig = SEVERITY_CONFIG[event.severity as keyof typeof SEVERITY_CONFIG];
@@ -113,12 +115,12 @@ export const EventPopup: React.FC<EventPopupProps> = ({
         {event.verified ? (
           <>
             <CheckCircle size={14} className={styles.verifiedIcon} />
-            <span className={styles.verifiedText}>Verifiziert</span>
+            <span className={styles.verifiedText}>{t.events.verified}</span>
           </>
         ) : (
           <>
             <AlertTriangle size={14} className={styles.unverifiedIcon} />
-            <span className={styles.unverifiedText}>Nicht verifiziert</span>
+            <span className={styles.unverifiedText}>{t.events.unverified}</span>
           </>
         )}
       </div>
@@ -132,7 +134,7 @@ export const EventPopup: React.FC<EventPopupProps> = ({
           className={styles.sourceLink}
         >
           <ExternalLink size={14} />
-          Quelle anzeigen
+          {t.app.viewSource}
         </a>
       )}
     </div>

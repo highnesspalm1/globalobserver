@@ -3,6 +3,7 @@ import {
   X, ChevronRight, ChevronLeft, MapPin, Layers, Clock, 
   Search, Bell, Bookmark, Share2, Filter, Zap, Globe
 } from 'lucide-react';
+import { useI18n } from '../../i18n';
 import styles from './OnboardingTour.module.css';
 
 interface TourStep {
@@ -91,6 +92,7 @@ const TOUR_STEPS: TourStep[] = [
 const STORAGE_KEY = 'globalobserver-tour-completed';
 
 export const OnboardingTour: React.FC = () => {
+  const { t } = useI18n();
   const [isActive, setIsActive] = useState(false);
   const [currentStep, setCurrentStep] = useState(0);
   const [showPrompt, setShowPrompt] = useState(false);
@@ -163,14 +165,14 @@ export const OnboardingTour: React.FC = () => {
           <div className={styles.promptIcon}>
             <Globe size={48} />
           </div>
-          <h2>Willkommen!</h2>
-          <p>Möchten Sie eine kurze Einführung in Global Observer?</p>
+          <h2>{t.onboarding.welcome}</h2>
+          <p>{t.onboarding.askTour}</p>
           <div className={styles.promptButtons}>
             <button className={styles.primaryButton} onClick={startTour}>
-              Tour starten
+              {t.onboarding.startTour}
             </button>
             <button className={styles.secondaryButton} onClick={() => endTour(true)}>
-              Überspringen
+              {t.onboarding.skipTour}
             </button>
           </div>
         </div>
@@ -223,7 +225,7 @@ export const OnboardingTour: React.FC = () => {
             className={styles.skipButton}
             onClick={skipTour}
           >
-            Überspringen
+            {t.onboarding.skipTour}
           </button>
 
           <div className={styles.navButtons}>

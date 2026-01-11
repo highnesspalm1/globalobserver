@@ -11,6 +11,7 @@ import { useKeyboardShortcuts } from './hooks/useKeyboardShortcuts';
 import { notify } from './stores/notificationStore';
 import { fetchAllLiveEvents, getConflictZones } from './services/liveDataService';
 import type { MapTerritory } from './types/database';
+import { I18nProvider, useI18n } from './i18n';
 import styles from './App.module.css';
 
 // Lazy load heavy components
@@ -80,9 +81,11 @@ function conflictZonesToTerritories(): MapTerritory[] {
 // Auto-refresh interval: 5 minutes
 const REFRESH_INTERVAL = 5 * 60 * 1000;
 
-function App() {
+// Inner App component that uses i18n
+function AppContent() {
   const { setEvents, setTerritories, isLoading, error, selectedEventId, setSelectedEventId } = useMapStore();
   const events = useMapStore((state) => state.events);
+  const { t } = useI18n();
   const [showWelcome, setShowWelcome] = useState(() => {
     // Check if user has dismissed welcome screen before
     return localStorage.getItem('globalobserver-welcome-dismissed') !== 'true';
@@ -123,9 +126,9 @@ function App() {
       if (liveEvents.length > 0) {
         setEvents(liveEvents);
         setLastRefresh(new Date());
-        notify.success('Live-Daten geladen', `${liveEvents.length} Ereignisse abgerufen`);
+        notify.success(t.success.dataLoaded, `${liveEvents.length} ${t.header.events}`);
       } else {
-        notify.warning('Keine neuen Daten', 'Keine Live-Ereignisse gefunden');
+        notify.warning(t.errors.noData, t.errors.noData);
       }
 
       // Load conflict zones as territories
@@ -135,8 +138,8 @@ function App() {
 
     } catch (err) {
       console.error('Error loading live data:', err);
-      useMapStore.getState().setError('Fehler beim Laden der Live-Daten');
-      notify.error('Fehler', 'Live-Daten konnten nicht geladen werden');
+      useMapStore.getState().setError(t.errors.loadingFailed);
+      notify.error(t.errors.loadingFailed, t.errors.loadingFailed);
     } finally {
       useMapStore.getState().setIsLoading(false);
     }
@@ -147,8 +150,8 @@ function App() {
     loadLiveData();
 
     // Welcome notification
-    notify.info('Global Observer', 'Live-Daten werden geladen...');
-  }, [loadLiveData]);
+    notify.info(t.app.title, t.header.loading);
+  }, [loadLiveData, t]);
 
   // Auto-refresh every 5 minutes
   useEffect(() => {
@@ -168,10 +171,10 @@ function App() {
   }, [loadLiveData]);
 
   return (
-    <div className={styles.app} role="application" aria-label="Global Observer - Konflikt-Monitor">
+    <div className={styles.app} role="application" aria-label={`${t.app.title} - ${t.app.subtitle}`}>
       {/* Skip Navigation Link für Accessibility */}
       <a href="#main-map" className="skip-link">
-        Zum Karteninhalt springen
+        {t.map.skipToMap}
       </a>
       
       <div className={styles.backgroundPattern} aria-hidden="true" />
@@ -186,7 +189,7 @@ function App() {
         />
       </Suspense>
 
-      <main id="main-map" className={styles.mapWrapper} role="main" aria-label="Interaktive Weltkarte">
+      <main id="main-map" className={styles.mapWrapper} role="main" aria-label={t.map.interactiveMap}>
         <MapView />
       </main>
 
@@ -284,7 +287,7 @@ function App() {
           <div className={styles.loadingOverlay}>
             <div className={styles.loadingContent}>
               <div className={styles.loadingSpinner} />
-              <span className={styles.loadingText}>Lade Daten...</span>
+              <span className={styles.loadingText}>{t.header.loading}</span>
             </div>
           </div>
         }>
@@ -304,6 +307,15 @@ function App() {
         <SystemStatus />
       </Suspense>
     </div>
+  );
+}
+
+// Main App component with I18nProvider
+function App() {
+  return (
+    <I18nProvider>
+      <AppContent />
+    </I18nProvider>
   );
 }
 

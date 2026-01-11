@@ -9,6 +9,7 @@ import {
     Zap
 } from 'lucide-react';
 import { useMapStore } from '../../stores/mapStore';
+import { useI18n } from '../../i18n';
 import styles from './HotspotAlerts.module.css';
 
 interface HotspotAlert {
@@ -22,6 +23,7 @@ interface HotspotAlert {
 }
 
 export const HotspotAlerts: React.FC = () => {
+    const { t } = useI18n();
     const events = useMapStore((state) => state.events);
     const setViewState = useMapStore((state) => state.setViewState);
     const setSelectedEventId = useMapStore((state) => state.setSelectedEventId);
@@ -101,13 +103,13 @@ export const HotspotAlerts: React.FC = () => {
                 <div className={styles.header}>
                     <div className={styles.headerLeft}>
                         <Bell size={14} />
-                        <span className={styles.title}>ALERTS</span>
+                        <span className={styles.title}>{t.alerts.title.toUpperCase()}</span>
                     </div>
                     <span className={styles.count}>0</span>
                 </div>
                 <div className={styles.emptyState}>
                     <Zap size={20} />
-                    <span>Keine aktuellen Hotspots</span>
+                    <span>{t.alerts.noHotspots}</span>
                 </div>
             </div>
         );
@@ -118,7 +120,7 @@ export const HotspotAlerts: React.FC = () => {
             <div className={styles.header}>
                 <div className={styles.headerLeft}>
                     <Bell size={14} className={styles.bellIcon} />
-                    <span className={styles.title}>HOTSPOT ALERTS</span>
+                    <span className={styles.title}>{t.alerts.hotspots.toUpperCase()}</span>
                 </div>
                 <span className={styles.count}>{alerts.length}</span>
             </div>

@@ -1,6 +1,7 @@
 import React, { useState, useCallback, useMemo } from 'react';
 import { format, formatDistanceToNow } from 'date-fns';
 import { de } from 'date-fns/locale';
+import { useI18n } from '../../i18n';
 import {
   X,
   Clock,
@@ -232,6 +233,7 @@ const MediaGallery: React.FC<{ urls: string[] }> = ({ urls }) => {
 };
 
 export const EventDetailPanel: React.FC<EventDetailPanelProps> = ({ event, onClose }) => {
+  const { t } = useI18n();
   const { setViewState, events } = useMapStore();
   const [isBookmarked, setIsBookmarked] = useState(false);
   const [activeTab, setActiveTab] = useState<'details' | 'timeline' | 'related'>('details');
@@ -384,12 +386,12 @@ export const EventDetailPanel: React.FC<EventDetailPanelProps> = ({ event, onClo
             {event.verified ? (
               <span className={styles.verifiedBadge}>
                 <CheckCircle size={10} />
-                Verifiziert
+                {t.events.verified}
               </span>
             ) : (
               <span className={styles.unverifiedBadge}>
                 <AlertTriangle size={10} />
-                Unbestätigt
+                {t.events.unverified}
               </span>
             )}
           </div>
@@ -402,21 +404,21 @@ export const EventDetailPanel: React.FC<EventDetailPanelProps> = ({ event, onClo
             onClick={() => setActiveTab('details')}
           >
             <Eye size={14} />
-            Details
+            {t.events.details}
           </button>
           <button
             className={`${styles.tab} ${activeTab === 'timeline' ? styles.tabActive : ''}`}
             onClick={() => setActiveTab('timeline')}
           >
             <History size={14} />
-            Verlauf
+            {t.events.history}
           </button>
           <button
             className={`${styles.tab} ${activeTab === 'related' ? styles.tabActive : ''}`}
             onClick={() => setActiveTab('related')}
           >
             <TrendingUp size={14} />
-            Verwandt
+            {t.events.relatedEvents}
             {relatedEvents.length > 0 && (
               <span className={styles.tabBadge}>{relatedEvents.length}</span>
             )}
@@ -457,7 +459,7 @@ export const EventDetailPanel: React.FC<EventDetailPanelProps> = ({ event, onClo
               <div className={styles.locationCard}>
                 <div className={styles.locationHeader}>
                   <MapPin size={16} className={styles.locationIcon} />
-                  <span className={styles.locationTitle}>Position</span>
+                  <span className={styles.locationTitle}>{t.events.position}</span>
                 </div>
                 <div className={styles.locationContent}>
                   <div className={styles.coordDisplay}>
@@ -483,7 +485,7 @@ export const EventDetailPanel: React.FC<EventDetailPanelProps> = ({ event, onClo
               {/* Tags */}
               {event.tags && event.tags.length > 0 && (
                 <div className={styles.tagsSection}>
-                  <h4 className={styles.sectionLabel}>Tags</h4>
+                  <h4 className={styles.sectionLabel}>{t.events.tags}</h4>
                   <div className={styles.tags}>
                     {event.tags.map((tag, i) => (
                       <span key={i} className={styles.tag}>#{tag}</span>
@@ -536,7 +538,7 @@ export const EventDetailPanel: React.FC<EventDetailPanelProps> = ({ event, onClo
               {relatedEvents.length === 0 ? (
                 <div className={styles.emptyState}>
                   <MessageCircle size={32} />
-                  <p>Keine verwandten Events gefunden</p>
+                  <p>{t.events.noRelatedEvents}</p>
                 </div>
               ) : (
                 <div className={styles.relatedList}>
@@ -571,7 +573,7 @@ export const EventDetailPanel: React.FC<EventDetailPanelProps> = ({ event, onClo
         <div className={styles.footer}>
           <button className={`${styles.actionButton} ${styles.actionPrimary}`} onClick={handleFlyTo}>
             <Navigation size={14} />
-            Zur Position
+            {t.app.goToLocation}
           </button>
           {event.sourceUrl && (
             <a
@@ -581,7 +583,7 @@ export const EventDetailPanel: React.FC<EventDetailPanelProps> = ({ event, onClo
               className={`${styles.actionButton} ${styles.actionSecondary}`}
             >
               <ExternalLink size={14} />
-              Quelle öffnen
+              {t.app.viewSource}
             </a>
           )}
         </div>

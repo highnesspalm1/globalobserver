@@ -4,6 +4,7 @@ import {
   ChevronLeft, ChevronRight, Layers
 } from 'lucide-react';
 import { useMapStore } from '../../stores/mapStore';
+import { useI18n } from '../../i18n';
 import styles from './CompareMode.module.css';
 
 interface ComparisonStats {
@@ -19,46 +20,8 @@ interface ComparisonStats {
   };
 }
 
-const PRESET_RANGES: { label: string; getDates: () => [Date, Date] }[] = [
-  { 
-    label: 'Heute vs. Gestern',
-    getDates: () => {
-      const today = new Date();
-      const yesterday = new Date(today);
-      yesterday.setDate(yesterday.getDate() - 1);
-      return [yesterday, today];
-    }
-  },
-  { 
-    label: 'Diese Woche vs. Letzte Woche',
-    getDates: () => {
-      const today = new Date();
-      const lastWeek = new Date(today);
-      lastWeek.setDate(lastWeek.getDate() - 7);
-      return [lastWeek, today];
-    }
-  },
-  { 
-    label: 'Dieser Monat vs. Letzter Monat',
-    getDates: () => {
-      const today = new Date();
-      const lastMonth = new Date(today);
-      lastMonth.setMonth(lastMonth.getMonth() - 1);
-      return [lastMonth, today];
-    }
-  },
-  { 
-    label: 'Dieses Jahr vs. Letztes Jahr',
-    getDates: () => {
-      const today = new Date();
-      const lastYear = new Date(today);
-      lastYear.setFullYear(lastYear.getFullYear() - 1);
-      return [lastYear, today];
-    }
-  },
-];
-
 export const CompareMode: React.FC = () => {
+  const { t } = useI18n();
   const [isOpen, setIsOpen] = useState(false);
   const [isActive, setIsActive] = useState(false);
   const [leftDate, setLeftDate] = useState<Date>(() => {
@@ -73,6 +36,46 @@ export const CompareMode: React.FC = () => {
   const [isAnimating, setIsAnimating] = useState(false);
 
   const events = useMapStore(state => state.events);
+
+  // Preset ranges with translations
+  const PRESET_RANGES = [
+    { 
+      label: t.compare.todayVsYesterday,
+      getDates: (): [Date, Date] => {
+        const today = new Date();
+        const yesterday = new Date(today);
+        yesterday.setDate(yesterday.getDate() - 1);
+        return [yesterday, today];
+      }
+    },
+    { 
+      label: t.compare.thisWeekVsLastWeek,
+      getDates: (): [Date, Date] => {
+        const today = new Date();
+        const lastWeek = new Date(today);
+        lastWeek.setDate(lastWeek.getDate() - 7);
+        return [lastWeek, today];
+      }
+    },
+    { 
+      label: t.compare.thisMonthVsLastMonth,
+      getDates: (): [Date, Date] => {
+        const today = new Date();
+        const lastMonth = new Date(today);
+        lastMonth.setMonth(lastMonth.getMonth() - 1);
+        return [lastMonth, today];
+      }
+    },
+    { 
+      label: t.compare.thisYearVsLastYear,
+      getDates: (): [Date, Date] => {
+        const today = new Date();
+        const lastYear = new Date(today);
+        lastYear.setFullYear(lastYear.getFullYear() - 1);
+        return [lastYear, today];
+      }
+    },
+  ];
 
   // Listen for toggle event from FloatingMenu
   useEffect(() => {
@@ -218,7 +221,7 @@ export const CompareMode: React.FC = () => {
             <div className={styles.header}>
               <h3>
                 <GitCompare size={18} />
-                Zeitvergleich
+                {t.compare.title}
               </h3>
               <button className={styles.closeButton} onClick={() => setIsOpen(false)}>
                 <X size={18} />
@@ -241,7 +244,7 @@ export const CompareMode: React.FC = () => {
             {/* Date Selection */}
             <div className={styles.dateSelection}>
               <div className={styles.dateInput}>
-                <label>Zeitpunkt A</label>
+                <label>{t.compare.timePointA}</label>
                 <div className={styles.dateField}>
                   <Calendar size={16} />
                   <input
@@ -255,7 +258,7 @@ export const CompareMode: React.FC = () => {
               <ArrowRight className={styles.dateArrow} size={24} />
 
               <div className={styles.dateInput}>
-                <label>Zeitpunkt B</label>
+                <label>{t.compare.timePointB}</label>
                 <div className={styles.dateField}>
                   <Calendar size={16} />
                   <input
@@ -273,7 +276,7 @@ export const CompareMode: React.FC = () => {
                 <div className={styles.statsSide}>
                   <div className={styles.statsLabel}>{formatDate(leftDate)}</div>
                   <div className={styles.statsValue}>{stats.left.total}</div>
-                  <div className={styles.statsSubtext}>Ereignisse</div>
+                  <div className={styles.statsSubtext}>{t.compare.eventsLabel}</div>
                 </div>
 
                 <div className={styles.statsChange}>
@@ -281,21 +284,21 @@ export const CompareMode: React.FC = () => {
                     {totalChange.label}
                   </div>
                   <div className={styles.changeLabel}>
-                    {totalChange.type === 'increase' ? 'Mehr' : totalChange.type === 'decrease' ? 'Weniger' : 'Gleich'}
+                    {totalChange.type === 'increase' ? t.compare.more : totalChange.type === 'decrease' ? t.compare.fewer : t.compare.same}
                   </div>
                 </div>
 
                 <div className={styles.statsSide}>
                   <div className={styles.statsLabel}>{formatDate(rightDate)}</div>
                   <div className={styles.statsValue}>{stats.right.total}</div>
-                  <div className={styles.statsSubtext}>Ereignisse</div>
+                  <div className={styles.statsSubtext}>{t.compare.eventsLabel}</div>
                 </div>
               </div>
             )}
 
             {/* Category Breakdown */}
             <div className={styles.categoryBreakdown}>
-              <h4>Nach Kategorie</h4>
+              <h4>{t.compare.byCategory}</h4>
               <div className={styles.categoryList}>
                 {Object.keys({ ...stats.left.byCategory, ...stats.right.byCategory }).map(cat => {
                   const left = stats.left.byCategory[cat] || 0;
@@ -326,7 +329,7 @@ export const CompareMode: React.FC = () => {
                 }}
               >
                 <Layers size={16} />
-                {isActive ? 'Vergleich beenden' : 'Split-Ansicht aktivieren'}
+                {isActive ? t.compare.endCompare : t.compare.activateSplit}
               </button>
 
               <button
@@ -335,13 +338,12 @@ export const CompareMode: React.FC = () => {
                 disabled={!isActive}
               >
                 {isAnimating ? <Pause size={16} /> : <Play size={16} />}
-                {isAnimating ? 'Stopp' : 'Animation'}
+                {isAnimating ? t.compare.stopAnimation : t.compare.startAnimation}
               </button>
             </div>
 
             <p className={styles.hint}>
-              Im Split-Modus zeigt die linke Seite Ereignisse vom ersten Datum,
-              die rechte Seite vom zweiten Datum.
+              {t.compare.splitModeHint}
             </p>
           </div>
         </div>
@@ -380,7 +382,7 @@ export const CompareMode: React.FC = () => {
             onClick={() => setIsActive(false)}
           >
             <X size={14} />
-            Vergleich beenden
+            {t.compare.endCompare}
           </button>
         </div>
       )}

@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { Share2, Link2, Copy, Check, Twitter, Mail, MapPin, X, QrCode } from 'lucide-react';
 import { useMapStore } from '../../stores/mapStore';
+import { useI18n } from '../../i18n';
 import styles from './SharePanel.module.css';
 
 interface ShareConfig {
@@ -12,6 +13,7 @@ interface ShareConfig {
 // Map state stored in URL params
 
 export const SharePanel: React.FC = () => {
+  const { t } = useI18n();
   const [isOpen, setIsOpen] = useState(false);
   const [shareConfig, setShareConfig] = useState<ShareConfig>({ type: 'view' });
   const [copied, setCopied] = useState(false);
@@ -131,11 +133,11 @@ export const SharePanel: React.FC = () => {
   const shareVia = useCallback((platform: 'twitter' | 'email' | 'native') => {
     const title = shareConfig.type === 'event' && shareConfig.eventTitle
       ? `${shareConfig.eventTitle} - Global Observer`
-      : 'Global Observer - Aktuelle Kartenansicht';
+      : t.share.shareTitle;
     
     const text = shareConfig.type === 'event'
-      ? `Schau dir dieses Ereignis an: ${shareConfig.eventTitle}`
-      : 'Schau dir diese Kartenansicht auf Global Observer an!';
+      ? `${t.share.shareEventText}: ${shareConfig.eventTitle}`
+      : t.share.shareViewText;
 
     switch (platform) {
       case 'twitter':
@@ -209,7 +211,7 @@ export const SharePanel: React.FC = () => {
                 className={`${styles.toggleButton} ${shareConfig.type === 'view' ? styles.active : ''}`}
                 onClick={() => setShareConfig({ type: 'view' })}
               >
-                Kartenansicht
+                {t.share.mapView}
               </button>
               {selectedEvent && (
                 <button
@@ -241,7 +243,7 @@ export const SharePanel: React.FC = () => {
                   onClick={copyToClipboard}
                 >
                   {copied ? <Check size={16} /> : <Copy size={16} />}
-                  {copied ? 'Kopiert!' : 'Kopieren'}
+                  {copied ? t.success.copied : t.share.copyLink}
                 </button>
               </div>
             </div>
@@ -276,7 +278,7 @@ export const SharePanel: React.FC = () => {
                 onClick={() => setShowQR(!showQR)}
               >
                 <QrCode size={20} />
-                QR-Code
+                {t.share.qrCode}
               </button>
             </div>
 
@@ -288,13 +290,13 @@ export const SharePanel: React.FC = () => {
                   alt="QR Code"
                   className={styles.qrCode}
                 />
-                <p>Scanne den Code mit deinem Smartphone</p>
+                <p>{t.share.scanQrCode}</p>
               </div>
             )}
 
             {/* Info */}
             <p className={styles.info}>
-              Der Link enthält die aktuelle Kartenposition, den Kartenstil und aktive Ebenen.
+              {t.share.includesPosition}
             </p>
           </div>
         </div>

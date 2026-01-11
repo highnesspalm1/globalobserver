@@ -9,6 +9,7 @@ import {
     Zap,
     RefreshCw
 } from 'lucide-react';
+import { useI18n } from '../../i18n';
 import styles from './SystemStatus.module.css';
 
 interface SystemMetrics {
@@ -20,6 +21,7 @@ interface SystemMetrics {
 }
 
 const SystemStatus: React.FC = () => {
+    const { t } = useI18n();
     const [metrics, setMetrics] = useState<SystemMetrics>({
         memory: { used: 0, total: 0 },
         latency: 0,
@@ -84,7 +86,7 @@ const SystemStatus: React.FC = () => {
                         <Zap size={10} />
                         <span>v2.1.0</span>
                     </div>
-                    <span className={styles.buildInfo}>BUILD 2026.01.11</span>
+                    <span className={styles.buildInfo}>{t.system.build}</span>
                 </div>
 
                 {/* Center Section - Metrics */}
@@ -92,7 +94,7 @@ const SystemStatus: React.FC = () => {
                     {/* Memory */}
                     <div className={styles.metric}>
                         <HardDrive size={12} className={styles.metricIcon} />
-                        <span className={styles.metricLabel}>MEM</span>
+                        <span className={styles.metricLabel}>{t.system.memory}</span>
                         <div className={styles.memoryBar}>
                             <div
                                 className={styles.memoryFill}
@@ -105,7 +107,7 @@ const SystemStatus: React.FC = () => {
                     {/* Latency */}
                     <div className={styles.metric}>
                         <Wifi size={12} className={`${styles.metricIcon} ${styles[getLatencyStatus(metrics.latency)]}`} />
-                        <span className={styles.metricLabel}>PING</span>
+                        <span className={styles.metricLabel}>{t.system.ping}</span>
                         <span className={`${styles.metricValue} ${styles[getLatencyStatus(metrics.latency)]}`}>
                             {metrics.latency}ms
                         </span>
@@ -114,21 +116,21 @@ const SystemStatus: React.FC = () => {
                     {/* FPS */}
                     <div className={styles.metric}>
                         <Cpu size={12} className={styles.metricIcon} />
-                        <span className={styles.metricLabel}>FPS</span>
+                        <span className={styles.metricLabel}>{t.system.fps}</span>
                         <span className={styles.metricValue}>{metrics.fps}</span>
                     </div>
 
                     {/* Connections */}
                     <div className={styles.metric}>
                         <Database size={12} className={styles.metricIcon} />
-                        <span className={styles.metricLabel}>CONN</span>
+                        <span className={styles.metricLabel}>{t.system.connection}</span>
                         <span className={styles.metricValue}>{metrics.connections}</span>
                     </div>
 
                     {/* Uptime */}
                     <div className={styles.metric}>
                         <Clock size={12} className={styles.metricIcon} />
-                        <span className={styles.metricLabel}>UP</span>
+                        <span className={styles.metricLabel}>{t.system.uptime}</span>
                         <span className={styles.metricValue}>{formatUptime(metrics.uptime)}</span>
                     </div>
                 </div>
@@ -137,7 +139,7 @@ const SystemStatus: React.FC = () => {
                 <div className={styles.rightSection}>
                     <div className={styles.activityIndicator}>
                         <Activity size={12} />
-                        <span className={styles.activityText}>SYSTEM ACTIVE</span>
+                        <span className={styles.activityText}>{t.system.active}</span>
                         <span className={styles.activityDot} />
                     </div>
                     <RefreshCw size={10} className={styles.syncIcon} />

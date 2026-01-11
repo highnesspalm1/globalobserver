@@ -8,6 +8,7 @@ import {
     TrendingUp
 } from 'lucide-react';
 import { useMapStore } from '../../stores/mapStore';
+import { useI18n } from '../../i18n';
 import styles from './ActivityFeed.module.css';
 
 interface ActivityItem {
@@ -20,6 +21,7 @@ interface ActivityItem {
 
 export const ActivityFeed: React.FC = () => {
     const events = useMapStore((state) => state.events);
+    const { t } = useI18n();
 
     // Stable timestamp to avoid purity violations
     const [now] = useState(() => Date.now());
@@ -83,7 +85,7 @@ export const ActivityFeed: React.FC = () => {
         <div className={styles.container}>
             <div className={styles.header}>
                 <Activity size={12} />
-                <span className={styles.title}>AKTIVITÄT</span>
+                <span className={styles.title}>{t.activity.title}</span>
                 <span className={styles.badge}>{activities.length}</span>
             </div>
 
@@ -91,7 +93,7 @@ export const ActivityFeed: React.FC = () => {
                 {activities.length === 0 ? (
                     <div className={styles.empty}>
                         <Clock size={16} />
-                        <span>Keine aktuellen Aktivitäten</span>
+                        <span>{t.activity.noActivity}</span>
                     </div>
                 ) : (
                     activities.map(activity => (

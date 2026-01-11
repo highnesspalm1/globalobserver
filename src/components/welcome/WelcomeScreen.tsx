@@ -14,6 +14,7 @@ import {
   Crosshair,
   Target,
 } from 'lucide-react';
+import { useI18n } from '../../i18n';
 import { Button } from '../ui/Button';
 import styles from './WelcomeScreen.module.css';
 
@@ -22,51 +23,52 @@ interface WelcomeScreenProps {
   onShowAgain?: (show: boolean) => void;
 }
 
-const FEATURES = [
-  {
-    icon: <MapPin size={24} />,
-    title: 'Echtzeit-Events',
-    description: 'Verfolgen Sie Ereignisse in Echtzeit auf der interaktiven Karte',
-  },
-  {
-    icon: <Layers size={24} />,
-    title: 'Multiple Layer',
-    description: 'Schalten Sie zwischen Satelliten-, Terrain- und taktischen Ansichten',
-  },
-  {
-    icon: <Clock size={24} />,
-    title: 'Zeit-Navigation',
-    description: 'Reisen Sie durch die Zeit mit dem interaktiven Timeline-Slider',
-  },
-  {
-    icon: <Filter size={24} />,
-    title: 'Erweiterte Filter',
-    description: 'Filtern Sie nach Kategorie, Schweregrad und Verifizierungsstatus',
-  },
-  {
-    icon: <Download size={24} />,
-    title: 'Export-Optionen',
-    description: 'Exportieren Sie Daten als GeoJSON, CSV oder KML',
-  },
-  {
-    icon: <Keyboard size={24} />,
-    title: 'Tastaturkürzel',
-    description: 'Nutzen Sie Shortcuts für schnelle Navigation',
-  },
-];
-
-const KEYBOARD_SHORTCUTS = [
-  { keys: ['S'], description: 'Sidebar ein/aus' },
-  { keys: ['L'], description: 'Layer-Panel ein/aus' },
-  { keys: ['T'], description: 'Timeline ein/aus' },
-  { keys: ['F'], description: 'Suche fokussieren' },
-  { keys: ['Esc'], description: 'Auswahl aufheben' },
-  { keys: ['?'], description: 'Hilfe anzeigen' },
-];
-
 export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onDismiss, onShowAgain }) => {
+  const { t } = useI18n();
   const [step, setStep] = useState(0);
   const [dontShowAgain, setDontShowAgain] = useState(false);
+
+  const FEATURES = [
+    {
+      icon: <MapPin size={24} />,
+      title: t.welcome.features.realtime,
+      description: t.welcome.features.realtimeDesc,
+    },
+    {
+      icon: <Layers size={24} />,
+      title: t.welcome.features.layers,
+      description: t.welcome.features.layersDesc,
+    },
+    {
+      icon: <Clock size={24} />,
+      title: t.welcome.features.timeline,
+      description: t.welcome.features.timelineDesc,
+    },
+    {
+      icon: <Filter size={24} />,
+      title: t.welcome.features.filters,
+      description: t.welcome.features.filtersDesc,
+    },
+    {
+      icon: <Download size={24} />,
+      title: t.welcome.features.export,
+      description: t.welcome.features.exportDesc,
+    },
+    {
+      icon: <Keyboard size={24} />,
+      title: t.welcome.features.shortcuts,
+      description: t.welcome.features.shortcutsDesc,
+    },
+  ];
+
+  const KEYBOARD_SHORTCUTS = [
+    { keys: ['S'], description: t.shortcuts.toggleSidebar },
+    { keys: ['L'], description: t.shortcuts.toggleLayers },
+    { keys: ['T'], description: t.shortcuts.toggleTimeline },
+    { keys: ['F'], description: t.shortcuts.focusSearch },
+    { keys: ['Esc'], description: t.shortcuts.clearSelection },
+    { keys: ['?'], description: t.shortcuts.showHelp },
+  ];
 
   const handleDismiss = () => {
     if (onShowAgain) {
@@ -81,7 +83,7 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onDismiss, onShowA
     <div className={styles.overlay}>
       <div className={styles.container}>
         {/* Close Button */}
-        <button className={styles.closeButton} onClick={handleDismiss} aria-label="Schließen">
+        <button className={styles.closeButton} onClick={handleDismiss} aria-label={t.welcome.close}>
           <X size={20} />
         </button>
 
@@ -96,29 +98,29 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onDismiss, onShowA
             </div>
 
             <h1 className={styles.title}>
-              Willkommen bei
-              <span className={styles.titleAccent}>Global Observer</span>
+              {t.welcome.welcomeTo}
+              <span className={styles.titleAccent}>{t.app.title}</span>
             </h1>
 
             <p className={styles.subtitle}>
-              Ihre Plattform für Geo-Intelligence und Echtzeit-Ereignisüberwachung
+              {t.welcome.description}
             </p>
 
             <div className={styles.stats}>
               <div className={styles.stat}>
                 <Radio className={styles.statIcon} size={20} />
-                <span className={styles.statValue}>Live</span>
-                <span className={styles.statLabel}>Tracking</span>
+                <span className={styles.statValue}>{t.header.live}</span>
+                <span className={styles.statLabel}>{t.welcome.tracking}</span>
               </div>
               <div className={styles.stat}>
                 <Crosshair className={styles.statIcon} size={20} />
-                <span className={styles.statValue}>Multi-Layer</span>
-                <span className={styles.statLabel}>Karten</span>
+                <span className={styles.statValue}>{t.welcome.multiLayer}</span>
+                <span className={styles.statLabel}>{t.welcome.maps}</span>
               </div>
               <div className={styles.stat}>
                 <Target className={styles.statIcon} size={20} />
-                <span className={styles.statValue}>Verifiziert</span>
-                <span className={styles.statLabel}>Daten</span>
+                <span className={styles.statValue}>{t.events.verified}</span>
+                <span className={styles.statLabel}>{t.welcome.data}</span>
               </div>
             </div>
           </div>
@@ -129,7 +131,7 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onDismiss, onShowA
           <div className={styles.featuresSection}>
             <h2 className={styles.sectionTitle}>
               <Shield size={24} />
-              Leistungsstarke Funktionen
+              {t.welcome.powerfulFeatures}
             </h2>
 
             <div className={styles.featuresGrid}>
@@ -155,7 +157,7 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onDismiss, onShowA
           <div className={styles.shortcutsSection}>
             <h2 className={styles.sectionTitle}>
               <Keyboard size={24} />
-              Tastaturkürzel
+              {t.shortcuts.title}
             </h2>
 
             <div className={styles.shortcutsGrid}>
@@ -179,7 +181,7 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onDismiss, onShowA
                   onChange={(e) => setDontShowAgain(e.target.checked)}
                   className={styles.checkbox}
                 />
-                <span className={styles.checkboxText}>Nicht mehr anzeigen</span>
+                <span className={styles.checkboxText}>{t.welcome.dontShowAgain}</span>
               </label>
             </div>
           </div>
@@ -193,7 +195,7 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onDismiss, onShowA
                 key={index}
                 className={`${styles.dot} ${step === index ? styles.dotActive : ''}`}
                 onClick={() => setStep(index)}
-                aria-label={`Schritt ${index + 1}`}
+                aria-label={`${t.welcome.step} ${index + 1}`}
               />
             ))}
           </div>
@@ -201,18 +203,18 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onDismiss, onShowA
           <div className={styles.navButtons}>
             {step > 0 && (
               <Button variant="ghost" onClick={() => setStep(step - 1)}>
-                Zurück
+                {t.welcome.back}
               </Button>
             )}
             
             {step < totalSteps - 1 ? (
               <Button variant="primary" onClick={() => setStep(step + 1)}>
-                Weiter
+                {t.welcome.next}
                 <ChevronRight size={16} />
               </Button>
             ) : (
               <Button variant="primary" onClick={handleDismiss}>
-                Los geht's
+                {t.welcome.getStarted}
                 <ChevronRight size={16} />
               </Button>
             )}

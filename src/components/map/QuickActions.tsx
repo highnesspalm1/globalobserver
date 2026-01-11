@@ -17,6 +17,7 @@ import {
   Share2,
 } from 'lucide-react';
 import { useMapStore } from '../../stores/mapStore';
+import { useI18n } from '../../i18n';
 import { Tooltip } from '../ui/Tooltip';
 import styles from './QuickActions.module.css';
 
@@ -37,6 +38,7 @@ interface QuickActionsProps {
 export const QuickActions: React.FC<QuickActionsProps> = ({ map }) => {
   const [isExpanded, setIsExpanded] = useState(true);
   const [isFullscreen, setIsFullscreen] = useState(false);
+  const { t } = useI18n();
 
   const {
     mapStyle,
@@ -117,17 +119,17 @@ export const QuickActions: React.FC<QuickActionsProps> = ({ map }) => {
     {
       id: 'fullscreen',
       icon: isFullscreen ? <Minimize2 size={18} /> : <Maximize2 size={18} />,
-      label: isFullscreen ? 'Vollbild beenden' : 'Vollbild',
+      label: isFullscreen ? t.quickActions.exitFullscreen : t.quickActions.fullscreen,
       shortcut: 'F11',
       onClick: handleToggleFullscreen
     },
   ];
 
   const styleActions: QuickAction[] = [
-    { id: 'dark', icon: <Map size={16} />, label: 'Dark Style', onClick: () => setMapStyle('dark'), active: mapStyle === 'dark' },
-    { id: 'satellite', icon: <Satellite size={16} />, label: 'Satellit', onClick: () => setMapStyle('satellite'), active: mapStyle === 'satellite' },
-    { id: 'terrain', icon: <Mountain size={16} />, label: 'Terrain', onClick: () => setMapStyle('terrain'), active: mapStyle === 'terrain' },
-    { id: 'tactical', icon: <Target size={16} />, label: 'Taktisch', onClick: () => setMapStyle('tactical'), active: mapStyle === 'tactical' },
+    { id: 'dark', icon: <Map size={16} />, label: t.quickActions.darkMode, onClick: () => setMapStyle('dark'), active: mapStyle === 'dark' },
+    { id: 'satellite', icon: <Satellite size={16} />, label: t.quickActions.satelliteMode, onClick: () => setMapStyle('satellite'), active: mapStyle === 'satellite' },
+    { id: 'terrain', icon: <Mountain size={16} />, label: t.quickActions.terrainMode, onClick: () => setMapStyle('terrain'), active: mapStyle === 'terrain' },
+    { id: 'tactical', icon: <Target size={16} />, label: t.quickActions.tacticalMode, onClick: () => setMapStyle('tactical'), active: mapStyle === 'tactical' },
   ];
 
   const dataActions: QuickAction[] = [
@@ -159,7 +161,7 @@ export const QuickActions: React.FC<QuickActionsProps> = ({ map }) => {
         <button
           className={styles.expandButton}
           onClick={() => setIsExpanded(true)}
-          aria-label="Quick Actions öffnen"
+          aria-label={t.quickActions.open}
         >
           <Navigation size={20} />
         </button>
@@ -219,7 +221,7 @@ export const QuickActions: React.FC<QuickActionsProps> = ({ map }) => {
         <button
           className={styles.collapseButton}
           onClick={() => setIsExpanded(false)}
-          aria-label="Quick Actions minimieren"
+          aria-label={t.quickActions.minimize}
         >
           <Minimize2 size={14} />
         </button>

@@ -4,6 +4,7 @@ import {
   Calendar, Rewind, FastForward
 } from 'lucide-react';
 import { useMapStore } from '../../stores/mapStore';
+import { useI18n } from '../../i18n';
 import styles from './HeatmapTimelapse.module.css';
 
 interface TimelapseConfig {
@@ -21,6 +22,7 @@ const DEFAULT_CONFIG: TimelapseConfig = {
 };
 
 export const HeatmapTimelapse: React.FC = () => {
+  const { t } = useI18n();
   const [isOpen, setIsOpen] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentDate, setCurrentDate] = useState<Date>(DEFAULT_CONFIG.startDate);
@@ -184,7 +186,7 @@ export const HeatmapTimelapse: React.FC = () => {
             <div className={styles.header}>
               <h3>
                 <Flame size={18} />
-                Heatmap-Zeitraffer
+                {t.heatmap.title}
               </h3>
               <button className={styles.closeButton} onClick={() => setIsOpen(false)}>
                 <X size={18} />
@@ -199,7 +201,7 @@ export const HeatmapTimelapse: React.FC = () => {
               </div>
               <div className={styles.eventCount}>
                 <span className={styles.countNumber}>{currentEvents}</span>
-                <span className={styles.countLabel}>Ereignisse</span>
+                <span className={styles.countLabel}>{t.heatmap.events}</span>
               </div>
             </div>
 
@@ -218,7 +220,7 @@ export const HeatmapTimelapse: React.FC = () => {
                       key={i}
                       className={`${styles.histogramBar} ${isActive ? styles.active : ''}`}
                       style={{ height: `${Math.max(height, 2)}%` }}
-                      title={`${count} Ereignisse`}
+                      title={`${count} ${t.heatmap.eventsTooltip}`}
                     />
                   );
                 })}
@@ -248,7 +250,7 @@ export const HeatmapTimelapse: React.FC = () => {
 
             {/* Playback Controls */}
             <div className={styles.controls}>
-              <button className={styles.controlButton} onClick={reset} title="Zurück zum Start">
+              <button className={styles.controlButton} onClick={reset} title={t.heatmap.backToStart}>
                 <SkipBack size={18} />
               </button>
               
@@ -262,7 +264,7 @@ export const HeatmapTimelapse: React.FC = () => {
                     activateHeatmap();
                   }
                 }}
-                title="-7 Tage"
+                title="-7"
               >
                 <Rewind size={16} />
               </button>
@@ -284,19 +286,19 @@ export const HeatmapTimelapse: React.FC = () => {
                     activateHeatmap();
                   }
                 }}
-                title="+7 Tage"
+                title="+7"
               >
                 <FastForward size={16} />
               </button>
               
-              <button className={styles.controlButton} onClick={skipToEnd} title="Zum Ende">
+              <button className={styles.controlButton} onClick={skipToEnd} title={t.heatmap.toEnd}>
                 <SkipForward size={18} />
               </button>
             </div>
 
             {/* Speed Control */}
             <div className={styles.speedSection}>
-              <span className={styles.speedLabel}>Geschwindigkeit:</span>
+              <span className={styles.speedLabel}>{t.heatmap.speed}:</span>
               <div className={styles.speedButtons}>
                 {[0.5, 1, 2, 4].map(s => (
                   <button
@@ -315,14 +317,14 @@ export const HeatmapTimelapse: React.FC = () => {
               className={styles.configToggle}
               onClick={() => setShowConfig(!showConfig)}
             >
-              {showConfig ? 'Einstellungen ausblenden' : 'Einstellungen anzeigen'}
+              {showConfig ? t.heatmap.hideSettings : t.heatmap.showSettings}
             </button>
 
             {/* Config Panel */}
             {showConfig && (
               <div className={styles.configSection}>
                 <div className={styles.configRow}>
-                  <label>Startdatum:</label>
+                  <label>{t.heatmap.startDate}:</label>
                   <input
                     type="date"
                     value={config.startDate.toISOString().split('T')[0]}
@@ -337,7 +339,7 @@ export const HeatmapTimelapse: React.FC = () => {
                 </div>
                 
                 <div className={styles.configRow}>
-                  <label>Enddatum:</label>
+                  <label>{t.heatmap.endDate}:</label>
                   <input
                     type="date"
                     value={config.endDate.toISOString().split('T')[0]}
@@ -352,7 +354,7 @@ export const HeatmapTimelapse: React.FC = () => {
                 </div>
 
                 <div className={styles.configRow}>
-                  <label>Schrittweite:</label>
+                  <label>{t.heatmap.stepSize}:</label>
                   <select
                     value={config.stepDays}
                     onChange={(e) => setConfig(prev => ({ 
@@ -360,9 +362,9 @@ export const HeatmapTimelapse: React.FC = () => {
                       stepDays: parseInt(e.target.value) 
                     }))}
                   >
-                    <option value={1}>1 Tag</option>
-                    <option value={7}>1 Woche</option>
-                    <option value={30}>1 Monat</option>
+                    <option value={1}>{t.heatmap.oneDay}</option>
+                    <option value={7}>{t.heatmap.oneWeek}</option>
+                    <option value={30}>{t.heatmap.oneMonth}</option>
                   </select>
                 </div>
               </div>
@@ -371,8 +373,8 @@ export const HeatmapTimelapse: React.FC = () => {
             {/* Info */}
             <div className={styles.info}>
               <p>
-                Die Heatmap zeigt die Dichte der Ereignisse für das ausgewählte Datum.
-                {isHeatmapActive && <strong> Heatmap aktiv!</strong>}
+                {t.heatmap.heatmapInfo}
+                {isHeatmapActive && <strong> {t.heatmap.heatmapActive}</strong>}
               </p>
             </div>
           </div>

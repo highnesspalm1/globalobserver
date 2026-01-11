@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Crosshair, Copy, Check } from 'lucide-react';
+import { useI18n } from '../../i18n';
 import styles from './CoordinateDisplay.module.css';
 
 interface CoordinateDisplayProps {
@@ -8,6 +9,7 @@ interface CoordinateDisplayProps {
 
 export const CoordinateDisplay: React.FC<CoordinateDisplayProps> = ({ coordinates }) => {
   const [copied, setCopied] = useState(false);
+  const { t } = useI18n();
 
   const formatCoordinate = (coord: number, isLat: boolean) => {
     const direction = isLat 
@@ -39,7 +41,7 @@ export const CoordinateDisplay: React.FC<CoordinateDisplayProps> = ({ coordinate
       <button 
         className={styles.copyButton} 
         onClick={handleCopy}
-        title="Koordinaten kopieren"
+        title={t.map.copyCoordinates}
       >
         {copied ? <Check size={12} /> : <Copy size={12} />}
       </button>

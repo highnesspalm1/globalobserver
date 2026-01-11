@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect, useCallback, useMemo } from 'react';
 import { ChevronDown, Check, Search, X } from 'lucide-react';
+import { useI18n } from '../../i18n';
 import styles from './Dropdown.module.css';
 
 export interface DropdownOption {
@@ -32,7 +33,7 @@ export const Dropdown: React.FC<DropdownProps> = ({
   options,
   value,
   onChange,
-  placeholder = 'Auswählen...',
+  placeholder,
   label,
   error,
   disabled = false,
@@ -44,10 +45,13 @@ export const Dropdown: React.FC<DropdownProps> = ({
   maxHeight = 280,
   className = '',
 }) => {
+  const { t } = useI18n();
   const [isOpen, setIsOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const containerRef = useRef<HTMLDivElement>(null);
   const searchRef = useRef<HTMLInputElement>(null);
+  
+  const placeholderText = placeholder || t.app.search;
 
   // Group options
   const groupedOptions = options.reduce((acc, opt) => {
@@ -77,9 +81,9 @@ export const Dropdown: React.FC<DropdownProps> = ({
   // Display value
   const displayValue = selectedOptions.length > 0
     ? multiple
-      ? `${selectedOptions.length} ausgewählt`
+      ? `${selectedOptions.length} ${t.app.selected}`
       : selectedOptions[0].label
-    : placeholder;
+    : placeholderText;
 
   // Handle select
   const handleSelect = useCallback((optValue: string) => {
@@ -170,7 +174,7 @@ export const Dropdown: React.FC<DropdownProps> = ({
                 ref={searchRef}
                 type="text"
                 className={styles.searchInput}
-                placeholder="Suchen..."
+                placeholder={t.search.placeholder}
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
               />
@@ -207,7 +211,7 @@ export const Dropdown: React.FC<DropdownProps> = ({
             ))}
 
             {Object.keys(filteredGroups).length === 0 && (
-              <div className={styles.emptyState}>Keine Ergebnisse gefunden</div>
+              <div className={styles.emptyState}>{t.ui.dropdown.noResults}</div>
             )}
           </div>
         </div>

@@ -13,6 +13,7 @@ import {
   Trash2,
 } from 'lucide-react';
 import { useMapStore } from '../../stores/mapStore';
+import { useI18n } from '../../i18n';
 import { CATEGORY_CONFIG, SEVERITY_CONFIG } from '../../types/database';
 import type { EventCategory, SeverityLevel } from '../../types/database';
 import { Button, IconButton } from '../ui/Button';
@@ -43,6 +44,7 @@ const DEFAULT_FORM_DATA: EventFormData = {
 };
 
 export const AdminPanel: React.FC = () => {
+  const { t } = useI18n();
   const {
     adminMode,
     setAdminMode,
@@ -140,7 +142,7 @@ export const AdminPanel: React.FC = () => {
         title="Admin-Modus aktivieren"
       >
         <Edit3 size={16} />
-        <span>Admin</span>
+        <span>{t.admin.title}</span>
       </button>
     );
   }
@@ -151,10 +153,10 @@ export const AdminPanel: React.FC = () => {
       <div className={styles.header}>
         <div className={styles.headerTitle}>
           <Edit3 size={16} />
-          <span>ADMIN PANEL</span>
+          <span>{t.admin.panel}</span>
         </div>
         <IconButton
-          aria-label="Admin-Modus beenden"
+          aria-label={t.admin.exitMode}
           icon={<X size={16} />}
           onClick={() => setAdminMode(false)}
           size="sm"
@@ -165,13 +167,13 @@ export const AdminPanel: React.FC = () => {
       <div className={styles.quickStats}>
         <div className={styles.statBox}>
           <span className={styles.statNumber}>{events.length}</span>
-          <span className={styles.statLabel}>Events</span>
+          <span className={styles.statLabel}>{t.admin.eventsTab}</span>
         </div>
         <div className={styles.statBox}>
           <span className={styles.statNumber}>
             {events.filter((e) => !e.verified).length}
           </span>
-          <span className={styles.statLabel}>Ungeprüft</span>
+          <span className={styles.statLabel}>{t.admin.pendingTab}</span>
         </div>
       </div>
 
@@ -192,7 +194,7 @@ export const AdminPanel: React.FC = () => {
         <div className={styles.formOverlay}>
           <div className={styles.formModal}>
             <div className={styles.formHeader}>
-              <h3>Neues Event erstellen</h3>
+              <h3>{t.events.create}</h3>
               <IconButton
                 aria-label="Schließen"
                 icon={<X size={18} />}
@@ -203,7 +205,7 @@ export const AdminPanel: React.FC = () => {
             <form onSubmit={handleSubmit} className={styles.form}>
               {/* Title */}
               <div className={styles.formGroup}>
-                <label className={styles.label}>Titel *</label>
+                <label className={styles.label}>{t.events.titleLabel} *</label>
                 <input
                   type="text"
                   name="title"
@@ -217,7 +219,7 @@ export const AdminPanel: React.FC = () => {
 
               {/* Description */}
               <div className={styles.formGroup}>
-                <label className={styles.label}>Beschreibung</label>
+                <label className={styles.label}>{t.events.descriptionLabel}</label>
                 <textarea
                   name="description"
                   value={formData.description}
@@ -231,7 +233,7 @@ export const AdminPanel: React.FC = () => {
               {/* Category & Severity */}
               <div className={styles.formRow}>
                 <div className={styles.formGroup}>
-                  <label className={styles.label}>Kategorie *</label>
+                  <label className={styles.label}>{t.events.categoryLabel} *</label>
                   <select
                     name="category"
                     value={formData.category}
@@ -247,7 +249,7 @@ export const AdminPanel: React.FC = () => {
                 </div>
 
                 <div className={styles.formGroup}>
-                  <label className={styles.label}>Schweregrad *</label>
+                  <label className={styles.label}>{t.events.severityLabel} *</label>
                   <select
                     name="severity"
                     value={formData.severity}
@@ -267,7 +269,7 @@ export const AdminPanel: React.FC = () => {
               <div className={styles.formGroup}>
                 <label className={styles.label}>
                   <MapPin size={14} />
-                  Position *
+                  {t.events.locationLabel} *
                 </label>
                 <div className={styles.locationInputs}>
                   <div className={styles.coordInput}>
@@ -303,7 +305,7 @@ export const AdminPanel: React.FC = () => {
                   onClick={() => setIsPickingLocation(!isPickingLocation)}
                   fullWidth
                 >
-                  {isPickingLocation ? 'Klicken Sie auf die Karte...' : 'Position auf Karte wählen'}
+                  {isPickingLocation ? t.events.clickOnMap : t.events.pickOnMap}
                 </Button>
               </div>
 
@@ -343,7 +345,7 @@ export const AdminPanel: React.FC = () => {
               <div className={styles.formGroup}>
                 <label className={styles.label}>
                   <Tag size={14} />
-                  Tags
+                  {t.events.tagsLabel}
                 </label>
                 <div className={styles.tagInput}>
                   <input
@@ -419,7 +421,7 @@ export const AdminPanel: React.FC = () => {
               </div>
               <div className={styles.pendingActions}>
                 <IconButton
-                  aria-label="Verifizieren"
+                  aria-label={t.admin.verify}
                   icon={<CheckCircle size={14} />}
                   size="sm"
                   onClick={() => {
@@ -427,7 +429,7 @@ export const AdminPanel: React.FC = () => {
                   }}
                 />
                 <IconButton
-                  aria-label="Löschen"
+                  aria-label={t.app.delete}
                   icon={<Trash2 size={14} />}
                   size="sm"
                   onClick={() => {
@@ -438,7 +440,7 @@ export const AdminPanel: React.FC = () => {
             </div>
           ))}
           {events.filter((e) => !e.verified).length === 0 && (
-            <p className={styles.emptyText}>Keine ausstehenden Events</p>
+            <p className={styles.emptyText}>{t.events.noPending}</p>
           )}
         </div>
       </div>

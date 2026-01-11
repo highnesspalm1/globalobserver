@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react';
 import { AlertTriangle, Shield, Activity } from 'lucide-react';
 import { useMapStore } from '../../stores/mapStore';
+import { useI18n } from '../../i18n';
 import styles from './ThreatLevel.module.css';
 
 type ThreatLevelType = 'LOW' | 'GUARDED' | 'ELEVATED' | 'HIGH' | 'SEVERE';
@@ -14,51 +15,42 @@ interface ThreatConfig {
     description: string;
 }
 
-const THREAT_LEVELS: Record<ThreatLevelType, ThreatConfig> = {
+const THREAT_LEVELS: Record<ThreatLevelType, Omit<ThreatConfig, 'label' | 'labelDe' | 'description'> & { key: ThreatLevelType }> = {
     LOW: {
         level: 5,
-        label: 'LOW',
-        labelDe: 'NIEDRIG',
+        key: 'LOW',
         color: '#16a34a',
-        bgColor: 'rgba(22, 163, 74, 0.15)',
-        description: 'Geringe Bedrohungslage'
+        bgColor: 'rgba(22, 163, 74, 0.15)'
     },
     GUARDED: {
         level: 4,
-        label: 'GUARDED',
-        labelDe: 'BEWACHT',
+        key: 'GUARDED',
         color: '#0284c7',
-        bgColor: 'rgba(2, 132, 199, 0.15)',
-        description: 'Allgemeine Bedrohung möglich'
+        bgColor: 'rgba(2, 132, 199, 0.15)'
     },
     ELEVATED: {
         level: 3,
-        label: 'ELEVATED',
-        labelDe: 'ERHÖHT',
+        key: 'ELEVATED',
         color: '#eab308',
-        bgColor: 'rgba(234, 179, 8, 0.15)',
-        description: 'Signifikante Bedrohungslage'
+        bgColor: 'rgba(234, 179, 8, 0.15)'
     },
     HIGH: {
         level: 2,
-        label: 'HIGH',
-        labelDe: 'HOCH',
+        key: 'HIGH',
         color: '#ea580c',
-        bgColor: 'rgba(234, 88, 12, 0.15)',
-        description: 'Hohe Bedrohungswahrscheinlichkeit'
+        bgColor: 'rgba(234, 88, 12, 0.15)'
     },
     SEVERE: {
         level: 1,
-        label: 'SEVERE',
-        labelDe: 'KRITISCH',
+        key: 'SEVERE',
         color: '#dc2626',
-        bgColor: 'rgba(220, 38, 38, 0.15)',
-        description: 'Akute Bedrohungslage'
+        bgColor: 'rgba(220, 38, 38, 0.15)'
     }
 };
 
 export const ThreatLevel: React.FC = () => {
     const events = useMapStore((state) => state.events);
+    const { t } = useI18n();
 
     // Use stable timestamp to avoid purity violations
     const [now] = React.useState(() => Date.now());
@@ -93,6 +85,23 @@ export const ThreatLevel: React.FC = () => {
     const barSegments = 10;
     const filledSegments = Math.round((6 - threatLevel.level) / 5 * barSegments);
 
+    // Get translated labels based on threat level key
+    const threatLabels: Record<ThreatLevelType, string> = {
+        LOW: t.threat.low,
+        GUARDED: t.threat.guarded,
+        ELEVATED: t.threat.elevated,
+        HIGH: t.threat.high,
+        SEVERE: t.threat.critical
+    };
+
+    const threatDescriptions: Record<ThreatLevelType, string> = {
+        LOW: t.threat.lowDesc,
+        GUARDED: t.threat.guardedDesc,
+        ELEVATED: t.threat.elevatedDesc,
+        HIGH: t.threat.highDesc,
+        SEVERE: t.threat.criticalDesc
+    };
+
     return (
         <div
             className={styles.container}
@@ -105,7 +114,7 @@ export const ThreatLevel: React.FC = () => {
                 <div className={styles.iconWrapper}>
                     <Shield size={16} />
                 </div>
-                <span className={styles.title}>THREAT LEVEL</span>
+                <span className={styles.title}>{t.threat.level}</span>
             </div>
 
             <div className={styles.levelDisplay}>
@@ -124,7 +133,7 @@ export const ThreatLevel: React.FC = () => {
 
                 <div className={styles.levelInfo}>
                     <span className={styles.levelNumber}>STUFE {threatLevel.level}</span>
-                    <span className={styles.levelLabel}>{threatLevel.labelDe}</span>
+                    <span className={styles.levelLabel}>{threatLabels[threatLevel.key]}</span>
                 </div>
             </div>
 
@@ -132,18 +141,18 @@ export const ThreatLevel: React.FC = () => {
                 <div className={styles.statItem}>
                     <AlertTriangle size={12} />
                     <span>{stats.criticalCount}</span>
-                    <span className={styles.statLabel}>Kritisch</span>
+                    <span className={styles.statLabel}>{t.stats.critical}</span>
                 </div>
                 <div className={styles.statDivider} />
                 <div className={styles.statItem}>
                     <Activity size={12} />
                     <span>{stats.highCount}</span>
-                    <span className={styles.statLabel}>Hoch</span>
+                    <span className={styles.statLabel}>{t.stats.high}</span>
                 </div>
             </div>
 
             <div className={styles.description}>
-                {threatLevel.description}
+                {threatDescriptions[threatLevel.key]}
             </div>
         </div>
     );

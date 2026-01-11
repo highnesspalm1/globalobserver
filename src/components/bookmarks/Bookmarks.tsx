@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Bookmark, MapPin, Star, Trash2, Plus, X, Navigation } from 'lucide-react';
+import { useI18n } from '../../i18n';
 import { useMapStore } from '../../stores/mapStore';
 import { IconButton } from '../ui/Button';
 import styles from './Bookmarks.module.css';
@@ -30,6 +31,7 @@ function saveBookmarks(bookmarks: BookmarkItem[]) {
 }
 
 export const Bookmarks: React.FC = () => {
+  const { t } = useI18n();
   const [isOpen, setIsOpen] = useState(false);
   const [bookmarks, setBookmarks] = useState<BookmarkItem[]>(loadBookmarks);
   const [showAddForm, setShowAddForm] = useState(false);
@@ -120,13 +122,13 @@ export const Bookmarks: React.FC = () => {
       <div className={styles.header}>
         <div className={styles.headerTitle}>
           <Bookmark size={16} />
-          <span>LESEZEICHEN</span>
+          <span>{t.bookmarks.title}</span>
         </div>
         <IconButton
           icon={<X size={16} />}
           onClick={() => setIsOpen(false)}
           size="sm"
-          aria-label="Schließen"
+          aria-label={t.app.close}
         />
       </div>
 
@@ -149,7 +151,7 @@ export const Bookmarks: React.FC = () => {
                 disabled={!newBookmarkName.trim()}
               >
                 <MapPin size={14} />
-                Speichern
+                {t.app.save}
               </button>
               <button 
                 className={styles.cancelButton}
@@ -158,7 +160,7 @@ export const Bookmarks: React.FC = () => {
                   setNewBookmarkName('');
                 }}
               >
-                Abbrechen
+                {t.app.cancel}
               </button>
             </div>
           </div>
@@ -169,7 +171,7 @@ export const Bookmarks: React.FC = () => {
               onClick={() => setShowAddForm(true)}
             >
               <Plus size={14} />
-              Aktuelle Position
+              {t.bookmarks.currentPosition}
             </button>
             {selectedEventId && (
               <button 
@@ -189,8 +191,8 @@ export const Bookmarks: React.FC = () => {
         {bookmarks.length === 0 ? (
           <div className={styles.empty}>
             <Bookmark size={32} />
-            <p>Keine Lesezeichen</p>
-            <span>Speichern Sie Orte oder Events für schnellen Zugriff</span>
+            <p>{t.bookmarks.noBookmarks}</p>
+            <span>{t.bookmarks.saveDescription}</span>
           </div>
         ) : (
           bookmarks.map((bookmark) => (

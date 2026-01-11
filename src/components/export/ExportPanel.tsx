@@ -10,6 +10,7 @@ import {
     Check,
     Loader
 } from 'lucide-react';
+import { useI18n } from '../../i18n';
 import { useMapStore } from '../../stores/mapStore';
 import { CATEGORY_CONFIG } from '../../types/database';
 import type { EventCategory, MapEvent } from '../../types/database';
@@ -26,6 +27,7 @@ interface ExportOptions {
 }
 
 const ExportPanel: React.FC = () => {
+    const { t } = useI18n();
     const [isOpen, setIsOpen] = useState(false);
     const [isExporting, setIsExporting] = useState(false);
     const [exportComplete, setExportComplete] = useState(false);
@@ -195,7 +197,7 @@ const ExportPanel: React.FC = () => {
                 <div className={styles.header}>
                     <div className={styles.headerTitle}>
                         <Download size={18} />
-                        <span>EXPORT</span>
+                        <span>{t.export.title}</span>
                     </div>
                     <button className={styles.closeButton} onClick={() => setIsOpen(false)}>
                         <X size={18} />
@@ -206,7 +208,7 @@ const ExportPanel: React.FC = () => {
                 <div className={styles.content}>
                     {/* Format Selection */}
                     <div className={styles.section}>
-                        <h3 className={styles.sectionTitle}>Format</h3>
+                        <h3 className={styles.sectionTitle}>{t.export.format}</h3>
                         <div className={styles.formatGrid}>
                             <button
                                 className={`${styles.formatOption} ${options.format === 'geojson' ? styles.active : ''}`}
@@ -236,7 +238,7 @@ const ExportPanel: React.FC = () => {
                     <div className={styles.section}>
                         <h3 className={styles.sectionTitle}>
                             <Calendar size={14} />
-                            Datumsbereich
+                            {t.export.dateRange}
                         </h3>
                         <div className={styles.dateRange}>
                             <input
@@ -245,7 +247,7 @@ const ExportPanel: React.FC = () => {
                                 onChange={e => setOptions(prev => ({ ...prev, dateFrom: e.target.value }))}
                                 className={styles.dateInput}
                             />
-                            <span className={styles.dateSeparator}>bis</span>
+                            <span className={styles.dateSeparator}>{t.filters.to}</span>
                             <input
                                 type="date"
                                 value={options.dateTo}

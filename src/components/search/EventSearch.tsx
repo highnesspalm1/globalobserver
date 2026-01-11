@@ -8,6 +8,7 @@ import {
     AlertTriangle
 } from 'lucide-react';
 import { useMapStore } from '../../stores/mapStore';
+import { useI18n } from '../../i18n';
 import { CATEGORY_CONFIG } from '../../types/database';
 import styles from './EventSearch.module.css';
 
@@ -21,6 +22,7 @@ interface SearchResult {
 }
 
 export const EventSearch: React.FC = () => {
+    const { t } = useI18n();
     const [isOpen, setIsOpen] = useState(false);
     const [query, setQuery] = useState('');
     const [selectedIndex, setSelectedIndex] = useState(0);
@@ -129,10 +131,10 @@ export const EventSearch: React.FC = () => {
             <button
                 className={styles.searchButton}
                 onClick={() => setIsOpen(true)}
-                title="Suche öffnen (⌘K)"
+                title={`${t.shortcuts.search} (⌘K)`}
             >
                 <Search size={16} />
-                <span className={styles.searchButtonText}>Suche...</span>
+                <span className={styles.searchButtonText}>{t.search.searching}</span>
                 <div className={styles.shortcut}>
                     <Command size={10} />
                     <span>K</span>
@@ -155,7 +157,7 @@ export const EventSearch: React.FC = () => {
                             setSelectedIndex(0);
                         }}
                         onKeyDown={handleKeyDown}
-                        placeholder="Events suchen..."
+                        placeholder={t.search.placeholder}
                         className={styles.input}
                     />
                     <button
@@ -170,14 +172,14 @@ export const EventSearch: React.FC = () => {
                     {displayResults.length === 0 && query.trim() && (
                         <div className={styles.noResults}>
                             <Search size={24} />
-                            <span>Keine Ergebnisse für "{query}"</span>
+                            <span>{t.search.noResultsFor.replace('{query}', query)}</span>
                         </div>
                     )}
 
                     {displayResults.length > 0 && (
                         <>
                             <div className={styles.resultsHeader}>
-                                {query.trim() ? 'Ergebnisse' : 'Aktuelle kritische Events'}
+                                {query.trim() ? t.search.resultsFound : t.events.recent}
                             </div>
 
                             {displayResults.map((result, index) => {
@@ -225,13 +227,13 @@ export const EventSearch: React.FC = () => {
 
                 <div className={styles.footer}>
                     <div className={styles.footerHint}>
-                        <span className={styles.key}>↑↓</span> navigieren
+                        <span className={styles.key}>↑↓</span> {t.shortcuts.navigation}
                     </div>
                     <div className={styles.footerHint}>
-                        <span className={styles.key}>↵</span> auswählen
+                        <span className={styles.key}>↵</span> {t.app.confirm}
                     </div>
                     <div className={styles.footerHint}>
-                        <span className={styles.key}>esc</span> schließen
+                        <span className={styles.key}>esc</span> {t.app.close}
                     </div>
                 </div>
             </div>

@@ -7,6 +7,7 @@ import {
   X,
   ChevronRight,
 } from 'lucide-react';
+import { useI18n } from '../../i18n';
 import styles from './Alert.module.css';
 
 type AlertVariant = 'info' | 'success' | 'warning' | 'danger' | 'tactical';
@@ -45,6 +46,8 @@ export const Alert: React.FC<AlertProps> = ({
   action,
   className = '',
 }) => {
+  const { t } = useI18n();
+  
   return (
     <div className={`${styles.alert} ${styles[variant]} ${className}`} role="alert">
       {showIcon && (
@@ -64,7 +67,7 @@ export const Alert: React.FC<AlertProps> = ({
       )}
 
       {dismissible && (
-        <button className={styles.dismiss} onClick={onDismiss} aria-label="Schließen">
+        <button className={styles.dismiss} onClick={onDismiss} aria-label={t.app.close}>
           <X size={16} />
         </button>
       )}
@@ -97,6 +100,8 @@ export const Banner: React.FC<BannerProps> = ({
   action,
   className = '',
 }) => {
+  const { t } = useI18n();
+  
   return (
     <div className={`${styles.banner} ${styles[variant]} ${className}`} role="alert">
       <div className={styles.bannerContent}>
@@ -112,7 +117,7 @@ export const Banner: React.FC<BannerProps> = ({
       </div>
 
       {dismissible && (
-        <button className={styles.bannerDismiss} onClick={onDismiss} aria-label="Schließen">
+        <button className={styles.bannerDismiss} onClick={onDismiss} aria-label={t.app.close}>
           <X size={16} />
         </button>
       )}

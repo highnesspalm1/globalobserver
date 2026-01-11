@@ -8,6 +8,7 @@ import {
   Eye
 } from 'lucide-react';
 import { useMapStore } from '../../stores/mapStore';
+import { useI18n } from '../../i18n';
 import styles from './StatsBar.module.css';
 
 // Animated Counter Component
@@ -123,6 +124,7 @@ export const StatsBar: React.FC = () => {
   const events = useMapStore((state) => state.events);
   const filters = useMapStore((state) => state.filters);
   const selectedDate = useMapStore((state) => state.selectedDate);
+  const { t } = useI18n();
 
   // Generate sparkline data from events
   const sparklineData = useMemo(() => {
@@ -187,7 +189,7 @@ export const StatsBar: React.FC = () => {
       {/* Live Status Indicator */}
       <div className={styles.liveIndicator}>
         <StatusPulse active={true} color="var(--success-green)" />
-        <span className={styles.liveText}>LIVE</span>
+        <span className={styles.liveText}>{t.stats.live}</span>
       </div>
 
       <div className={styles.divider} />
@@ -199,7 +201,7 @@ export const StatsBar: React.FC = () => {
         </div>
         <div className={styles.statContent}>
           <AnimatedCounter value={filteredCount} />
-          <span className={styles.statLabel}>Sichtbar</span>
+          <span className={styles.statLabel}>{t.stats.visible}</span>
         </div>
         <Sparkline data={sparklineData} color="var(--camo-accent)" />
       </div>
@@ -213,7 +215,7 @@ export const StatsBar: React.FC = () => {
         </div>
         <div className={styles.statContent}>
           <AnimatedCounter value={criticalCount} />
-          <span className={styles.statLabel}>Kritisch</span>
+          <span className={styles.statLabel}>{t.stats.critical}</span>
         </div>
       </div>
 
@@ -224,7 +226,7 @@ export const StatsBar: React.FC = () => {
         </div>
         <div className={styles.statContent}>
           <AnimatedCounter value={stats.bySeverity['high'] || 0} />
-          <span className={styles.statLabel}>Hoch</span>
+          <span className={styles.statLabel}>{t.stats.high}</span>
         </div>
       </div>
 
@@ -235,7 +237,7 @@ export const StatsBar: React.FC = () => {
         </div>
         <div className={styles.statContent}>
           <AnimatedCounter value={stats.bySeverity['medium'] || 0} />
-          <span className={styles.statLabel}>Mittel</span>
+          <span className={styles.statLabel}>{t.stats.medium}</span>
         </div>
       </div>
 
@@ -248,7 +250,7 @@ export const StatsBar: React.FC = () => {
         </div>
         <div className={styles.statContent}>
           <AnimatedCounter value={stats.total} />
-          <span className={styles.statLabel}>Gesamt</span>
+          <span className={styles.statLabel}>{t.stats.total}</span>
         </div>
       </div>
 
@@ -259,7 +261,7 @@ export const StatsBar: React.FC = () => {
         </div>
         <div className={styles.statContent}>
           <AnimatedCounter value={stats.verified} />
-          <span className={styles.statLabel}>Verifiziert</span>
+          <span className={styles.statLabel}>{t.events.verified}</span>
         </div>
       </div>
     </div>

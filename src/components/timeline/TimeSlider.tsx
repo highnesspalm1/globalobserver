@@ -8,10 +8,12 @@ import {
   Clock
 } from 'lucide-react';
 import { useMapStore } from '../../stores/mapStore';
+import { useI18n } from '../../i18n';
 import { IconButton } from '../ui/Button';
 import styles from './TimeSlider.module.css';
 
 export const TimeSlider: React.FC = () => {
+  const { t } = useI18n();
   const {
     selectedDate,
     setSelectedDate,
@@ -111,7 +113,7 @@ export const TimeSlider: React.FC = () => {
       <button 
         className={styles.toggleButton}
         onClick={() => setTimelineOpen(true)}
-        aria-label="Timeline öffnen"
+        aria-label={t.timeline.openTimeline}
       >
         <Clock size={14} />
         <span>{format(selectedDate, 'dd.MM.yy')}</span>
@@ -124,7 +126,7 @@ export const TimeSlider: React.FC = () => {
       {/* Controls - Play/Pause */}
       <div className={styles.controlGroup}>
         <IconButton
-          aria-label="Tag zurück"
+          aria-label={t.timeline.previousDay}
           icon={<SkipBack size={12} />}
           onClick={handleStepBack}
           size="sm"
@@ -132,14 +134,14 @@ export const TimeSlider: React.FC = () => {
         
         {isPlaying ? (
           <IconButton
-            aria-label="Pause"
+            aria-label={t.timeline.pause}
             icon={<Pause size={14} />}
             onClick={handlePause}
             size="sm"
           />
         ) : (
           <IconButton
-            aria-label="Abspielen"
+            aria-label={t.timeline.play}
             icon={<Play size={14} />}
             onClick={handlePlay}
             size="sm"
@@ -147,7 +149,7 @@ export const TimeSlider: React.FC = () => {
         )}
         
         <IconButton
-          aria-label="Tag vor"
+          aria-label={t.timeline.nextDay}
           icon={<SkipForward size={12} />}
           onClick={handleStepForward}
           size="sm"
@@ -184,7 +186,7 @@ export const TimeSlider: React.FC = () => {
         <button 
           className={styles.speedButton}
           onClick={handleSpeedChange}
-          title="Geschwindigkeit"
+          title={t.timeline.speed}
         >
           {playbackSpeed}x
         </button>
@@ -192,9 +194,9 @@ export const TimeSlider: React.FC = () => {
         <button
           className={styles.todayButton}
           onClick={handleGoToToday}
-          title="Heute"
+          title={t.timeline.today}
         >
-          Heute
+          {t.timeline.today}
         </button>
       </div>
 

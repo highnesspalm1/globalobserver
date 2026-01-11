@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Globe, RefreshCw, Wifi, WifiOff, Clock, Radio } from 'lucide-react';
+import { useI18n } from '../../i18n';
+import { LanguageSwitcher } from '../ui/LanguageSwitcher';
 import styles from './HeaderBar.module.css';
 
 interface HeaderBarProps {
@@ -15,6 +17,7 @@ const HeaderBar: React.FC<HeaderBarProps> = ({
     lastRefresh,
     eventCount = 0
 }) => {
+    const { t, language } = useI18n();
     const [currentTime, setCurrentTime] = useState(new Date());
     const [isOnline, setIsOnline] = useState(navigator.onLine);
 
@@ -41,6 +44,7 @@ const HeaderBar: React.FC<HeaderBarProps> = ({
     }, []);
 
     const formatTime = (date: Date, utc: boolean = false) => {
+        const locale = language === 'de' ? 'de-DE' : language === 'tr' ? 'tr-TR' : 'en-GB';
         const options: Intl.DateTimeFormatOptions = {
             hour: '2-digit',
             minute: '2-digit',
@@ -48,11 +52,12 @@ const HeaderBar: React.FC<HeaderBarProps> = ({
             hour12: false,
             timeZone: utc ? 'UTC' : undefined
         };
-        return date.toLocaleTimeString('de-DE', options);
+        return date.toLocaleTimeString(locale, options);
     };
 
     const formatDate = (date: Date) => {
-        return date.toLocaleDateString('de-DE', {
+        const locale = language === 'de' ? 'de-DE' : language === 'tr' ? 'tr-TR' : 'en-GB';
+        return date.toLocaleDateString(locale, {
             day: '2-digit',
             month: '2-digit',
             year: 'numeric'
@@ -60,12 +65,11 @@ const HeaderBar: React.FC<HeaderBarProps> = ({
     };
 
     const getLastRefreshText = () => {
-        if (!lastRefresh) return 'Nie';
-        // Use currentTime state instead of Date.now() for purity
+        if (!lastRefresh) return t.time.never;
         const diff = Math.floor((currentTime.getTime() - lastRefresh.getTime()) / 1000);
-        if (diff < 60) return `vor ${diff}s`;
-        if (diff < 3600) return `vor ${Math.floor(diff / 60)}m`;
-        return `vor ${Math.floor(diff / 3600)}h`;
+        if (diff < 60) return t.time.secondsAgo.replace('{n}', String(diff));
+        if (diff < 3600) return t.time.minutesAgo.replace('{n}', String(Math.floor(diff / 60)));
+        return t.time.hoursAgo.replace('{n}', String(Math.floor(diff / 3600)));
     };
 
     return (
@@ -78,8 +82,8 @@ const HeaderBar: React.FC<HeaderBarProps> = ({
                     <Globe className={styles.logoIcon} size={28} />
                 </div>
                 <div className={styles.titleWrapper}>
-                    <h1 className={styles.title}>GLOBAL OBSERVER</h1>
-                    <span className={styles.subtitle}>CONFLICT INTELLIGENCE</span>
+                    <h1 className={styles.title}>{t.app.title}</h1>
+                    <span className={styles.subtitle}>{t.app.subtitle}</span>
                 </div>
             </div>
 
@@ -87,16 +91,19 @@ const HeaderBar: React.FC<HeaderBarProps> = ({
             <div className={styles.centerSection}>
                 <div className={styles.liveIndicator}>
                     <Radio className={`${styles.liveIcon} ${isRefreshing ? styles.pulsing : ''}`} size={14} />
-                    <span className={styles.liveText}>LIVE</span>
+                    <span className={styles.liveText}>{t.header.live}</span>
                 </div>
                 <div className={styles.eventCounter}>
                     <span className={styles.eventCount}>{eventCount}</span>
-                    <span className={styles.eventLabel}>EREIGNISSE</span>
+                    <span className={styles.eventLabel}>{t.header.events}</span>
                 </div>
             </div>
 
             {/* Right Section - Clock & Controls */}
             <div className={styles.rightSection}>
+                {/* Language Switcher */}
+                <LanguageSwitcher />
+
                 {/* Clock Display */}
                 <div className={styles.clockSection}>
                     <div className={styles.clockRow}>
@@ -106,7 +113,7 @@ const HeaderBar: React.FC<HeaderBarProps> = ({
                     </div>
                     <div className={styles.clockRow}>
                         <Clock size={12} className={styles.clockIcon} />
-                        <span className={styles.clockLabel}>LOC</span>
+                        <span className={styles.clockLabel}>{t.header.localTime}</span>
                         <span className={styles.clockTime}>{formatTime(currentTime, false)}</span>
                     </div>
                     <div className={styles.dateRow}>
@@ -117,7 +124,7 @@ const HeaderBar: React.FC<HeaderBarProps> = ({
                 {/* Connection Status */}
                 <div className={`${styles.connectionStatus} ${isOnline ? styles.online : styles.offline}`}>
                     {isOnline ? <Wifi size={16} /> : <WifiOff size={16} />}
-                    <span>{isOnline ? 'ONLINE' : 'OFFLINE'}</span>
+                    <span>{isOnline ? t.header.online : t.header.offline}</span>
                 </div>
 
                 {/* Refresh Button */}
@@ -125,7 +132,7 @@ const HeaderBar: React.FC<HeaderBarProps> = ({
                     className={`${styles.refreshButton} ${isRefreshing ? styles.spinning : ''}`}
                     onClick={onRefresh}
                     disabled={isRefreshing}
-                    title={`Letzte Aktualisierung: ${getLastRefreshText()}`}
+                    title={`${t.header.lastUpdate}: ${getLastRefreshText()}`}
                 >
                     <RefreshCw size={18} />
                     <span className={styles.refreshText}>{getLastRefreshText()}</span>

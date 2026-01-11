@@ -1,6 +1,7 @@
 import React, { useEffect, useCallback } from 'react';
 import { X } from 'lucide-react';
 import { IconButton } from './Button';
+import { useI18n } from '../../i18n';
 import styles from './Modal.module.css';
 
 interface ModalProps {
@@ -30,6 +31,8 @@ export const Modal: React.FC<ModalProps> = ({
   footer,
   className = '',
 }) => {
+  const { t } = useI18n();
+  
   const handleEscape = useCallback((e: KeyboardEvent) => {
     if (e.key === 'Escape' && closeOnEscape) {
       onClose();
@@ -69,7 +72,7 @@ export const Modal: React.FC<ModalProps> = ({
             )}
             {showCloseButton && (
               <IconButton
-                aria-label="Modal schließen"
+                aria-label={t.ui.modal.close}
                 icon={<X size={18} />}
                 onClick={onClose}
                 size="sm"
@@ -110,11 +113,15 @@ export const ConfirmModal: React.FC<ConfirmModalProps> = ({
   onConfirm,
   title,
   message,
-  confirmLabel = 'Bestätigen',
-  cancelLabel = 'Abbrechen',
+  confirmLabel,
+  cancelLabel,
   variant = 'default',
   loading = false,
 }) => {
+  const { t } = useI18n();
+  const confirmText = confirmLabel || t.app.confirm;
+  const cancelText = cancelLabel || t.app.cancel;
+  
   return (
     <Modal
       isOpen={isOpen}
@@ -128,14 +135,14 @@ export const ConfirmModal: React.FC<ConfirmModalProps> = ({
             onClick={onClose}
             disabled={loading}
           >
-            {cancelLabel}
+            {cancelText}
           </button>
           <button
             className={`${styles.confirmButton} ${styles[variant]}`}
             onClick={onConfirm}
             disabled={loading}
           >
-            {loading ? 'Wird ausgeführt...' : confirmLabel}
+            {loading ? t.app.loading : confirmText}
           </button>
         </div>
       }

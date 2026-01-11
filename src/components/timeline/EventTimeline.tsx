@@ -4,6 +4,7 @@ import {
   MapPin, Filter, Play, Pause, FastForward
 } from 'lucide-react';
 import { useMapStore } from '../../stores/mapStore';
+import { useI18n } from '../../i18n';
 import styles from './EventTimeline.module.css';
 
 interface TimelineEvent {
@@ -42,6 +43,7 @@ const CATEGORY_ICONS: Record<string, string> = {
 };
 
 export const EventTimeline: React.FC = () => {
+  const { t } = useI18n();
   const [isOpen, setIsOpen] = useState(false);
   const [selectedRegion, setSelectedRegion] = useState<string>('all');
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
@@ -91,11 +93,11 @@ export const EventTimeline: React.FC = () => {
         const e = event as EventData;
         return {
           id: e.id || `event-${index}`,
-          title: e.title || 'Unbekanntes Ereignis',
+          title: e.title || t.events.unknown,
           date: new Date(e.date || e.timestamp || fallbackDate),
           category: e.category || 'unknown',
           severity: e.severity || 'unknown',
-          location: e.location || e.country || 'Unbekannt',
+          location: e.location || e.country || t.app.unknown,
           lat: e.lat || e.latitude || 0,
           lng: e.lng || e.longitude || 0,
         };
@@ -234,11 +236,11 @@ export const EventTimeline: React.FC = () => {
     const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
     const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
 
-    if (diffMins < 60) return `vor ${diffMins} Min.`;
-    if (diffHours < 24) return `vor ${diffHours} Std.`;
-    if (diffDays === 1) return 'Gestern';
-    if (diffDays < 7) return `vor ${diffDays} Tagen`;
-    return date.toLocaleDateString('de-DE');
+    if (diffMins < 60) return t.time.minutesAgo.replace('{n}', String(diffMins));
+    if (diffHours < 24) return t.time.hoursAgo.replace('{n}', String(diffHours));
+    if (diffDays === 1) return t.time.yesterday;
+    if (diffDays < 7) return t.time.daysAgo.replace('{n}', String(diffDays));
+    return date.toLocaleDateString();
   };
 
   return (
@@ -264,7 +266,7 @@ export const EventTimeline: React.FC = () => {
                 value={selectedRegion}
                 onChange={(e) => setSelectedRegion(e.target.value)}
               >
-                <option value="all">Alle Regionen</option>
+                <option value="all">{t.timeline.allRegions}</option>
                 {regions.map(region => (
                   <option key={region} value={region}>{region}</option>
                 ))}
@@ -276,7 +278,7 @@ export const EventTimeline: React.FC = () => {
                 value={selectedCategory}
                 onChange={(e) => setSelectedCategory(e.target.value)}
               >
-                <option value="all">Alle Kategorien</option>
+                <option value="all">{t.timeline.allCategories}</option>
                 {categories.map(cat => (
                   <option key={cat} value={cat}>{cat}</option>
                 ))}
@@ -291,7 +293,7 @@ export const EventTimeline: React.FC = () => {
               onClick={() => setIsPlaying(!isPlaying)}
             >
               {isPlaying ? <Pause size={16} /> : <Play size={16} />}
-              {isPlaying ? 'Pause' : 'Abspielen'}
+              {isPlaying ? t.timeline.pause : t.timeline.play}
             </button>
 
             <div className={styles.speedControl}>
@@ -308,7 +310,7 @@ export const EventTimeline: React.FC = () => {
             </div>
 
             <span className={styles.eventCount}>
-              {timelineEvents.length} Events
+              {timelineEvents.length} {t.timeline.eventsCount}
             </span>
           </div>
 
@@ -317,7 +319,7 @@ export const EventTimeline: React.FC = () => {
             {groupedEvents.length === 0 ? (
               <div className={styles.empty}>
                 <Calendar size={32} />
-                <p>Keine Events gefunden</p>
+                <p>{t.events.noEvents}</p>
               </div>
             ) : (
               groupedEvents.map((group, groupIndex) => (
