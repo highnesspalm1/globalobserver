@@ -140,18 +140,19 @@
 /* Premium Dashboard Panel */
 .dashboardPanel {
   position: fixed;
-  top: 60px;
-  right: 10px;
+  top: 56px;
+  right: 8px;
+  bottom: 28px;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 8px;
   z-index: 90;
-  max-height: calc(100vh - 140px);
-  width: 260px;
+  width: 250px;
   overflow-y: auto;
   overflow-x: hidden;
-  padding-right: 4px;
-  padding-bottom: 80px;
+  padding: 4px;
+  scrollbar-width: thin;
+  scrollbar-color: var(--tactical-slate) transparent;
 }
 
 .dashboardPanel::-webkit-scrollbar {

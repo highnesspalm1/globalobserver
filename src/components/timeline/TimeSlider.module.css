@@ -1,10 +1,11 @@
 .container {
   position: fixed;
-  bottom: 36px;
-  left: calc(50% + 30px);
-  transform: translateX(-50%);
+  bottom: 70px;
+  left: 380px;
+  right: 270px;
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 12px;
   background: var(--bg-secondary);
   border: 1px solid var(--border-default);
@@ -12,7 +13,6 @@
   padding: 8px 14px;
   box-shadow: var(--shadow-md);
   z-index: 100;
-  max-width: calc(100% - 660px);
 }
 
 @keyframes slideUp {
@@ -222,30 +222,26 @@
 }
 
 /* Responsive */
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
   .container {
-    bottom: 60px;
+    left: 10px;
+    right: 10px;
+    bottom: 28px;
     padding: 6px 10px;
     gap: 8px;
-    left: 50%;
-    max-width: calc(100% - 20px);
   }
 
   .sliderContainer {
-    width: 140px;
+    flex: 1;
+    width: auto;
   }
 
   .toggleButton {
     bottom: 70px;
     padding: 8px 14px;
     min-height: 44px;
-  }
-}
-
-@media (min-width: 769px) and (max-width: 1400px) {
-  .container {
-    left: calc(50% + 50px);
-    max-width: calc(100% - 420px);
+    left: 50%;
+    transform: translateX(-50%);
   }
 }
 
