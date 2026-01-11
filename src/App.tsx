@@ -41,6 +41,11 @@ const AnalyticsDashboard = lazy(() => import('./components/analytics/AnalyticsDa
 const ExportPanel = lazy(() => import('./components/export/ExportPanel'));
 const SettingsPanel = lazy(() => import('./components/settings/SettingsPanel'));
 
+// Lazy load new components
+const Bookmarks = lazy(() => import('./components/bookmarks/Bookmarks'));
+const PushNotifications = lazy(() => import('./components/notifications/PushNotifications'));
+const SkeletonMap = lazy(() => import('./components/ui/SkeletonMap'));
+
 // Loading fallback component
 const LoadingFallback = () => (
   <div className={styles.loadingFallback}>
@@ -215,6 +220,16 @@ function App() {
       <TimeSlider />
       <NotificationCenter />
 
+      {/* Bookmarks */}
+      <Suspense fallback={null}>
+        <Bookmarks />
+      </Suspense>
+
+      {/* Push Notifications */}
+      <Suspense fallback={null}>
+        <PushNotifications />
+      </Suspense>
+
       {/* Event Detail Panel */}
       {selectedEvent && (
         <Suspense fallback={<LoadingFallback />}>
@@ -236,12 +251,16 @@ function App() {
       )}
 
       {isLoading && (
-        <div className={styles.loadingOverlay}>
-          <div className={styles.loadingContent}>
-            <div className={styles.loadingSpinner} />
-            <span className={styles.loadingText}>Lade Daten...</span>
+        <Suspense fallback={
+          <div className={styles.loadingOverlay}>
+            <div className={styles.loadingContent}>
+              <div className={styles.loadingSpinner} />
+              <span className={styles.loadingText}>Lade Daten...</span>
+            </div>
           </div>
-        </div>
+        }>
+          <SkeletonMap />
+        </Suspense>
       )}
 
       {error && (

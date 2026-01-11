@@ -1,0 +1,211 @@
+.container {
+  position: fixed;
+  inset: 0;
+  background: var(--bg-primary);
+  z-index: 2000;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* Header */
+.header {
+  height: 52px;
+  background: var(--bg-secondary);
+  border-bottom: 1px solid var(--border-default);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
+}
+
+.headerLeft,
+.headerCenter,
+.headerRight {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.headerTitle {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+/* Map Area */
+.mapArea {
+  flex: 1;
+  position: relative;
+  background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+  overflow: hidden;
+}
+
+.mapMarkers {
+  position: absolute;
+  inset: 0;
+}
+
+.marker {
+  position: absolute;
+  background: var(--camo-accent);
+  border-radius: 50%;
+  opacity: 0.3;
+  animation: markerPulse 2s ease-in-out infinite;
+}
+
+.marker:nth-child(2n) {
+  animation-delay: 0.3s;
+  background: var(--warning-amber);
+}
+
+.marker:nth-child(3n) {
+  animation-delay: 0.6s;
+  background: var(--danger-red);
+}
+
+@keyframes markerPulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.3;
+  }
+  50% {
+    transform: scale(1.2);
+    opacity: 0.5;
+  }
+}
+
+.gridLines {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.gridLineH,
+.gridLineV {
+  position: absolute;
+  background: var(--border-subtle);
+  opacity: 0.3;
+}
+
+.gridLineH {
+  left: 0;
+  right: 0;
+  height: 1px;
+}
+
+.gridLineV {
+  top: 0;
+  bottom: 0;
+  width: 1px;
+}
+
+/* Sidebar */
+.sidebar {
+  position: absolute;
+  top: 52px;
+  left: 0;
+  width: 320px;
+  height: calc(100% - 52px);
+  background: var(--bg-secondary);
+  border-right: 1px solid var(--border-default);
+  display: flex;
+  flex-direction: column;
+  padding: 16px;
+  gap: 16px;
+}
+
+.sidebarHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.sidebarSearch {
+  margin-top: 8px;
+}
+
+.sidebarStats {
+  display: flex;
+  justify-content: space-around;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.sidebarList {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  flex: 1;
+  overflow: hidden;
+}
+
+/* Stats Bar */
+.statsBar {
+  position: absolute;
+  top: 60px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-md);
+  padding: 8px 16px;
+}
+
+.statItem {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Loading Text */
+.loadingText {
+  position: absolute;
+  bottom: 100px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 24px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--camo-accent);
+  border-radius: var(--radius-md);
+  color: var(--text-secondary);
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.loadingSpinner {
+  width: 20px;
+  height: 20px;
+  border: 2px solid var(--border-default);
+  border-top-color: var(--camo-accent);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .sidebar {
+    display: none;
+  }
+
+  .statsBar {
+    top: auto;
+    bottom: 120px;
+    left: 16px;
+    right: 16px;
+    transform: none;
+    justify-content: space-around;
+  }
+}
