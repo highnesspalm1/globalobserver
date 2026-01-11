@@ -1,7 +1,7 @@
 .toggleButton {
   position: fixed;
-  bottom: 230px;
-  right: 20px;
+  bottom: 280px;
+  right: 380px;
   width: 44px;
   height: 44px;
   background: var(--olive-800);

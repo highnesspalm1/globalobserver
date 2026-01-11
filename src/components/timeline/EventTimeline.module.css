@@ -1,14 +1,12 @@
 .toggleButton {
   position: fixed;
-  top: 50%;
-  right: 0;
-  transform: translateY(-50%);
-  width: 40px;
-  height: 80px;
+  bottom: 80px;
+  right: 380px;
+  width: 44px;
+  height: 44px;
   background: var(--olive-800);
   border: 2px solid var(--olive-600);
-  border-right: none;
-  border-radius: 8px 0 0 8px;
+  border-radius: 50%;
   color: var(--sand-300);
   display: flex;
   align-items: center;
@@ -16,12 +14,12 @@
   cursor: pointer;
   transition: all 0.2s ease;
   z-index: 1000;
-  box-shadow: -4px 0 12px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
 
 .toggleButton:hover {
   background: var(--olive-700);
-  width: 50px;
+  transform: scale(1.1);
 }
 
 .toggleButton.active {
