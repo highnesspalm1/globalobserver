@@ -140,14 +140,14 @@
 /* Premium Dashboard Panel */
 .dashboardPanel {
   position: fixed;
-  top: 90px;
+  top: 60px;
   right: 16px;
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
   z-index: 90;
-  max-height: calc(100vh - 180px);
-  max-width: 280px;
+  max-height: calc(100vh - 120px);
+  width: 300px;
   overflow-y: auto;
   padding-right: 4px;
 }
