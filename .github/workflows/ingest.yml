@@ -1,9 +1,9 @@
 name: Ingestion Pipeline
 
 on:
-  schedule:
-    # Run every 30 minutes
-    - cron: '*/30 * * * *'
+  # Disabled automatic schedule until Telegram API is configured
+  # schedule:
+  #   - cron: '*/30 * * * *'
   workflow_dispatch:
     inputs:
       limit:
