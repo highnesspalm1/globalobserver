@@ -51,7 +51,7 @@ const CATEGORY_ICONS: Record<string, React.ReactNode> = {
 export const Sidebar: React.FC = () => {
   const { t, language } = useI18n();
   const dateLocale = language === 'de' ? de : language === 'tr' ? tr : enGB;
-  
+
   const {
     sidebarOpen,
     setSidebarOpen,
@@ -217,7 +217,7 @@ export const Sidebar: React.FC = () => {
     <aside ref={sidebarRef} className={styles.sidebar}>
       {/* Header */}
       <div className={styles.header}>
-        <span className={styles.sidebarTitle}>{t.sidebar.events}</span>
+        <span className={styles.sidebarTitle}>{t.events.title}</span>
         <IconButton
           aria-label={t.sidebar.close}
           icon={<X size={18} />}
@@ -272,8 +272,8 @@ export const Sidebar: React.FC = () => {
                 <button
                   key={key}
                   className={`${styles.filterChip} ${filters.categories.includes(key as EventCategory)
-                      ? styles.filterChipActive
-                      : ''
+                    ? styles.filterChipActive
+                    : ''
                     }`}
                   onClick={() => toggleCategory(key as EventCategory)}
                   style={{
@@ -295,8 +295,8 @@ export const Sidebar: React.FC = () => {
                 <button
                   key={key}
                   className={`${styles.filterChip} ${filters.severities.includes(key as SeverityLevel)
-                      ? styles.filterChipActive
-                      : ''
+                    ? styles.filterChipActive
+                    : ''
                     }`}
                   onClick={() => toggleSeverity(key as SeverityLevel)}
                   style={{
