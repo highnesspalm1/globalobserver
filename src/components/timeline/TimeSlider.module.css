@@ -1,6 +1,6 @@
 .container {
   position: fixed;
-  bottom: 75px;
+  bottom: 32px;
   left: 50%;
   transform: translateX(-50%);
   display: flex;
@@ -9,7 +9,7 @@
   background: var(--bg-secondary);
   border: 1px solid var(--border-default);
   border-radius: var(--radius-md);
-  padding: 8px 14px;
+  padding: 6px 12px;
   box-shadow: var(--shadow-sm);
   z-index: 100;
 }
@@ -29,7 +29,7 @@
 /* Toggle Button (when collapsed) */
 .toggleButton {
   position: fixed;
-  bottom: 100px;
+  bottom: 32px;
   left: 50%;
   transform: translateX(-50%);
   display: flex;
