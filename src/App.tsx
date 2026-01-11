@@ -46,6 +46,13 @@ const Bookmarks = lazy(() => import('./components/bookmarks/Bookmarks'));
 const PushNotifications = lazy(() => import('./components/notifications/PushNotifications'));
 const SkeletonMap = lazy(() => import('./components/ui/SkeletonMap'));
 
+// Lazy load Priorität 2 & 3 components
+const OnboardingTour = lazy(() => import('./components/onboarding/OnboardingTour'));
+const SharePanel = lazy(() => import('./components/share/SharePanel'));
+const CompareMode = lazy(() => import('./components/compare/CompareMode'));
+const EventTimeline = lazy(() => import('./components/timeline/EventTimeline'));
+const HeatmapTimelapse = lazy(() => import('./components/heatmap/HeatmapTimelapse'));
+
 // Loading fallback component
 const LoadingFallback = () => (
   <div className={styles.loadingFallback}>
@@ -249,6 +256,31 @@ function App() {
           />
         </Suspense>
       )}
+
+      {/* Onboarding Tour */}
+      <Suspense fallback={null}>
+        <OnboardingTour />
+      </Suspense>
+
+      {/* Share Panel */}
+      <Suspense fallback={null}>
+        <SharePanel />
+      </Suspense>
+
+      {/* Compare Mode */}
+      <Suspense fallback={null}>
+        <CompareMode />
+      </Suspense>
+
+      {/* Event Timeline */}
+      <Suspense fallback={null}>
+        <EventTimeline />
+      </Suspense>
+
+      {/* Heatmap Timelapse */}
+      <Suspense fallback={null}>
+        <HeatmapTimelapse />
+      </Suspense>
 
       {isLoading && (
         <Suspense fallback={

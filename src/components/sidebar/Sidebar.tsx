@@ -1,4 +1,4 @@
-import React, { useMemo, useState, useCallback } from 'react';
+import React, { useMemo, useState, useCallback, useEffect, useRef } from 'react';
 import { format } from 'date-fns';
 import { de } from 'date-fns/locale';
 import {
@@ -32,6 +32,7 @@ import { Button, IconButton } from '../ui/Button';
 import { Logo } from '../ui/Logo';
 import { exportToGeoJSON, exportToCSV, exportToKML, getExportFilename } from '../../utils/exportUtils';
 import { notify } from '../../stores/notificationStore';
+import { useSwipeGestures, useEdgeSwipe } from '../../hooks/useSwipeGestures';
 import styles from './Sidebar.module.css';
 
 const CATEGORY_ICONS: Record<string, React.ReactNode> = {
@@ -58,6 +59,20 @@ export const Sidebar: React.FC = () => {
     selectedEventId,
     setSelectedEventId,
   } = useMapStore();
+
+  // Swipe gesture to close sidebar
+  const sidebarRef = useSwipeGestures<HTMLDivElement>({
+    threshold: 50,
+    onSwipeLeft: () => setSidebarOpen(false),
+  });
+
+  // Edge swipe to open sidebar (when closed)
+  useEdgeSwipe({
+    edge: 'left',
+    edgeWidth: 30,
+    threshold: 50,
+    onSwipe: () => setSidebarOpen(true),
+  });
 
   // Get events directly from store
   const events = useMapStore((state) => state.events);
@@ -168,7 +183,7 @@ export const Sidebar: React.FC = () => {
   }
 
   return (
-    <aside className={styles.sidebar}>
+    <aside ref={sidebarRef} className={styles.sidebar}>
       {/* Header */}
       <div className={styles.header}>
         <Logo variant="full" />

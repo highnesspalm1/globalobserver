@@ -1,0 +1,364 @@
+.promptOverlay,
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.backdrop {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(4px);
+}
+
+/* Initial Prompt */
+.promptCard {
+  position: relative;
+  background: linear-gradient(135deg, var(--olive-800) 0%, var(--olive-900) 100%);
+  border: 2px solid var(--olive-600);
+  border-radius: 16px;
+  padding: 2.5rem;
+  max-width: 400px;
+  text-align: center;
+  animation: slideUp 0.3s ease-out;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+}
+
+.promptIcon {
+  width: 80px;
+  height: 80px;
+  margin: 0 auto 1.5rem;
+  background: linear-gradient(135deg, var(--olive-600) 0%, var(--olive-700) 100%);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--sand-300);
+  animation: pulse 2s ease-in-out infinite;
+}
+
+.promptCard h2 {
+  font-size: 1.75rem;
+  color: var(--sand-100);
+  margin-bottom: 0.75rem;
+  font-weight: 700;
+}
+
+.promptCard p {
+  color: var(--sand-400);
+  font-size: 1rem;
+  margin-bottom: 2rem;
+  line-height: 1.5;
+}
+
+.promptButtons {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.primaryButton {
+  padding: 1rem 2rem;
+  background: linear-gradient(135deg, var(--alert-critical) 0%, #c0392b 100%);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.primaryButton:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(231, 76, 60, 0.4);
+}
+
+.secondaryButton {
+  padding: 0.75rem 1.5rem;
+  background: transparent;
+  color: var(--sand-400);
+  border: 1px solid var(--olive-600);
+  border-radius: 8px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.secondaryButton:hover {
+  background: var(--olive-700);
+  color: var(--sand-200);
+}
+
+/* Tour Card */
+.tourCard {
+  position: relative;
+  background: linear-gradient(145deg, var(--olive-800) 0%, var(--olive-900) 100%);
+  border: 2px solid var(--olive-500);
+  border-radius: 16px;
+  padding: 2rem;
+  max-width: 450px;
+  width: 90%;
+  animation: slideUp 0.3s ease-out;
+  box-shadow: 
+    0 20px 60px rgba(0, 0, 0, 0.5),
+    0 0 40px rgba(85, 107, 47, 0.2);
+}
+
+.positionCenter {
+  /* Default centered position */
+  margin: auto;
+}
+
+.positionTop {
+  align-self: flex-start;
+  margin-top: 100px;
+}
+
+.positionBottom {
+  align-self: flex-end;
+  margin-bottom: 100px;
+}
+
+.positionLeft {
+  margin-right: auto;
+  margin-left: 20%;
+}
+
+.positionRight {
+  margin-left: auto;
+  margin-right: 20%;
+}
+
+.closeButton {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  width: 32px;
+  height: 32px;
+  background: var(--olive-700);
+  border: 1px solid var(--olive-500);
+  border-radius: 50%;
+  color: var(--sand-400);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.closeButton:hover {
+  background: var(--alert-critical);
+  border-color: var(--alert-critical);
+  color: white;
+}
+
+.stepIcon {
+  width: 64px;
+  height: 64px;
+  margin: 0 auto 1.5rem;
+  background: linear-gradient(135deg, var(--olive-600) 0%, var(--olive-700) 100%);
+  border: 2px solid var(--olive-500);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--sand-200);
+}
+
+.content {
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.title {
+  font-size: 1.4rem;
+  color: var(--sand-100);
+  margin-bottom: 0.75rem;
+  font-weight: 700;
+}
+
+.description {
+  color: var(--sand-400);
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+/* Progress Dots */
+.progress {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 1.5rem;
+}
+
+.progressDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--olive-600);
+  transition: all 0.3s ease;
+}
+
+.progressDot.active {
+  background: var(--sand-300);
+  transform: scale(1.3);
+}
+
+.progressDot.completed {
+  background: var(--status-active);
+}
+
+/* Navigation */
+.navigation {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.skipButton {
+  padding: 0.5rem 1rem;
+  background: transparent;
+  color: var(--sand-500);
+  border: none;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.skipButton:hover {
+  color: var(--sand-300);
+}
+
+.navButtons {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.navButton {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.6rem 1rem;
+  background: var(--olive-700);
+  color: var(--sand-300);
+  border: 1px solid var(--olive-500);
+  border-radius: 6px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.navButton:hover {
+  background: var(--olive-600);
+}
+
+.navButtonPrimary {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.6rem 1.25rem;
+  background: linear-gradient(135deg, var(--olive-500) 0%, var(--olive-600) 100%);
+  color: var(--sand-100);
+  border: none;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.navButtonPrimary:hover {
+  background: linear-gradient(135deg, var(--olive-400) 0%, var(--olive-500) 100%);
+  transform: translateY(-1px);
+}
+
+.stepCounter {
+  position: absolute;
+  bottom: 1rem;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 0.75rem;
+  color: var(--sand-600);
+  font-family: var(--font-mono);
+}
+
+/* Animations */
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(107, 142, 35, 0.4);
+  }
+  50% {
+    transform: scale(1.05);
+    box-shadow: 0 0 0 15px rgba(107, 142, 35, 0);
+  }
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  .promptCard,
+  .tourCard {
+    margin: 1rem;
+    padding: 1.5rem;
+    max-width: calc(100% - 2rem);
+  }
+
+  .positionLeft,
+  .positionRight {
+    margin-left: 1rem;
+    margin-right: 1rem;
+  }
+
+  .title {
+    font-size: 1.2rem;
+  }
+
+  .description {
+    font-size: 0.9rem;
+  }
+
+  .navigation {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .skipButton {
+    order: 2;
+  }
+
+  .navButtons {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .stepCounter {
+    position: static;
+    transform: none;
+    margin-top: 1rem;
+    text-align: center;
+  }
+}
