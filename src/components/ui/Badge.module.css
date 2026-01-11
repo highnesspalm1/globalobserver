@@ -1,0 +1,121 @@
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border-radius: var(--radius-sm);
+  white-space: nowrap;
+}
+
+/* Sizes */
+.sm {
+  padding: 2px 6px;
+  font-size: 9px;
+}
+
+.md {
+  padding: 4px 10px;
+  font-size: 10px;
+}
+
+.lg {
+  padding: 6px 14px;
+  font-size: 11px;
+}
+
+/* Variants */
+.default {
+  background: var(--bg-tertiary);
+  color: var(--text-secondary);
+  border: 1px solid var(--border-subtle);
+}
+
+.success {
+  background: rgba(22, 163, 74, 0.15);
+  color: var(--success-green);
+  border: 1px solid rgba(22, 163, 74, 0.3);
+}
+
+.warning {
+  background: rgba(217, 119, 6, 0.15);
+  color: var(--warning-amber);
+  border: 1px solid rgba(217, 119, 6, 0.3);
+}
+
+.danger {
+  background: rgba(220, 38, 38, 0.15);
+  color: var(--danger-red);
+  border: 1px solid rgba(220, 38, 38, 0.3);
+}
+
+.info {
+  background: rgba(2, 132, 199, 0.15);
+  color: var(--info-blue);
+  border: 1px solid rgba(2, 132, 199, 0.3);
+}
+
+.camo {
+  background: linear-gradient(135deg, var(--camo-dark), var(--camo-medium));
+  color: var(--camo-accent);
+  border: 1px solid var(--camo-accent);
+}
+
+/* Dot */
+.dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+/* Pulse Animation */
+.pulse .dot {
+  animation: pulseDot 2s infinite;
+}
+
+@keyframes pulseDot {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.5;
+    transform: scale(1.2);
+  }
+}
+
+/* Icon */
+.icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.icon svg {
+  width: 12px;
+  height: 12px;
+}
+
+.sm .icon svg {
+  width: 10px;
+  height: 10px;
+}
+
+.lg .icon svg {
+  width: 14px;
+  height: 14px;
+}
+
+/* Text */
+.text {
+  line-height: 1;
+}
+
+/* Badge Group */
+.group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}

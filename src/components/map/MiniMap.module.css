@@ -1,0 +1,131 @@
+.container {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-default);
+    border-radius: var(--radius-lg);
+    padding: 0.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    min-width: 140px;
+    box-shadow: var(--shadow-md);
+}
+
+.header {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    color: var(--camo-accent);
+    padding: 0 0.25rem;
+}
+
+.title {
+    font-family: var(--font-mono);
+    font-size: 0.55rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    color: var(--text-secondary);
+}
+
+.mapWrapper {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 1.25;
+    background: var(--bg-tertiary);
+    border-radius: var(--radius-sm);
+    overflow: hidden;
+}
+
+.worldSvg {
+    width: 100%;
+    height: 100%;
+}
+
+.hotspot {
+    position: absolute;
+    transform: translate(-50%, -50%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 18px;
+    height: 18px;
+    background: var(--warning-amber);
+    border: 2px solid var(--bg-secondary);
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    box-shadow: 0 0 6px var(--warning-amber);
+    z-index: 2;
+}
+
+.hotspot:hover {
+    transform: translate(-50%, -50%) scale(1.2);
+}
+
+.hotspotCritical {
+    background: var(--danger-red);
+    box-shadow: 0 0 8px var(--danger-red);
+    animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+
+    0%,
+    100% {
+        box-shadow: 0 0 6px var(--danger-red);
+    }
+
+    50% {
+        box-shadow: 0 0 12px var(--danger-red);
+    }
+}
+
+.hotspotCount {
+    font-family: var(--font-mono);
+    font-size: 0.5rem;
+    font-weight: 700;
+    color: white;
+}
+
+.viewport {
+    position: absolute;
+    transform: translate(-50%, -50%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--camo-accent);
+    z-index: 3;
+    animation: viewportPulse 2s ease-in-out infinite;
+}
+
+@keyframes viewportPulse {
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.5;
+    }
+}
+
+.resetButton {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.25rem;
+    width: 100%;
+    padding: 0.35rem;
+    background: var(--bg-tertiary);
+    border: none;
+    border-radius: var(--radius-sm);
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    font-size: 0.6rem;
+}
+
+.resetButton:hover {
+    background: var(--bg-elevated);
+    color: var(--camo-accent);
+}

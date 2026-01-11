@@ -1,0 +1,314 @@
+/* ==================== Alert ==================== */
+.alert {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 14px 16px;
+  border-radius: var(--radius-md);
+  border: 1px solid;
+  animation: alertFadeIn 200ms ease-out;
+}
+
+@keyframes alertFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Alert Variants */
+.alert.info {
+  background: rgba(2, 132, 199, 0.1);
+  border-color: rgba(2, 132, 199, 0.3);
+}
+
+.alert.info .icon {
+  color: var(--info-blue);
+}
+
+.alert.success {
+  background: rgba(22, 163, 74, 0.1);
+  border-color: rgba(22, 163, 74, 0.3);
+}
+
+.alert.success .icon {
+  color: var(--success-green);
+}
+
+.alert.warning {
+  background: rgba(217, 119, 6, 0.1);
+  border-color: rgba(217, 119, 6, 0.3);
+}
+
+.alert.warning .icon {
+  color: var(--warning-amber);
+}
+
+.alert.danger {
+  background: rgba(220, 38, 38, 0.1);
+  border-color: rgba(220, 38, 38, 0.3);
+}
+
+.alert.danger .icon {
+  color: var(--danger-red);
+}
+
+.alert.tactical {
+  background: linear-gradient(135deg, rgba(139, 163, 111, 0.1), rgba(75, 85, 56, 0.1));
+  border-color: var(--camo-accent);
+}
+
+.alert.tactical .icon {
+  color: var(--camo-accent);
+}
+
+.icon {
+  flex-shrink: 0;
+  display: flex;
+  margin-top: 2px;
+}
+
+.content {
+  flex: 1;
+  min-width: 0;
+}
+
+.title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 4px;
+}
+
+.message {
+  font-size: 13px;
+  color: var(--text-secondary);
+  line-height: 1.5;
+  margin: 0;
+}
+
+.action {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 10px;
+  background: rgba(255, 255, 255, 0.1);
+  border: none;
+  border-radius: var(--radius-sm);
+  color: var(--text-primary);
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background var(--transition-fast);
+  white-space: nowrap;
+}
+
+.action:hover {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.dismiss {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  background: transparent;
+  border: none;
+  border-radius: var(--radius-sm);
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.dismiss:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--text-primary);
+}
+
+/* ==================== Banner ==================== */
+.banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 16px;
+  border-bottom: 1px solid;
+}
+
+.banner.info {
+  background: linear-gradient(90deg, rgba(2, 132, 199, 0.15), rgba(2, 132, 199, 0.05));
+  border-color: rgba(2, 132, 199, 0.3);
+}
+
+.banner.info .bannerIcon {
+  color: var(--info-blue);
+}
+
+.banner.success {
+  background: linear-gradient(90deg, rgba(22, 163, 74, 0.15), rgba(22, 163, 74, 0.05));
+  border-color: rgba(22, 163, 74, 0.3);
+}
+
+.banner.success .bannerIcon {
+  color: var(--success-green);
+}
+
+.banner.warning {
+  background: linear-gradient(90deg, rgba(217, 119, 6, 0.15), rgba(217, 119, 6, 0.05));
+  border-color: rgba(217, 119, 6, 0.3);
+}
+
+.banner.warning .bannerIcon {
+  color: var(--warning-amber);
+}
+
+.banner.danger {
+  background: linear-gradient(90deg, rgba(220, 38, 38, 0.15), rgba(220, 38, 38, 0.05));
+  border-color: rgba(220, 38, 38, 0.3);
+}
+
+.banner.danger .bannerIcon {
+  color: var(--danger-red);
+}
+
+.banner.tactical {
+  background: linear-gradient(90deg, rgba(139, 163, 111, 0.15), transparent);
+  border-color: var(--camo-accent);
+}
+
+.banner.tactical .bannerIcon {
+  color: var(--camo-accent);
+}
+
+.bannerContent {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.bannerIcon {
+  display: flex;
+}
+
+.bannerMessage {
+  font-size: 13px;
+  color: var(--text-primary);
+}
+
+.bannerAction {
+  padding: 4px 10px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: var(--radius-sm);
+  color: var(--text-primary);
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.bannerAction:hover {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.bannerDismiss {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  background: transparent;
+  border: none;
+  border-radius: var(--radius-sm);
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.bannerDismiss:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--text-primary);
+}
+
+/* ==================== Callout ==================== */
+.callout {
+  padding: 16px;
+  border-radius: var(--radius-md);
+  border-left: 4px solid;
+}
+
+.callout-info {
+  background: rgba(2, 132, 199, 0.08);
+  border-color: var(--info-blue);
+}
+
+.callout-info .calloutIcon {
+  color: var(--info-blue);
+}
+
+.callout-warning {
+  background: rgba(217, 119, 6, 0.08);
+  border-color: var(--warning-amber);
+}
+
+.callout-warning .calloutIcon {
+  color: var(--warning-amber);
+}
+
+.callout-tip {
+  background: rgba(22, 163, 74, 0.08);
+  border-color: var(--success-green);
+}
+
+.callout-tip .calloutIcon {
+  color: var(--success-green);
+}
+
+.callout-important {
+  background: rgba(220, 38, 38, 0.08);
+  border-color: var(--danger-red);
+}
+
+.callout-important .calloutIcon {
+  color: var(--danger-red);
+}
+
+.calloutHeader {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.calloutIcon {
+  display: flex;
+}
+
+.calloutTitle {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-primary);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.calloutContent {
+  font-size: 13px;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+.calloutContent p {
+  margin: 0;
+}
+
+.calloutContent p + p {
+  margin-top: 8px;
+}

@@ -1,0 +1,207 @@
+.footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 28px;
+    background: linear-gradient(180deg,
+            rgba(26, 29, 22, 0.95) 0%,
+            rgba(13, 15, 10, 0.98) 100%);
+    backdrop-filter: blur(8px);
+    border-top: 1px solid var(--border-subtle);
+    z-index: 900;
+}
+
+.content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 100%;
+    padding: 0 16px;
+}
+
+/* Left Section */
+.leftSection {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.versionBadge {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 2px 8px;
+    background: rgba(139, 163, 111, 0.15);
+    border: 1px solid rgba(139, 163, 111, 0.3);
+    border-radius: 4px;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--camo-accent);
+}
+
+.buildInfo {
+    font-family: var(--font-mono);
+    font-size: 9px;
+    color: var(--text-muted);
+    letter-spacing: 0.5px;
+}
+
+/* Metrics Section */
+.metricsSection {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.metric {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.metricIcon {
+    color: var(--text-muted);
+}
+
+.metricIcon.good {
+    color: var(--success-green);
+}
+
+.metricIcon.medium {
+    color: var(--warning-amber);
+}
+
+.metricIcon.poor {
+    color: var(--danger-red);
+}
+
+.metricLabel {
+    font-family: var(--font-mono);
+    font-size: 9px;
+    font-weight: 600;
+    color: var(--text-muted);
+    letter-spacing: 0.5px;
+}
+
+.metricValue {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--text-secondary);
+}
+
+.metricValue.good {
+    color: var(--success-green);
+}
+
+.metricValue.medium {
+    color: var(--warning-amber);
+}
+
+.metricValue.poor {
+    color: var(--danger-red);
+}
+
+/* Memory Bar */
+.memoryBar {
+    width: 40px;
+    height: 4px;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 2px;
+    overflow: hidden;
+}
+
+.memoryFill {
+    height: 100%;
+    background: linear-gradient(90deg,
+            var(--camo-medium) 0%,
+            var(--camo-accent) 100%);
+    border-radius: 2px;
+    transition: width 0.3s ease;
+}
+
+/* Right Section */
+.rightSection {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.activityIndicator {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--text-muted);
+}
+
+.activityText {
+    font-family: var(--font-mono);
+    font-size: 9px;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+}
+
+.activityDot {
+    width: 6px;
+    height: 6px;
+    background: var(--success-green);
+    border-radius: 50%;
+    box-shadow: 0 0 6px var(--success-green);
+    animation: activityPulse 2s ease-in-out infinite;
+}
+
+@keyframes activityPulse {
+
+    0%,
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+
+    50% {
+        opacity: 0.6;
+        transform: scale(0.9);
+    }
+}
+
+.syncIcon {
+    color: var(--text-muted);
+    animation: slowRotate 8s linear infinite;
+}
+
+@keyframes slowRotate {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+    .metricsSection {
+        gap: 12px;
+    }
+
+    .memoryBar {
+        display: none;
+    }
+
+    .buildInfo {
+        display: none;
+    }
+}
+
+@media (max-width: 600px) {
+    .leftSection {
+        display: none;
+    }
+
+    .activityText {
+        display: none;
+    }
+}

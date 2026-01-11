@@ -1,0 +1,54 @@
+.coordinateDisplay {
+  position: absolute;
+  bottom: 40px;
+  left: 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-md);
+  font-family: 'JetBrains Mono', 'Fira Code', monospace;
+  font-size: 12px;
+  color: var(--text-secondary);
+  z-index: 100;
+  backdrop-filter: blur(8px);
+}
+
+.icon {
+  color: var(--camo-accent);
+}
+
+.lat, .lng {
+  color: var(--text-primary);
+}
+
+.separator {
+  color: var(--border-default);
+}
+
+.copyButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  margin-left: 4px;
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.copyButton:hover {
+  background: var(--bg-hover);
+  color: var(--camo-accent);
+  border-color: var(--camo-accent);
+}
+
+.copyButton svg {
+  flex-shrink: 0;
+}

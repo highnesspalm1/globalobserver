@@ -1,0 +1,151 @@
+.tabs {
+  display: flex;
+  gap: 4px;
+  background: var(--bg-tertiary);
+  padding: 4px;
+  border-radius: var(--radius-md);
+}
+
+.fullWidth {
+  width: 100%;
+}
+
+.fullWidth .tab {
+  flex: 1;
+}
+
+.tab {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 8px 16px;
+  background: transparent;
+  border: none;
+  border-radius: var(--radius-sm);
+  color: var(--text-secondary);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  white-space: nowrap;
+}
+
+.tab:hover:not(:disabled) {
+  color: var(--text-primary);
+  background: var(--bg-elevated);
+}
+
+.tab:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.tab.active {
+  background: var(--camo-medium);
+  color: var(--text-primary);
+  box-shadow: var(--shadow-sm);
+}
+
+/* Sizes */
+.sm .tab {
+  padding: 6px 12px;
+  font-size: 11px;
+}
+
+.lg .tab {
+  padding: 12px 24px;
+  font-size: 14px;
+}
+
+/* Icon */
+.icon {
+  display: flex;
+  align-items: center;
+}
+
+.icon svg {
+  width: 16px;
+  height: 16px;
+}
+
+.sm .icon svg {
+  width: 14px;
+  height: 14px;
+}
+
+/* Badge */
+.badge {
+  padding: 2px 6px;
+  background: var(--bg-primary);
+  border-radius: 10px;
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+.tab.active .badge {
+  background: var(--camo-dark);
+  color: var(--camo-accent);
+}
+
+/* Pills Variant */
+.pills {
+  background: transparent;
+  padding: 0;
+  gap: 8px;
+}
+
+.pills .tab {
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-subtle);
+}
+
+.pills .tab:hover:not(:disabled) {
+  border-color: var(--border-default);
+}
+
+.pills .tab.active {
+  background: linear-gradient(135deg, var(--camo-dark), var(--camo-medium));
+  border-color: var(--camo-accent);
+}
+
+/* Underline Variant */
+.underline {
+  position: relative;
+  background: transparent;
+  padding: 0;
+  gap: 0;
+  border-bottom: 1px solid var(--border-subtle);
+  border-radius: 0;
+}
+
+.underline .tab {
+  border-radius: 0;
+  padding: 12px 20px;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+}
+
+.underline .tab.active {
+  background: transparent;
+  color: var(--camo-accent);
+  border-bottom-color: var(--camo-accent);
+  box-shadow: none;
+}
+
+/* Tab Panel */
+.panel {
+  animation: tabFadeIn 200ms ease-out;
+}
+
+@keyframes tabFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

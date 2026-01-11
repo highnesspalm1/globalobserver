@@ -1,0 +1,334 @@
+.header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 52px;
+    background: linear-gradient(180deg,
+            rgba(13, 15, 10, 0.98) 0%,
+            rgba(26, 29, 22, 0.95) 100%);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border-default);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 16px;
+    z-index: 1000;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+}
+
+/* Logo Section */
+.logoSection {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.logoWrapper {
+    position: relative;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, var(--camo-dark) 0%, var(--tactical-charcoal) 100%);
+    border-radius: 8px;
+    border: 1px solid var(--border-strong);
+    overflow: hidden;
+}
+
+.logoGlow {
+    position: absolute;
+    inset: -2px;
+    background: radial-gradient(circle at center,
+            rgba(139, 163, 111, 0.3) 0%,
+            transparent 70%);
+    animation: logoGlowPulse 3s ease-in-out infinite;
+}
+
+.scanline {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg,
+            transparent 0%,
+            rgba(139, 163, 111, 0.8) 50%,
+            transparent 100%);
+    animation: scanlineMove 2s linear infinite;
+}
+
+@keyframes logoGlowPulse {
+
+    0%,
+    100% {
+        opacity: 0.5;
+    }
+
+    50% {
+        opacity: 1;
+    }
+}
+
+@keyframes scanlineMove {
+    0% {
+        transform: translateY(0);
+    }
+
+    100% {
+        transform: translateY(40px);
+    }
+}
+
+.logoIcon {
+    color: var(--camo-accent);
+    z-index: 1;
+    filter: drop-shadow(0 0 6px rgba(139, 163, 111, 0.5));
+}
+
+.titleWrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+}
+
+.title {
+    font-family: var(--font-mono);
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text-primary);
+    letter-spacing: 2px;
+    line-height: 1.2;
+    margin: 0;
+}
+
+.subtitle {
+    font-family: var(--font-mono);
+    font-size: 9px;
+    font-weight: 500;
+    color: var(--text-muted);
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+}
+
+/* Center Section */
+.centerSection {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+}
+
+.liveIndicator {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 12px;
+    background: rgba(220, 38, 38, 0.15);
+    border: 1px solid rgba(220, 38, 38, 0.4);
+    border-radius: 20px;
+}
+
+.liveIcon {
+    color: var(--danger-red);
+    animation: livePulse 1.5s ease-in-out infinite;
+}
+
+.liveIcon.pulsing {
+    animation: liveRotate 1s linear infinite;
+}
+
+@keyframes livePulse {
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.4;
+    }
+}
+
+@keyframes liveRotate {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.liveText {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--danger-red);
+    letter-spacing: 1px;
+}
+
+.eventCounter {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+}
+
+.eventCount {
+    font-family: var(--font-mono);
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--camo-accent);
+    line-height: 1;
+}
+
+.eventLabel {
+    font-family: var(--font-mono);
+    font-size: 8px;
+    font-weight: 500;
+    color: var(--text-muted);
+    letter-spacing: 1px;
+}
+
+/* Right Section */
+.rightSection {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.clockSection {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding: 4px 12px;
+    background: rgba(42, 47, 36, 0.6);
+    border: 1px solid var(--border-subtle);
+    border-radius: 6px;
+}
+
+.clockRow {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.clockIcon {
+    color: var(--text-muted);
+}
+
+.clockLabel {
+    font-family: var(--font-mono);
+    font-size: 9px;
+    font-weight: 600;
+    color: var(--text-muted);
+    width: 24px;
+}
+
+.clockTime {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--camo-accent);
+    letter-spacing: 1px;
+}
+
+.dateRow {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.dateText {
+    font-family: var(--font-mono);
+    font-size: 9px;
+    color: var(--text-muted);
+}
+
+/* Connection Status */
+.connectionStatus {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    transition: all var(--transition-fast);
+}
+
+.connectionStatus.online {
+    background: rgba(22, 163, 74, 0.15);
+    border: 1px solid rgba(22, 163, 74, 0.4);
+    color: var(--success-green);
+}
+
+.connectionStatus.offline {
+    background: rgba(220, 38, 38, 0.15);
+    border: 1px solid rgba(220, 38, 38, 0.4);
+    color: var(--danger-red);
+}
+
+/* Refresh Button */
+.refreshButton {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 14px;
+    background: var(--bg-tertiary);
+    border: 1px solid var(--border-default);
+    border-radius: 6px;
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.refreshButton:hover {
+    background: var(--bg-elevated);
+    border-color: var(--camo-accent);
+    color: var(--camo-accent);
+}
+
+.refreshButton:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.refreshButton.spinning svg {
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.refreshText {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    font-weight: 500;
+}
+
+/* Responsive */
+@media (max-width: 1200px) {
+    .clockSection {
+        display: none;
+    }
+}
+
+@media (max-width: 900px) {
+    .eventCounter {
+        display: none;
+    }
+
+    .subtitle {
+        display: none;
+    }
+}

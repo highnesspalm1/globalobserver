@@ -1,0 +1,209 @@
+.container {
+  position: absolute;
+  right: 300px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 100;
+}
+
+.panel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 8px;
+  background: linear-gradient(145deg, var(--bg-secondary), rgba(26, 29, 22, 0.95));
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg), 0 0 30px rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(12px);
+  animation: panelSlide 300ms ease-out;
+}
+
+@keyframes panelSlide {
+  from {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.separator {
+  width: 24px;
+  height: 1px;
+  background: var(--border-subtle);
+  margin: 4px 0;
+}
+
+/* Action Button */
+.actionButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  width: 40px;
+  height: 40px;
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.actionButton:hover {
+  background: var(--bg-elevated);
+  border-color: var(--border-default);
+  color: var(--text-primary);
+}
+
+.actionButton.active {
+  background: linear-gradient(135deg, var(--camo-dark), var(--camo-medium));
+  border-color: var(--camo-accent);
+  color: var(--camo-accent);
+}
+
+.actionButton:active {
+  transform: scale(0.95);
+}
+
+.shortcut {
+  position: absolute;
+  bottom: 2px;
+  right: 2px;
+  font-size: 8px;
+  font-family: var(--font-mono);
+  color: var(--text-muted);
+  opacity: 0.6;
+}
+
+/* Style Buttons */
+.styleButtons {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 4px;
+}
+
+.styleButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.styleButton:hover {
+  background: var(--bg-elevated);
+  color: var(--text-secondary);
+}
+
+.styleButton.styleActive {
+  background: linear-gradient(135deg, var(--camo-dark), var(--camo-medium));
+  border-color: var(--camo-accent);
+  color: var(--camo-accent);
+}
+
+/* Expand/Collapse */
+.expandButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  background: linear-gradient(145deg, var(--bg-secondary), rgba(26, 29, 22, 0.95));
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-md);
+  color: var(--camo-accent);
+  cursor: pointer;
+  box-shadow: var(--shadow-md);
+  transition: all var(--transition-fast);
+}
+
+.expandButton:hover {
+  background: var(--bg-tertiary);
+  border-color: var(--camo-accent);
+  box-shadow: 0 0 15px rgba(139, 163, 111, 0.2);
+}
+
+.collapseButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  margin-top: 4px;
+  background: transparent;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.collapseButton:hover {
+  background: var(--bg-tertiary);
+  color: var(--text-primary);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .container {
+    right: 8px;
+  }
+
+  .panel {
+    padding: 6px;
+  }
+
+  .actionButton {
+    width: 36px;
+    height: 36px;
+  }
+
+  .styleButton {
+    width: 28px;
+    height: 28px;
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    top: auto;
+    bottom: 160px;
+    transform: none;
+    right: 8px;
+  }
+
+  .panel {
+    flex-direction: row;
+    flex-wrap: wrap;
+    max-width: 140px;
+    justify-content: center;
+  }
+
+  .group {
+    flex-direction: row;
+  }
+
+  .separator {
+    width: 1px;
+    height: 24px;
+    margin: 0 4px;
+  }
+}

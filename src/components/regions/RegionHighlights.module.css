@@ -1,0 +1,170 @@
+.container {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-default);
+    border-radius: var(--radius-lg);
+    padding: 0.75rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    min-width: 200px;
+    box-shadow: var(--shadow-md);
+}
+
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.headerLeft {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--camo-accent);
+}
+
+.title {
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    color: var(--text-secondary);
+}
+
+.totalBadge {
+    font-family: var(--font-mono);
+    font-size: 0.6rem;
+    color: var(--text-muted);
+    background: var(--bg-tertiary);
+    padding: 0.15rem 0.4rem;
+    border-radius: var(--radius-sm);
+}
+
+.topRegion {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.6rem;
+    background: linear-gradient(135deg, var(--bg-tertiary), transparent);
+    border: 1px solid var(--region-color);
+    border-left-width: 3px;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.topRegion:hover {
+    background: var(--bg-tertiary);
+    transform: translateX(2px);
+}
+
+.topFlag {
+    font-size: 1.25rem;
+}
+
+.topInfo {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.topName {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.topLabel {
+    font-size: 0.6rem;
+    color: var(--text-muted);
+}
+
+.topCount {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    font-family: var(--font-mono);
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--region-color);
+}
+
+.regionList {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.regionItem {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.4rem 0.5rem;
+    background: var(--bg-tertiary);
+    border: none;
+    border-left: 2px solid transparent;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    text-align: left;
+    width: 100%;
+}
+
+.regionItem:hover {
+    background: var(--bg-elevated);
+    border-left-color: var(--region-color);
+}
+
+.regionFlag {
+    font-size: 0.9rem;
+}
+
+.regionName {
+    flex: 1;
+    font-size: 0.7rem;
+    color: var(--text-secondary);
+}
+
+.regionStats {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+}
+
+.criticalBadge {
+    font-family: var(--font-mono);
+    font-size: 0.6rem;
+    font-weight: 600;
+    color: var(--danger-red);
+    background: rgba(220, 38, 38, 0.15);
+    padding: 0.1rem 0.25rem;
+    border-radius: var(--radius-sm);
+}
+
+.eventBadge {
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    color: var(--text-muted);
+}
+
+.trendUp {
+    color: var(--danger-red);
+}
+
+.trendDown {
+    color: var(--success-green);
+}
+
+.trendStable {
+    color: var(--text-muted);
+}
+
+.regionArrow {
+    color: var(--text-muted);
+    opacity: 0;
+    transition: opacity var(--transition-fast);
+}
+
+.regionItem:hover .regionArrow {
+    opacity: 1;
+}

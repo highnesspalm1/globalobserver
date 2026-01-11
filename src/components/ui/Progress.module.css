@@ -1,0 +1,150 @@
+.progress {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+}
+
+.track {
+  flex: 1;
+  background: var(--bg-tertiary);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+}
+
+/* Sizes */
+.sm .track {
+  height: 4px;
+}
+
+.md .track {
+  height: 8px;
+}
+
+.lg .track {
+  height: 12px;
+}
+
+.bar {
+  height: 100%;
+  border-radius: var(--radius-sm);
+  transition: width 500ms ease-out;
+}
+
+/* Variants */
+.default {
+  background: var(--text-secondary);
+}
+
+.success {
+  background: linear-gradient(90deg, var(--success-green), #22c55e);
+}
+
+.warning {
+  background: linear-gradient(90deg, var(--warning-amber), #f59e0b);
+}
+
+.danger {
+  background: linear-gradient(90deg, var(--danger-red), #ef4444);
+}
+
+.camo {
+  background: linear-gradient(90deg, var(--camo-dark), var(--camo-accent));
+}
+
+/* Striped */
+.striped {
+  background-image: linear-gradient(
+    45deg,
+    rgba(255, 255, 255, 0.1) 25%,
+    transparent 25%,
+    transparent 50%,
+    rgba(255, 255, 255, 0.1) 50%,
+    rgba(255, 255, 255, 0.1) 75%,
+    transparent 75%,
+    transparent
+  );
+  background-size: 20px 20px;
+}
+
+/* Animated */
+.animated {
+  animation: progressStripes 1s linear infinite;
+}
+
+@keyframes progressStripes {
+  from {
+    background-position: 20px 0;
+  }
+  to {
+    background-position: 0 0;
+  }
+}
+
+/* Label */
+.label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  font-family: var(--font-mono);
+  min-width: 40px;
+  text-align: right;
+}
+
+/* Ring Progress */
+.ring {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ringSvg {
+  transform: rotate(-90deg);
+}
+
+.ringTrack {
+  fill: none;
+  stroke: var(--bg-tertiary);
+}
+
+.ringBar {
+  fill: none;
+  stroke-linecap: round;
+  transition: stroke-dashoffset 500ms ease-out;
+}
+
+.ring-default {
+  stroke: var(--text-secondary);
+}
+
+.ring-success {
+  stroke: var(--success-green);
+}
+
+.ring-warning {
+  stroke: var(--warning-amber);
+}
+
+.ring-danger {
+  stroke: var(--danger-red);
+}
+
+.ring-camo {
+  stroke: var(--camo-accent);
+}
+
+.ringContent {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.ringLabel {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text-primary);
+  font-family: var(--font-mono);
+}

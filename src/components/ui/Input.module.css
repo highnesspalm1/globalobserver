@@ -1,0 +1,230 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.fullWidth {
+  width: 100%;
+}
+
+/* Label */
+.label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.required {
+  color: var(--danger-red);
+  margin-left: 2px;
+}
+
+/* Input Wrapper */
+.inputWrapper,
+.textareaWrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-md);
+  transition: all var(--transition-fast);
+}
+
+.inputWrapper:focus-within,
+.textareaWrapper:focus-within {
+  border-color: var(--camo-accent);
+  box-shadow: 0 0 0 3px rgba(139, 163, 111, 0.2);
+}
+
+/* Sizes */
+.sm {
+  min-height: 32px;
+}
+
+.sm .input,
+.sm .textarea {
+  padding: 6px 10px;
+  font-size: 12px;
+}
+
+.md {
+  min-height: 40px;
+}
+
+.md .input,
+.md .textarea {
+  padding: 8px 12px;
+  font-size: 13px;
+}
+
+.lg {
+  min-height: 48px;
+}
+
+.lg .input,
+.lg .textarea {
+  padding: 10px 14px;
+  font-size: 14px;
+}
+
+/* Variants */
+.ghost {
+  background: transparent;
+  border-color: transparent;
+}
+
+.ghost:focus-within {
+  background: var(--bg-tertiary);
+  border-color: var(--camo-accent);
+}
+
+.tactical {
+  background: linear-gradient(135deg, var(--camo-dark), var(--tactical-charcoal));
+  border-color: var(--camo-medium);
+}
+
+.tactical:focus-within {
+  border-color: var(--camo-accent);
+  box-shadow: 0 0 0 3px rgba(139, 163, 111, 0.15);
+}
+
+/* Input */
+.input,
+.textarea {
+  flex: 1;
+  width: 100%;
+  background: transparent;
+  border: none;
+  color: var(--text-primary);
+  outline: none;
+}
+
+.input::placeholder,
+.textarea::placeholder {
+  color: var(--text-muted);
+}
+
+.textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+/* Icons */
+.hasLeftIcon .input {
+  padding-left: 36px;
+}
+
+.sm.hasLeftIcon .input {
+  padding-left: 30px;
+}
+
+.lg.hasLeftIcon .input {
+  padding-left: 42px;
+}
+
+.hasRightIcon .input {
+  padding-right: 36px;
+}
+
+.leftIcon {
+  position: absolute;
+  left: 12px;
+  display: flex;
+  color: var(--text-muted);
+  pointer-events: none;
+}
+
+.sm .leftIcon {
+  left: 10px;
+}
+
+.lg .leftIcon {
+  left: 14px;
+}
+
+.rightIcons {
+  position: absolute;
+  right: 8px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.rightIcon {
+  display: flex;
+  color: var(--text-muted);
+}
+
+.iconButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  background: transparent;
+  border: none;
+  border-radius: var(--radius-sm);
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.iconButton:hover {
+  color: var(--text-primary);
+  background: var(--bg-elevated);
+}
+
+.statusIcon {
+  color: var(--danger-red);
+}
+
+.statusIconSuccess {
+  color: var(--success-green);
+}
+
+/* States */
+.hasError {
+  border-color: var(--danger-red);
+}
+
+.hasError:focus-within {
+  border-color: var(--danger-red);
+  box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.2);
+}
+
+.hasSuccess {
+  border-color: var(--success-green);
+}
+
+.hasSuccess:focus-within {
+  border-color: var(--success-green);
+  box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.2);
+}
+
+.disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.disabled .input,
+.disabled .textarea {
+  cursor: not-allowed;
+}
+
+/* Message */
+.message {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+.errorMessage {
+  color: var(--danger-red);
+}

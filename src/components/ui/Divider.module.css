@@ -1,0 +1,92 @@
+.divider {
+  background: var(--border-subtle);
+  flex-shrink: 0;
+}
+
+.horizontal {
+  width: 100%;
+  height: 1px;
+  margin: 16px 0;
+}
+
+.vertical {
+  width: 1px;
+  height: 100%;
+  min-height: 20px;
+  margin: 0 16px;
+}
+
+/* Variants */
+.solid {
+  background: var(--border-subtle);
+}
+
+.dashed {
+  background: transparent;
+  border: none;
+}
+
+.dashed.horizontal {
+  border-top: 1px dashed var(--border-subtle);
+  height: 0;
+}
+
+.dashed.vertical {
+  border-left: 1px dashed var(--border-subtle);
+  width: 0;
+}
+
+.dotted {
+  background: transparent;
+}
+
+.dotted.horizontal {
+  border-top: 1px dotted var(--border-subtle);
+  height: 0;
+}
+
+.dotted.vertical {
+  border-left: 1px dotted var(--border-subtle);
+  width: 0;
+}
+
+.gradient {
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    var(--border-default) 50%,
+    transparent 100%
+  );
+}
+
+.gradient.vertical {
+  background: linear-gradient(
+    180deg,
+    transparent 0%,
+    var(--border-default) 50%,
+    transparent 100%
+  );
+}
+
+/* Labeled Divider */
+.labeledDivider {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 16px 0;
+}
+
+.line {
+  flex: 1;
+  height: 1px;
+  background: var(--border-subtle);
+}
+
+.label {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text-muted);
+  white-space: nowrap;
+}

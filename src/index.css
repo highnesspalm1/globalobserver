@@ -1,0 +1,535 @@
+/* Global Observer - Military Premium Design System */
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+:root {
+  /* Military Color Palette */
+  --olive-50: #f7f8f3;
+  --olive-100: #eef0e5;
+  --olive-200: #d5dbc3;
+  --olive-300: #b8c299;
+  --olive-400: #97a66d;
+  --olive-500: #7a8b4f;
+  --olive-600: #5f6d3c;
+  --olive-700: #4a5532;
+  --olive-800: #3d452b;
+  --olive-900: #353c27;
+  --olive-950: #1a1f12;
+
+  /* Camo Colors */
+  --camo-dark: #2d3524;
+  --camo-medium: #4a5d3a;
+  --camo-light: #6b7d54;
+  --camo-accent: #8fa36f;
+
+  /* Tactical Neutrals */
+  --tactical-black: #0d0f0a;
+  --tactical-charcoal: #1a1d16;
+  --tactical-gray: #2a2f24;
+  --tactical-slate: #3d453a;
+  --tactical-stone: #5a6355;
+
+  /* Alert Colors */
+  --danger-red: #dc2626;
+  --danger-red-dark: #991b1b;
+  --warning-amber: #d97706;
+  --warning-amber-dark: #92400e;
+  --success-green: #16a34a;
+  --info-blue: #0284c7;
+  --contested-orange: #ea580c;
+
+  /* UI Colors */
+  --bg-primary: var(--tactical-black);
+  --bg-secondary: var(--tactical-charcoal);
+  --bg-tertiary: var(--tactical-gray);
+  --bg-elevated: var(--tactical-slate);
+
+  --text-primary: #e8ebe3;
+  --text-secondary: #a8b09e;
+  --text-muted: #6b7565;
+  --text-accent: var(--camo-accent);
+
+  --border-subtle: rgba(139, 163, 111, 0.15);
+  --border-default: rgba(139, 163, 111, 0.25);
+  --border-strong: rgba(139, 163, 111, 0.4);
+
+  /* Shadows */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.5);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.4), 0 1px 3px rgba(0, 0, 0, 0.3);
+  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.5), 0 4px 6px rgba(0, 0, 0, 0.3);
+  --shadow-glow: 0 0 20px rgba(139, 163, 111, 0.2);
+
+  /* Typography */
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+
+  /* Spacing */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+
+  /* Transitions */
+  --transition-fast: 150ms ease;
+  --transition-normal: 250ms ease;
+  --transition-slow: 400ms ease;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Scrollbar Styling */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-secondary);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--tactical-slate);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--camo-medium);
+}
+
+/* Selection */
+::selection {
+  background: var(--camo-medium);
+  color: var(--text-primary);
+}
+
+/* Focus Styles */
+:focus-visible {
+  outline: 2px solid var(--camo-accent);
+  outline-offset: 2px;
+}
+
+/* Button Base */
+button {
+  font-family: inherit;
+  cursor: pointer;
+  border: none;
+  background: none;
+}
+
+/* Input Base */
+input,
+textarea,
+select {
+  font-family: inherit;
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-default);
+  color: var(--text-primary);
+  border-radius: var(--radius-md);
+  padding: 0.5rem 0.75rem;
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+  border-color: var(--camo-accent);
+  box-shadow: 0 0 0 3px rgba(139, 163, 111, 0.2);
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: var(--text-muted);
+}
+
+/* Link Styles */
+a {
+  color: var(--text-accent);
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+
+a:hover {
+  color: var(--camo-light);
+}
+
+/* Military Pattern Background */
+.military-pattern {
+  background-image:
+    linear-gradient(45deg, var(--camo-dark) 25%, transparent 25%),
+    linear-gradient(-45deg, var(--camo-dark) 25%, transparent 25%),
+    linear-gradient(45deg, transparent 75%, var(--tactical-charcoal) 75%),
+    linear-gradient(-45deg, transparent 75%, var(--tactical-charcoal) 75%);
+  background-size: 20px 20px;
+  background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
+}
+
+/* Tactical Grid Overlay */
+.tactical-grid {
+  background-image:
+    linear-gradient(rgba(139, 163, 111, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(139, 163, 111, 0.03) 1px, transparent 1px);
+  background-size: 50px 50px;
+}
+
+/* Status Indicators */
+.status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.status-dot--live {
+  background: var(--danger-red);
+  box-shadow: 0 0 8px var(--danger-red);
+  animation: pulse 2s infinite;
+}
+
+.status-dot--warning {
+  background: var(--warning-amber);
+  box-shadow: 0 0 8px var(--warning-amber);
+}
+
+.status-dot--safe {
+  background: var(--success-green);
+  box-shadow: 0 0 8px var(--success-green);
+}
+
+@keyframes pulse {
+
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.5;
+  }
+}
+
+/* MapLibre Overrides */
+.maplibregl-map {
+  font-family: var(--font-sans);
+}
+
+.maplibregl-ctrl-group {
+  background: var(--bg-secondary) !important;
+  border: 1px solid var(--border-default) !important;
+  border-radius: var(--radius-md) !important;
+  box-shadow: var(--shadow-md) !important;
+}
+
+.maplibregl-ctrl-group button {
+  background-color: transparent !important;
+  border-color: var(--border-subtle) !important;
+}
+
+.maplibregl-ctrl-group button:hover {
+  background-color: var(--bg-tertiary) !important;
+}
+
+.maplibregl-ctrl-group button .maplibregl-ctrl-icon {
+  filter: invert(0.8) sepia(0.2) hue-rotate(60deg);
+}
+
+.maplibregl-popup-content {
+  background: var(--bg-secondary) !important;
+  color: var(--text-primary) !important;
+  border: 1px solid var(--border-default) !important;
+  border-radius: var(--radius-md) !important;
+  box-shadow: var(--shadow-lg) !important;
+  padding: 0 !important;
+}
+
+.maplibregl-popup-tip {
+  border-top-color: var(--bg-secondary) !important;
+}
+
+.maplibregl-popup-close-button {
+  color: var(--text-secondary) !important;
+  font-size: 18px !important;
+  padding: 4px 8px !important;
+}
+
+.maplibregl-popup-close-button:hover {
+  color: var(--text-primary) !important;
+  background: var(--bg-tertiary) !important;
+}
+
+/* Animation Utilities */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.animate-fadeIn {
+  animation: fadeIn var(--transition-normal) ease-out;
+}
+
+.animate-slideUp {
+  animation: slideUp var(--transition-normal) ease-out;
+}
+
+.animate-slideDown {
+  animation: slideDown var(--transition-normal) ease-out;
+}
+
+.animate-scaleIn {
+  animation: scaleIn var(--transition-normal) ease-out;
+}
+
+/* Premium Shimmer Effect */
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.shimmer {
+  background: linear-gradient(90deg,
+      rgba(139, 163, 111, 0.05) 0%,
+      rgba(139, 163, 111, 0.15) 50%,
+      rgba(139, 163, 111, 0.05) 100%);
+  background-size: 200% 100%;
+  animation: shimmer 2s linear infinite;
+}
+
+/* Radar Sweep Animation */
+@keyframes radarSweep {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.radar-sweep {
+  position: relative;
+  overflow: hidden;
+}
+
+.radar-sweep::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 100%;
+  height: 100%;
+  background: conic-gradient(from 0deg,
+      transparent 0deg,
+      rgba(139, 163, 111, 0.3) 30deg,
+      transparent 60deg);
+  transform-origin: 0 0;
+  animation: radarSweep 4s linear infinite;
+}
+
+/* Glitch Effect */
+@keyframes glitch {
+
+  0%,
+  90%,
+  100% {
+    transform: translate(0);
+    opacity: 1;
+  }
+
+  91% {
+    transform: translate(-2px, 1px);
+    opacity: 0.8;
+  }
+
+  92% {
+    transform: translate(2px, -1px);
+    opacity: 0.9;
+  }
+
+  93% {
+    transform: translate(-1px, 2px);
+    opacity: 0.8;
+  }
+
+  94% {
+    transform: translate(1px, -2px);
+    opacity: 1;
+  }
+}
+
+.glitch-text {
+  animation: glitch 5s infinite;
+}
+
+/* Scanline Effect */
+@keyframes scanline {
+  0% {
+    transform: translateY(-100%);
+  }
+
+  100% {
+    transform: translateY(100vh);
+  }
+}
+
+.scanline-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(180deg,
+      transparent 0%,
+      rgba(139, 163, 111, 0.1) 50%,
+      transparent 100%);
+  animation: scanline 8s linear infinite;
+  pointer-events: none;
+}
+
+/* Glow Pulse */
+@keyframes glowPulse {
+
+  0%,
+  100% {
+    box-shadow: 0 0 5px rgba(139, 163, 111, 0.3);
+  }
+
+  50% {
+    box-shadow: 0 0 20px rgba(139, 163, 111, 0.6), 0 0 40px rgba(139, 163, 111, 0.3);
+  }
+}
+
+.glow-pulse {
+  animation: glowPulse 3s ease-in-out infinite;
+}
+
+/* Glassmorphism Utilities */
+.glass {
+  background: rgba(26, 29, 22, 0.8);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--border-default);
+}
+
+.glass-dark {
+  background: rgba(13, 15, 10, 0.9);
+  backdrop-filter: blur(16px);
+  border: 1px solid var(--border-subtle);
+}
+
+.glass-light {
+  background: rgba(42, 47, 36, 0.7);
+  backdrop-filter: blur(8px);
+  border: 1px solid var(--border-strong);
+}
+
+/* Gradient Text */
+.gradient-text {
+  background: linear-gradient(135deg, var(--camo-accent) 0%, var(--camo-light) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Floating Animation */
+@keyframes float {
+
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+
+  50% {
+    transform: translateY(-5px);
+  }
+}
+
+.floating {
+  animation: float 3s ease-in-out infinite;
+}
+
+/* Border Glow */
+.border-glow {
+  position: relative;
+}
+
+.border-glow::before {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(135deg,
+      rgba(139, 163, 111, 0.5) 0%,
+      transparent 50%,
+      rgba(139, 163, 111, 0.3) 100%);
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}

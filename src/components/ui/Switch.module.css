@@ -1,0 +1,294 @@
+/* ==================== Switch ==================== */
+.container {
+  display: inline-flex;
+}
+
+.wrapper {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  cursor: pointer;
+}
+
+.disabled .wrapper {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+}
+
+.track {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-default);
+  border-radius: 100px;
+  transition: all var(--transition-fast);
+}
+
+/* Switch Sizes */
+.track.sm {
+  width: 32px;
+  height: 18px;
+  padding: 2px;
+}
+
+.track.md {
+  width: 44px;
+  height: 24px;
+  padding: 3px;
+}
+
+.track.lg {
+  width: 56px;
+  height: 30px;
+  padding: 4px;
+}
+
+.thumb {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--text-muted);
+  border-radius: 50%;
+  transition: all var(--transition-fast);
+  box-shadow: var(--shadow-sm);
+}
+
+.sm .thumb {
+  width: 12px;
+  height: 12px;
+}
+
+.md .thumb {
+  width: 16px;
+  height: 16px;
+}
+
+.lg .thumb {
+  width: 20px;
+  height: 20px;
+}
+
+.checkIcon {
+  width: 60%;
+  height: 60%;
+  color: var(--bg-secondary);
+  opacity: 0;
+  transition: opacity var(--transition-fast);
+}
+
+/* Switch Checked State */
+.input:checked + .track {
+  background: linear-gradient(135deg, var(--camo-medium), var(--camo-accent));
+  border-color: var(--camo-accent);
+}
+
+.input:checked + .track .thumb {
+  background: var(--text-primary);
+  transform: translateX(100%);
+}
+
+.sm .input:checked + .track .thumb {
+  transform: translateX(14px);
+}
+
+.md .input:checked + .track .thumb {
+  transform: translateX(20px);
+}
+
+.lg .input:checked + .track .thumb {
+  transform: translateX(26px);
+}
+
+.input:checked + .track .checkIcon {
+  opacity: 1;
+}
+
+/* Switch Focus */
+.input:focus-visible + .track {
+  outline: 2px solid var(--camo-accent);
+  outline-offset: 2px;
+}
+
+/* ==================== Checkbox ==================== */
+.checkboxContainer {
+  display: inline-flex;
+}
+
+.checkboxWrapper {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  cursor: pointer;
+}
+
+.disabled .checkboxWrapper {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.checkboxInput {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+}
+
+.checkbox {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  background: var(--bg-tertiary);
+  border: 2px solid var(--border-default);
+  border-radius: var(--radius-sm);
+  color: transparent;
+  transition: all var(--transition-fast);
+}
+
+.checkbox-sm {
+  width: 16px;
+  height: 16px;
+}
+
+.checkbox-md {
+  width: 20px;
+  height: 20px;
+}
+
+.checkbox-lg {
+  width: 24px;
+  height: 24px;
+}
+
+.checkbox svg {
+  width: 100%;
+  height: 100%;
+}
+
+.checkboxChecked,
+.checkboxIndeterminate {
+  background: linear-gradient(135deg, var(--camo-medium), var(--camo-accent));
+  border-color: var(--camo-accent);
+  color: var(--text-primary);
+}
+
+.checkboxInput:focus-visible + .checkbox {
+  outline: 2px solid var(--camo-accent);
+  outline-offset: 2px;
+}
+
+/* ==================== Radio ==================== */
+.radioContainer {
+  display: inline-flex;
+}
+
+.radioWrapper {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  cursor: pointer;
+}
+
+.disabled .radioWrapper {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.radioInput {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+}
+
+.radio {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  background: var(--bg-tertiary);
+  border: 2px solid var(--border-default);
+  border-radius: 50%;
+  transition: all var(--transition-fast);
+}
+
+.radio-sm {
+  width: 16px;
+  height: 16px;
+}
+
+.radio-md {
+  width: 20px;
+  height: 20px;
+}
+
+.radio-lg {
+  width: 24px;
+  height: 24px;
+}
+
+.radioDot {
+  width: 0;
+  height: 0;
+  background: var(--text-primary);
+  border-radius: 50%;
+  transition: all var(--transition-fast);
+}
+
+.radioChecked {
+  background: linear-gradient(135deg, var(--camo-medium), var(--camo-accent));
+  border-color: var(--camo-accent);
+}
+
+.radioChecked .radioDot {
+  width: 50%;
+  height: 50%;
+}
+
+.radioInput:focus-visible + .radio {
+  outline: 2px solid var(--camo-accent);
+  outline-offset: 2px;
+}
+
+/* ==================== Labels ==================== */
+.labelGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.label,
+.checkboxLabel,
+.radioLabel {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-primary);
+  line-height: 1.4;
+}
+
+.description {
+  font-size: 12px;
+  color: var(--text-secondary);
+  line-height: 1.4;
+}

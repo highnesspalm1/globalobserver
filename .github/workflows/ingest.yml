@@ -1,0 +1,132 @@
+name: Ingestion Pipeline
+
+on:
+  schedule:
+    # Run every 30 minutes
+    - cron: '*/30 * * * *'
+  workflow_dispatch:
+    inputs:
+      limit:
+        description: 'Number of messages to fetch per channel'
+        required: false
+        default: '50'
+
+jobs:
+  ingest:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+      
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install telethon supabase python-dotenv
+      
+      - name: Run ingestion pipeline
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
+          TELEGRAM_API_ID: ${{ secrets.TELEGRAM_API_ID }}
+          TELEGRAM_API_HASH: ${{ secrets.TELEGRAM_API_HASH }}
+        run: |
+          cd scripts
+          python ingest.py
+      
+      - name: Upload logs
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: ingestion-logs
+          path: scripts/*.log
+          retention-days: 7
+
+  generate-tiles:
+    runs-on: ubuntu-latest
+    needs: ingest
+    if: success()
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      
+      - name: Install tippecanoe
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y build-essential libsqlite3-dev zlib1g-dev
+          git clone https://github.com/felt/tippecanoe.git
+          cd tippecanoe
+          make -j
+          sudo make install
+      
+      - name: Export GeoJSON from Supabase
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
+        run: |
+          # Export events as GeoJSON
+          curl -X GET "$SUPABASE_URL/rest/v1/events_geojson?select=feature" \
+            -H "apikey: $SUPABASE_SERVICE_KEY" \
+            -H "Authorization: Bearer $SUPABASE_SERVICE_KEY" \
+            | jq -s '{type: "FeatureCollection", features: [.[].feature]}' \
+            > events.geojson
+          
+          # Export territories as GeoJSON  
+          curl -X GET "$SUPABASE_URL/rest/v1/territories_geojson?select=feature" \
+            -H "apikey: $SUPABASE_SERVICE_KEY" \
+            -H "Authorization: Bearer $SUPABASE_SERVICE_KEY" \
+            | jq -s '{type: "FeatureCollection", features: [.[].feature]}' \
+            > territories.geojson
+      
+      - name: Generate PMTiles
+        run: |
+          # Events tiles (clustered)
+          tippecanoe -o events.pmtiles \
+            --layer=events \
+            --minimum-zoom=4 \
+            --maximum-zoom=14 \
+            --drop-densest-as-needed \
+            --extend-zooms-if-still-dropping \
+            --force \
+            events.geojson
+          
+          # Territory tiles
+          tippecanoe -o territories.pmtiles \
+            --layer=territories \
+            --minimum-zoom=4 \
+            --maximum-zoom=12 \
+            --detect-shared-borders \
+            --force \
+            territories.geojson
+      
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./
+          publish_branch: gh-pages
+          destination_dir: tiles
+          keep_files: true
+
+  notify:
+    runs-on: ubuntu-latest
+    needs: [ingest, generate-tiles]
+    if: failure()
+    
+    steps:
+      - name: Send failure notification
+        run: |
+          echo "Pipeline failed! Check the logs."
+          # Add webhook notification here if needed

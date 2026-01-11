@@ -1,0 +1,223 @@
+.container {
+    background: linear-gradient(135deg,
+            rgba(26, 29, 22, 0.95) 0%,
+            rgba(42, 47, 36, 0.9) 100%);
+    backdrop-filter: blur(12px);
+    border: 1px solid var(--border-default);
+    border-radius: var(--radius-lg);
+    padding: 12px;
+    width: 280px;
+}
+
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border-subtle);
+}
+
+.headerTitle {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--camo-accent);
+    letter-spacing: 1px;
+}
+
+/* Summary Row */
+.summaryRow {
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
+    margin-bottom: 12px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border-subtle);
+}
+
+.summaryItem {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    padding: 8px 4px;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: var(--radius-md);
+}
+
+.summaryValue {
+    font-family: var(--font-mono);
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.summaryValue.critical {
+    color: var(--danger-red);
+    text-shadow: 0 0 8px rgba(220, 38, 38, 0.5);
+}
+
+.summaryValue.high {
+    color: var(--warning-amber);
+    text-shadow: 0 0 8px rgba(217, 119, 6, 0.5);
+}
+
+.summaryLabel {
+    font-family: var(--font-mono);
+    font-size: 8px;
+    font-weight: 500;
+    color: var(--text-muted);
+    letter-spacing: 1px;
+}
+
+/* Region List */
+.regionList {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.regionItem {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding: 8px;
+    background: rgba(0, 0, 0, 0.15);
+    border-radius: var(--radius-md);
+    border: 1px solid transparent;
+    transition: all var(--transition-fast);
+    animation: slideIn 0.3s ease-out forwards;
+    opacity: 0;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateX(-10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.regionItem:hover {
+    background: rgba(0, 0, 0, 0.25);
+    border-color: var(--border-subtle);
+}
+
+.regionInfo {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.regionFlag {
+    font-size: 16px;
+}
+
+.regionName {
+    flex: 1;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--text-primary);
+}
+
+.trendUp {
+    color: var(--danger-red);
+    animation: trendPulse 1.5s ease-in-out infinite;
+}
+
+.trendDown {
+    color: var(--success-green);
+}
+
+.trendStable {
+    color: var(--text-muted);
+}
+
+@keyframes trendPulse {
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.5;
+    }
+}
+
+/* Region Stats */
+.regionStats {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.barContainer {
+    flex: 1;
+    height: 6px;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.bar {
+    height: 100%;
+    background: linear-gradient(90deg,
+            var(--camo-medium) 0%,
+            var(--camo-accent) 100%);
+    border-radius: 3px;
+    animation: barGrow 0.5s ease-out forwards;
+    transform-origin: left;
+    transform: scaleX(0);
+}
+
+@keyframes barGrow {
+    from {
+        transform: scaleX(0);
+    }
+
+    to {
+        transform: scaleX(1);
+    }
+}
+
+.countBadges {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.badge {
+    display: flex;
+    align-items: center;
+    gap: 3px;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    font-weight: 600;
+}
+
+.badgeCritical {
+    background: rgba(220, 38, 38, 0.2);
+    color: var(--danger-red);
+}
+
+.totalCount {
+    display: flex;
+    align-items: center;
+    gap: 3px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text-secondary);
+}

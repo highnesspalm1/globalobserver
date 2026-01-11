@@ -1,0 +1,203 @@
+.mapContainer {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.map {
+  width: 100%;
+  height: 100%;
+}
+
+/* Tactical Grid Overlay */
+.gridOverlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgba(139, 163, 111, 0.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(139, 163, 111, 0.02) 1px, transparent 1px);
+  background-size: 100px 100px;
+  z-index: 1;
+}
+
+/* Coordinates Display */
+.coordinates {
+  position: absolute;
+  bottom: 230px;
+  left: 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-md);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  z-index: 10;
+  box-shadow: var(--shadow-md);
+}
+
+.coordLabel {
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.coordValue {
+  color: var(--camo-accent);
+  font-weight: 500;
+}
+
+/* Status Bar */
+.statusBar {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 16px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-md);
+  z-index: 10;
+  box-shadow: var(--shadow-md);
+}
+
+.statusText {
+  color: var(--danger-red);
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.eventCount {
+  color: var(--text-secondary);
+  font-size: 12px;
+  padding-left: 10px;
+  border-left: 1px solid var(--border-default);
+}
+
+/* Map Controls Override */
+.mapContainer :global(.maplibregl-ctrl-top-right) {
+  top: 80px;
+  right: 16px;
+}
+
+.mapContainer :global(.maplibregl-ctrl-bottom-right) {
+  bottom: 40px;
+}
+
+/* Loading State */
+.loadingOverlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(13, 15, 10, 0.8);
+  z-index: 100;
+}
+
+.loadingContent {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+.loadingSpinner {
+  width: 48px;
+  height: 48px;
+  border: 3px solid var(--border-default);
+  border-top-color: var(--camo-accent);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+.loadingText {
+  color: var(--text-secondary);
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Compass */
+.compass {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 60px;
+  height: 60px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-default);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  box-shadow: var(--shadow-md);
+}
+
+.compassNeedle {
+  color: var(--camo-accent);
+  transition: transform var(--transition-normal);
+}
+
+/* Location Picking Overlay */
+.pickingOverlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  z-index: 50;
+  cursor: crosshair;
+}
+
+.pickingCrosshair {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+
+  0%,
+  100% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+
+  50% {
+    opacity: 0.7;
+    transform: translate(-50%, -50%) scale(1.1);
+  }
+}
+
+.pickingHint {
+  position: absolute;
+  bottom: 100px;
+  padding: 10px 20px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--camo-accent);
+  border-radius: var(--radius-md);
+  color: var(--text-primary);
+  font-size: 13px;
+  font-weight: 500;
+  box-shadow: var(--shadow-lg);
+}
