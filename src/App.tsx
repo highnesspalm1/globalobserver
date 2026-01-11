@@ -9,9 +9,10 @@ import { QuickActions } from './components/map/QuickActions';
 import { useMapStore } from './stores/mapStore';
 import { useKeyboardShortcuts } from './hooks/useKeyboardShortcuts';
 import { notify } from './stores/notificationStore';
-import { fetchAllLiveEvents, getConflictZones } from './services/liveDataService';
+import { fetchLiveEventsProgressive, getConflictZones, DATA_SOURCES } from './services/liveDataService';
 import type { MapTerritory } from './types/database';
 import styles from './App.module.css';
+import { LoadingOverlay } from './components/loading/LoadingOverlay';
 
 // Lazy load heavy components
 const AdminPanel = lazy(() => import('./components/admin/AdminPanel').then(m => ({ default: m.AdminPanel })));
@@ -66,8 +67,9 @@ function conflictZonesToTerritories(): MapTerritory[] {
 const REFRESH_INTERVAL = 5 * 60 * 1000;
 
 function App() {
-  const { setEvents, setTerritories, isLoading, error, selectedEventId, setSelectedEventId } = useMapStore();
+  const { setEvents, setTerritories, isLoading, error, selectedEventId, setSelectedEventId, setLoadingProgress, resetLoadingProgress } = useMapStore();
   const events = useMapStore((state) => state.events);
+  const loadingProgress = useMapStore((state) => state.loadingProgress);
   const [showWelcome, setShowWelcome] = useState(() => {
     // Check if user has dismissed welcome screen before
     return localStorage.getItem('globalobserver-welcome-dismissed') !== 'true';
@@ -96,14 +98,28 @@ function App() {
     }
   };
 
-  // Load live data function
+  // Load live data function with progressive loading
   const loadLiveData = useCallback(async () => {
     useMapStore.getState().setIsLoading(true);
     useMapStore.getState().setError(null);
+    resetLoadingProgress();
 
     try {
-      // Fetch live events from all sources
-      const liveEvents = await fetchAllLiveEvents();
+      // Fetch live events progressively from all sources
+      const liveEvents = await fetchLiveEventsProgressive((progress) => {
+        // Update progress in store
+        setLoadingProgress({
+          current: progress.current,
+          total: progress.total,
+          currentSource: progress.currentSource,
+          loadedSources: progress.loadedSources,
+        });
+        
+        // Update events incrementally as they come in
+        if (progress.events.length > 0) {
+          setEvents(progress.events);
+        }
+      });
 
       if (liveEvents.length > 0) {
         setEvents(liveEvents);
@@ -125,7 +141,7 @@ function App() {
     } finally {
       useMapStore.getState().setIsLoading(false);
     }
-  }, [setEvents, setTerritories]);
+  }, [setEvents, setTerritories, setLoadingProgress, resetLoadingProgress]);
 
   // Load live data on mount
   useEffect(() => {
@@ -155,6 +171,9 @@ function App() {
   return (
     <div className={styles.app}>
       <div className={styles.backgroundPattern} />
+
+      {/* Loading Overlay */}
+      <LoadingOverlay />
 
       {/* Header Bar */}
       <Suspense fallback={null}>

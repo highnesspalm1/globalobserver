@@ -809,7 +809,7 @@ export async function fetchUSGSEarthquakes(): Promise<MapEvent[]> {
 }
 
 // Helper function to add timeout to fetch calls
-async function fetchWithTimeout<T>(fetchFn: () => Promise<T>, timeoutMs: number = 10000): Promise<T> {
+async function fetchWithTimeout<T>(fetchFn: () => Promise<T>, timeoutMs: number = 15000): Promise<T> {
     return Promise.race([
         fetchFn(),
         new Promise<T>((_, reject) => 
@@ -818,197 +818,130 @@ async function fetchWithTimeout<T>(fetchFn: () => Promise<T>, timeoutMs: number 
     ]);
 }
 
-// Fallback demo events when APIs fail
-function getFallbackEvents(): MapEvent[] {
-    const now = new Date();
-    return [
-        {
-            id: 'demo-1',
-            title: 'Iran protesters defy crackdown as videos show violent clashes',
-            description: 'Hundreds of protesters are believed to have been killed or injured, and many more detained.',
-            category: 'protest' as EventCategory,
-            severity: 'critical' as SeverityLevel,
-            coordinates: [51.39, 35.69], // Tehran
-            eventDate: now,
-            sourceUrl: null,
-            verified: true,
-            mediaUrls: [],
-            tags: ['iran', 'protest']
-        },
-        {
-            id: 'demo-2',
-            title: 'US military strikes Islamic State group targets in Syria, officials say',
-            description: 'US President Donald Trump ordered the "large-scale strikes" on Saturday, US Central Command said.',
-            category: 'air_raid' as EventCategory,
-            severity: 'high' as SeverityLevel,
-            coordinates: [38.99, 34.80], // Syria
-            eventDate: now,
-            sourceUrl: null,
-            verified: true,
-            mediaUrls: [],
-            tags: ['syria', 'us-military', 'isis']
-        },
-        {
-            id: 'demo-3',
-            title: 'Thousands march and dozens arrested in Minneapolis protests against ICE',
-            description: 'Days after the death of Renee Good, protests continue in Minneapolis and cities across the country.',
-            category: 'protest' as EventCategory,
-            severity: 'medium' as SeverityLevel,
-            coordinates: [-93.27, 44.98], // Minneapolis
-            eventDate: now,
-            sourceUrl: null,
-            verified: true,
-            mediaUrls: [],
-            tags: ['usa', 'protest', 'ice']
-        },
-        {
-            id: 'demo-4',
-            title: 'Last Kurdish forces leave Aleppo after ceasefire deal reached',
-            description: 'The deal was announced in the early hours of Sunday morning after a week of violent clashes.',
-            category: 'combat' as EventCategory,
-            severity: 'medium' as SeverityLevel,
-            coordinates: [37.16, 36.20], // Aleppo
-            eventDate: now,
-            sourceUrl: null,
-            verified: true,
-            mediaUrls: [],
-            tags: ['syria', 'kurdish', 'ceasefire']
-        },
-        {
-            id: 'demo-5',
-            title: 'US seizes fifth oil tanker linked to Venezuela, officials say',
-            description: 'The ship was intercepted in international waters carrying crude oil.',
-            category: 'naval' as EventCategory,
-            severity: 'low' as SeverityLevel,
-            coordinates: [-66.58, 10.48], // Venezuela coast
-            eventDate: now,
-            sourceUrl: null,
-            verified: true,
-            mediaUrls: [],
-            tags: ['venezuela', 'usa', 'sanctions']
-        },
-        {
-            id: 'demo-6',
-            title: 'Ongoing fighting in Kharkiv region as Russian forces advance',
-            description: 'Heavy artillery exchanges reported near front lines.',
-            category: 'shelling' as EventCategory,
-            severity: 'critical' as SeverityLevel,
-            coordinates: [36.25, 49.99], // Kharkiv
-            eventDate: now,
-            sourceUrl: null,
-            verified: true,
-            mediaUrls: [],
-            tags: ['ukraine', 'russia', 'kharkiv']
-        },
-        {
-            id: 'demo-7',
-            title: 'Israeli airstrikes hit Gaza targets amid escalating tensions',
-            description: 'Multiple strikes reported in northern Gaza Strip.',
-            category: 'air_raid' as EventCategory,
-            severity: 'critical' as SeverityLevel,
-            coordinates: [34.44, 31.50], // Gaza
-            eventDate: now,
-            sourceUrl: null,
-            verified: true,
-            mediaUrls: [],
-            tags: ['gaza', 'israel', 'airstrike']
-        },
-        {
-            id: 'demo-8',
-            title: 'Humanitarian crisis deepens in Sudan conflict zones',
-            description: 'Aid agencies warn of catastrophic food shortages.',
-            category: 'humanitarian' as EventCategory,
-            severity: 'high' as SeverityLevel,
-            coordinates: [32.53, 15.59], // Khartoum
-            eventDate: now,
-            sourceUrl: null,
-            verified: true,
-            mediaUrls: [],
-            tags: ['sudan', 'humanitarian']
-        },
-        {
-            id: 'demo-9',
-            title: 'Drone attack reported on military installation in Yemen',
-            description: 'Houthi rebels claim responsibility for the attack.',
-            category: 'drone' as EventCategory,
-            severity: 'medium' as SeverityLevel,
-            coordinates: [44.21, 15.37], // Yemen
-            eventDate: now,
-            sourceUrl: null,
-            verified: false,
-            mediaUrls: [],
-            tags: ['yemen', 'houthi', 'drone']
-        },
-        {
-            id: 'demo-10',
-            title: 'Political tensions rise in Myanmar after military coup anniversary',
-            description: 'Pro-democracy protests reported in major cities.',
-            category: 'political' as EventCategory,
-            severity: 'medium' as SeverityLevel,
-            coordinates: [96.17, 16.87], // Yangon
-            eventDate: now,
-            sourceUrl: null,
-            verified: true,
-            mediaUrls: [],
-            tags: ['myanmar', 'politics']
-        }
-    ];
+// Data source definitions
+export interface DataSource {
+    id: string;
+    name: string;
+    fetch: () => Promise<MapEvent[]>;
 }
 
-// Main function to fetch all live events
+export const DATA_SOURCES: DataSource[] = [
+    { id: 'gdelt', name: 'GDELT Geopolitical', fetch: fetchGDELTEvents },
+    { id: 'reliefweb', name: 'ReliefWeb Humanitarian', fetch: fetchReliefWebEvents },
+    { id: 'rss', name: 'RSS News Feeds', fetch: fetchRSSEvents },
+    { id: 'nasa', name: 'NASA Natural Events', fetch: fetchNASAEONETEvents },
+    { id: 'usgs', name: 'USGS Earthquakes', fetch: fetchUSGSEarthquakes },
+];
+
+// Progress callback type
+export type ProgressCallback = (progress: {
+    current: number;
+    total: number;
+    currentSource: string;
+    loadedSources: string[];
+    events: MapEvent[];
+}) => void;
+
+// Progressive fetch - loads sources one by one and calls back with progress
+export async function fetchLiveEventsProgressive(onProgress: ProgressCallback): Promise<MapEvent[]> {
+    console.log('🌍 Fetching live events progressively...');
+    
+    const allEvents: MapEvent[] = [];
+    const loadedSources: string[] = [];
+    const total = DATA_SOURCES.length;
+    
+    for (let i = 0; i < DATA_SOURCES.length; i++) {
+        const source = DATA_SOURCES[i];
+        
+        // Update progress - starting to load this source
+        onProgress({
+            current: i,
+            total,
+            currentSource: source.name,
+            loadedSources: [...loadedSources],
+            events: [...allEvents],
+        });
+        
+        try {
+            console.log(`📡 Loading ${source.name}...`);
+            const events = await fetchWithTimeout(source.fetch, 20000);
+            
+            if (events.length > 0) {
+                allEvents.push(...events);
+                console.log(`✅ ${source.name}: ${events.length} events`);
+            } else {
+                console.log(`⚠️ ${source.name}: No events`);
+            }
+            
+            loadedSources.push(source.name);
+            
+        } catch (error) {
+            console.warn(`❌ ${source.name} failed:`, error);
+            loadedSources.push(`${source.name} (Fehler)`);
+        }
+        
+        // Update progress - finished this source
+        onProgress({
+            current: i + 1,
+            total,
+            currentSource: i < DATA_SOURCES.length - 1 ? DATA_SOURCES[i + 1].name : 'Fertig',
+            loadedSources: [...loadedSources],
+            events: [...allEvents],
+        });
+    }
+    
+    // Remove duplicates
+    const uniqueEvents = allEvents.filter((event, index, self) =>
+        index === self.findIndex(e =>
+            e.title.substring(0, 30) === event.title.substring(0, 30) ||
+            (Math.abs(e.coordinates[0] - event.coordinates[0]) < 0.1 &&
+                Math.abs(e.coordinates[1] - event.coordinates[1]) < 0.1 &&
+                e.title.substring(0, 20) === event.title.substring(0, 20))
+        )
+    );
+    
+    console.log(`✅ Total: ${uniqueEvents.length} unique events from ${loadedSources.length} sources`);
+    
+    return uniqueEvents;
+}
+
+// Main function to fetch all live events (parallel version - kept for compatibility)
 export async function fetchAllLiveEvents(): Promise<MapEvent[]> {
     console.log('🌍 Fetching live events from all sources...');
 
     try {
-        // Try to fetch with timeout
-        const results = await fetchWithTimeout(async () => {
-            const [gdeltEvents, reliefWebEvents, rssEvents, eonetEvents, earthquakeEvents] = await Promise.all([
-                fetchGDELTEvents().catch(() => []),
-                fetchReliefWebEvents().catch(() => []),
-                fetchRSSEvents().catch(() => []),
-                fetchNASAEONETEvents().catch(() => []),
-                fetchUSGSEarthquakes().catch(() => [])
-            ]);
-            return { gdeltEvents, reliefWebEvents, rssEvents, eonetEvents, earthquakeEvents };
-        }, 15000); // 15 second timeout
+        const [gdeltEvents, reliefWebEvents, rssEvents, eonetEvents, earthquakeEvents] = await Promise.all([
+            fetchWithTimeout(fetchGDELTEvents, 20000).catch(() => []),
+            fetchWithTimeout(fetchReliefWebEvents, 20000).catch(() => []),
+            fetchWithTimeout(fetchRSSEvents, 20000).catch(() => []),
+            fetchWithTimeout(fetchNASAEONETEvents, 20000).catch(() => []),
+            fetchWithTimeout(fetchUSGSEarthquakes, 20000).catch(() => [])
+        ]);
 
         const allEvents = [
-            ...results.gdeltEvents, 
-            ...results.reliefWebEvents, 
-            ...results.rssEvents, 
-            ...results.eonetEvents, 
-            ...results.earthquakeEvents
+            ...gdeltEvents, 
+            ...reliefWebEvents, 
+            ...rssEvents, 
+            ...eonetEvents, 
+            ...earthquakeEvents
         ];
 
-        // If we got some events, use them
-        if (allEvents.length > 0) {
-            // Remove duplicates based on similar titles and proximity
-            const uniqueEvents = allEvents.filter((event, index, self) =>
-                index === self.findIndex(e =>
-                    e.title.substring(0, 30) === event.title.substring(0, 30) ||
-                    (Math.abs(e.coordinates[0] - event.coordinates[0]) < 0.1 &&
-                        Math.abs(e.coordinates[1] - event.coordinates[1]) < 0.1 &&
-                        e.title.substring(0, 20) === event.title.substring(0, 20))
-                )
-            );
+        // Remove duplicates
+        const uniqueEvents = allEvents.filter((event, index, self) =>
+            index === self.findIndex(e =>
+                e.title.substring(0, 30) === event.title.substring(0, 30) ||
+                (Math.abs(e.coordinates[0] - event.coordinates[0]) < 0.1 &&
+                    Math.abs(e.coordinates[1] - event.coordinates[1]) < 0.1 &&
+                    e.title.substring(0, 20) === event.title.substring(0, 20))
+            )
+        );
 
-            console.log(`✅ Fetched ${uniqueEvents.length} unique events:`);
-            console.log(`   - GDELT: ${results.gdeltEvents.length}`);
-            console.log(`   - ReliefWeb: ${results.reliefWebEvents.length}`);
-            console.log(`   - RSS: ${results.rssEvents.length}`);
-            console.log(`   - NASA EONET: ${results.eonetEvents.length}`);
-            console.log(`   - USGS Earthquakes: ${results.earthquakeEvents.length}`);
-
-            return uniqueEvents;
-        }
-
-        // If no events from APIs, use fallback
-        console.log('⚠️ No events from APIs, using fallback data');
-        return getFallbackEvents();
+        console.log(`✅ Fetched ${uniqueEvents.length} unique events`);
+        return uniqueEvents;
 
     } catch (error) {
-        console.error('❌ Error fetching live events, using fallback data:', error);
-        return getFallbackEvents();
+        console.error('❌ Error fetching live events:', error);
+        return [];
     }
 }
 

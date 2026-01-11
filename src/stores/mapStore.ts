@@ -105,6 +105,21 @@ interface MapState {
   setIsLoading: (loading: boolean) => void;
   error: string | null;
   setError: (error: string | null) => void;
+  
+  // Loading Progress
+  loadingProgress: {
+    current: number;
+    total: number;
+    currentSource: string;
+    loadedSources: string[];
+  };
+  setLoadingProgress: (progress: Partial<{
+    current: number;
+    total: number;
+    currentSource: string;
+    loadedSources: string[];
+  }>) => void;
+  resetLoadingProgress: () => void;
 }
 
 const DEFAULT_FILTERS: MapFilters = {
@@ -246,6 +261,27 @@ export const useMapStore = create<MapState>()(
     setIsLoading: (loading) => set({ isLoading: loading }),
     error: null,
     setError: (error) => set({ error }),
+    
+    // Loading Progress
+    loadingProgress: {
+      current: 0,
+      total: 5,
+      currentSource: '',
+      loadedSources: [],
+    },
+    setLoadingProgress: (progress) =>
+      set((state) => ({
+        loadingProgress: { ...state.loadingProgress, ...progress },
+      })),
+    resetLoadingProgress: () =>
+      set({
+        loadingProgress: {
+          current: 0,
+          total: 5,
+          currentSource: '',
+          loadedSources: [],
+        },
+      }),
   }))
 );
 
