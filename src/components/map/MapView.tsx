@@ -216,7 +216,7 @@ export const MapView: React.FC = () => {
       });
     }
 
-    // Cluster circles
+    // Cluster circles - Larger and more visible
     if (!map.current.getLayer('clusters')) {
       map.current.addLayer({
         id: 'clusters',
@@ -227,22 +227,26 @@ export const MapView: React.FC = () => {
           'circle-color': [
             'step',
             ['get', 'point_count'],
-            'rgba(143, 163, 111, 0.8)',
-            10, 'rgba(215, 151, 6, 0.8)',
-            30, 'rgba(220, 38, 38, 0.8)',
+            'rgba(143, 163, 111, 0.9)',
+            10, 'rgba(215, 151, 6, 0.9)',
+            30, 'rgba(234, 88, 12, 0.9)',
+            50, 'rgba(220, 38, 38, 0.9)',
           ],
           'circle-radius': [
-            'step',
-            ['get', 'point_count'],
-            18, 10, 24, 30, 32,
+            'interpolate',
+            ['linear'],
+            ['zoom'],
+            2, ['step', ['get', 'point_count'], 16, 10, 20, 30, 26, 50, 32],
+            6, ['step', ['get', 'point_count'], 22, 10, 28, 30, 36, 50, 44],
+            10, ['step', ['get', 'point_count'], 28, 10, 36, 30, 46, 50, 56],
           ],
-          'circle-stroke-width': 2,
-          'circle-stroke-color': 'rgba(255, 255, 255, 0.3)',
+          'circle-stroke-width': 3,
+          'circle-stroke-color': 'rgba(255, 255, 255, 0.5)',
         },
       });
     }
 
-    // Cluster count
+    // Cluster count - Larger text
     if (!map.current.getLayer('cluster-count')) {
       map.current.addLayer({
         id: 'cluster-count',
@@ -252,15 +256,24 @@ export const MapView: React.FC = () => {
         layout: {
           'text-field': '{point_count_abbreviated}',
           'text-font': ['Open Sans Bold'],
-          'text-size': 12,
+          'text-size': [
+            'interpolate',
+            ['linear'],
+            ['zoom'],
+            2, 11,
+            6, 14,
+            10, 16,
+          ],
         },
         paint: {
           'text-color': '#ffffff',
+          'text-halo-color': 'rgba(0, 0, 0, 0.5)',
+          'text-halo-width': 1,
         },
       });
     }
 
-    // Unclustered points
+    // Unclustered points - Larger, more visible markers
     if (!map.current.getLayer('unclustered-point')) {
       map.current.addLayer({
         id: 'unclustered-point',
@@ -280,24 +293,36 @@ export const MapView: React.FC = () => {
             'political', CATEGORY_CONFIG.political.color,
             'humanitarian', CATEGORY_CONFIG.humanitarian.color,
             'infrastructure', CATEGORY_CONFIG.infrastructure.color,
+            'protest', '#f59e0b',
+            'terrorism', '#ef4444',
+            'explosion', '#dc2626',
+            'weapons', '#7c3aed',
+            'earthquake', '#854d0e',
+            'natural_disaster', '#0891b2',
             '#888888',
           ],
           'circle-radius': [
-            'match',
-            ['get', 'severity'],
-            'critical', 10,
-            'high', 8,
-            'medium', 6,
-            'low', 5,
-            6,
+            'interpolate',
+            ['linear'],
+            ['zoom'],
+            2, ['match', ['get', 'severity'], 'critical', 8, 'high', 6, 'medium', 5, 'low', 4, 5],
+            6, ['match', ['get', 'severity'], 'critical', 12, 'high', 10, 'medium', 8, 'low', 6, 8],
+            10, ['match', ['get', 'severity'], 'critical', 16, 'high', 14, 'medium', 12, 'low', 10, 12],
           ],
-          'circle-stroke-width': 2,
+          'circle-stroke-width': [
+            'interpolate',
+            ['linear'],
+            ['zoom'],
+            2, 2,
+            10, 3,
+          ],
           'circle-stroke-color': [
             'case',
             ['get', 'verified'],
-            'rgba(255, 255, 255, 0.8)',
-            'rgba(255, 255, 255, 0.3)',
+            'rgba(255, 255, 255, 0.9)',
+            'rgba(255, 255, 255, 0.4)',
           ],
+          'circle-opacity': 0.9,
         },
       });
     }

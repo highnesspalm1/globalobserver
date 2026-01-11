@@ -221,15 +221,99 @@
 }
 
 /* Responsive */
-@media (max-width: 600px) {
+@media (max-width: 768px) {
   .container {
-    width: calc(100% - 40px);
-    left: 20px;
-    right: 20px;
-    transform: none;
+    bottom: 60px;
+    padding: 6px 10px;
+    gap: 8px;
   }
 
   .sliderContainer {
-    width: 120px;
+    width: 140px;
+  }
+
+  .toggleButton {
+    bottom: 70px;
+    padding: 8px 14px;
+    min-height: 44px;
+  }
+}
+
+@media (max-width: 600px) {
+  .container {
+    width: calc(100% - 20px);
+    left: 10px;
+    right: 10px;
+    transform: none;
+    bottom: 55px;
+  }
+
+  .sliderContainer {
+    flex: 1;
+    width: auto;
+  }
+
+  .dateDisplay {
+    min-width: 70px;
+  }
+
+  .fullDate {
+    font-size: 11px;
+  }
+
+  .controlGroup {
+    gap: 0;
+  }
+
+  .speedButton,
+  .todayButton {
+    padding: 4px 6px;
+    min-width: 32px;
+    min-height: 32px;
+    justify-content: center;
+  }
+
+  .speedButton span,
+  .todayButton span:not(:first-child) {
+    display: none;
+  }
+}
+
+@media (max-width: 400px) {
+  .container {
+    padding: 6px 8px;
+    gap: 6px;
+  }
+
+  .dateDisplay {
+    display: none;
+  }
+
+  .controls {
+    gap: 2px;
+  }
+}
+
+/* Touch-friendly adjustments */
+@media (hover: none) and (pointer: coarse) {
+  .sliderInput::-webkit-slider-thumb {
+    width: 20px;
+    height: 20px;
+  }
+
+  .sliderInput::-moz-range-thumb {
+    width: 20px;
+    height: 20px;
+  }
+
+  .speedButton,
+  .todayButton {
+    min-width: 44px;
+    min-height: 44px;
+  }
+
+  .toggleButton {
+    min-height: 48px;
+    padding: 10px 16px;
   }
 }

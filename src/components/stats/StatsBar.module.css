@@ -174,29 +174,33 @@
 
 @media (max-width: 768px) {
   .statsBar {
-    top: auto;
-    bottom: 80px;
-    left: 16px;
-    right: 16px;
+    top: 54px;
+    bottom: auto;
+    left: 10px;
+    right: 10px;
     transform: none;
     justify-content: space-around;
-    padding: 10px 16px;
-    gap: 8px;
-    flex-wrap: wrap;
+    padding: 8px 12px;
+    gap: 6px;
+    flex-wrap: nowrap;
   }
 
   .liveIndicator {
-    display: none;
+    padding-right: 6px;
+  }
+
+  .liveText {
+    font-size: 9px;
   }
 
   .statIcon {
-    width: 28px;
-    height: 28px;
+    width: 26px;
+    height: 26px;
   }
 
   .statValue,
   .animatedValue {
-    font-size: 14px;
+    font-size: 13px;
   }
 
   .statLabel {
@@ -204,10 +208,38 @@
   }
 
   .divider {
-    display: none;
+    height: 16px;
   }
 
   .statContent {
     min-width: auto;
+  }
+}
+
+@media (max-width: 480px) {
+  .statsBar {
+    top: 50px;
+    left: 5px;
+    right: 5px;
+    padding: 6px 8px;
+    gap: 4px;
+  }
+
+  .liveIndicator {
+    display: none;
+  }
+
+  .statIcon {
+    width: 22px;
+    height: 22px;
+  }
+
+  .statValue,
+  .animatedValue {
+    font-size: 12px;
+  }
+
+  .divider {
+    display: none;
   }
 }

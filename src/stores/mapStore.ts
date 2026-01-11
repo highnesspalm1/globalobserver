@@ -119,6 +119,38 @@ const DEFAULT_FILTERS: MapFilters = {
   },
 };
 
+// Load saved preferences from localStorage
+function loadSavedPreferences() {
+  try {
+    const saved = localStorage.getItem('globalobserver-preferences');
+    if (saved) {
+      return JSON.parse(saved);
+    }
+  } catch (e) {
+    console.error('Error loading preferences:', e);
+  }
+  return null;
+}
+
+// Save preferences to localStorage
+function savePreferences(prefs: {
+  mapStyle?: string;
+  showEvents?: boolean;
+  showTerritories?: boolean;
+  showHeatmap?: boolean;
+  show3D?: boolean;
+  sidebarOpen?: boolean;
+}) {
+  try {
+    const existing = loadSavedPreferences() || {};
+    localStorage.setItem('globalobserver-preferences', JSON.stringify({ ...existing, ...prefs }));
+  } catch (e) {
+    console.error('Error saving preferences:', e);
+  }
+}
+
+const savedPrefs = loadSavedPreferences();
+
 // Default to world view (centered globally)
 const DEFAULT_VIEW_STATE: ViewState = {
   longitude: 20,
@@ -225,21 +257,36 @@ export const useMapStore = create<MapState>()(
     pickedLocation: null,
     setPickedLocation: (location) => set({ pickedLocation: location }),
 
-    // Layer Visibility
-    showEvents: true,
-    setShowEvents: (show) => set({ showEvents: show }),
-    showTerritories: true,
-    setShowTerritories: (show) => set({ showTerritories: show }),
+    // Layer Visibility - Load from saved preferences
+    showEvents: savedPrefs?.showEvents ?? true,
+    setShowEvents: (show) => {
+      savePreferences({ showEvents: show });
+      set({ showEvents: show });
+    },
+    showTerritories: savedPrefs?.showTerritories ?? true,
+    setShowTerritories: (show) => {
+      savePreferences({ showTerritories: show });
+      set({ showTerritories: show });
+    },
     showFrontlines: true,
     setShowFrontlines: (show) => set({ showFrontlines: show }),
-    showHeatmap: false,
-    setShowHeatmap: (show) => set({ showHeatmap: show }),
-    show3D: false,
-    setShow3D: (show) => set({ show3D: show }),
+    showHeatmap: savedPrefs?.showHeatmap ?? false,
+    setShowHeatmap: (show) => {
+      savePreferences({ showHeatmap: show });
+      set({ showHeatmap: show });
+    },
+    show3D: savedPrefs?.show3D ?? false,
+    setShow3D: (show) => {
+      savePreferences({ show3D: show });
+      set({ show3D: show });
+    },
 
-    // Map Style
-    mapStyle: 'dark',
-    setMapStyle: (style) => set({ mapStyle: style }),
+    // Map Style - Load from saved preferences
+    mapStyle: savedPrefs?.mapStyle ?? 'dark',
+    setMapStyle: (style) => {
+      savePreferences({ mapStyle: style });
+      set({ mapStyle: style });
+    },
 
     // Loading State
     isLoading: false,

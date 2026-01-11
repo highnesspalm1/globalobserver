@@ -171,3 +171,44 @@
     display: none;
   }
 }
+
+/* Mobile Responsive - Tablet */
+@media (max-width: 1024px) {
+  .mapWrapper {
+    top: 48px;
+    bottom: 24px;
+  }
+
+  .dashboardPanel {
+    display: none;
+  }
+}
+
+/* Mobile Responsive - Phone */
+@media (max-width: 768px) {
+  .mapWrapper {
+    top: 44px;
+    bottom: 0;
+  }
+
+  .loadingOverlay {
+    padding: 20px;
+  }
+
+  .loadingSpinner {
+    width: 36px;
+    height: 36px;
+  }
+
+  .loadingText {
+    font-size: 12px;
+  }
+}
+
+/* Touch-friendly adjustments */
+@media (hover: none) and (pointer: coarse) {
+  .mapWrapper {
+    /* More space for touch controls */
+    bottom: 60px;
+  }
+}

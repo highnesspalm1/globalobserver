@@ -332,3 +332,83 @@
         display: none;
     }
 }
+
+@media (max-width: 768px) {
+    .header {
+        height: 48px;
+        padding: 0 12px;
+    }
+
+    .logoWrapper {
+        width: 36px;
+        height: 36px;
+    }
+
+    .title {
+        font-size: 12px;
+        letter-spacing: 1px;
+    }
+
+    .liveIndicator {
+        padding: 4px 8px;
+    }
+
+    .liveText {
+        display: none;
+    }
+
+    .centerSection {
+        gap: 12px;
+    }
+
+    .rightSection {
+        gap: 8px;
+    }
+
+    .refreshButton {
+        padding: 8px 10px;
+    }
+
+    .refreshText {
+        display: none;
+    }
+
+    .connectionStatus {
+        padding: 6px 8px;
+    }
+
+    .connectionStatus span {
+        display: none;
+    }
+}
+
+@media (max-width: 480px) {
+    .header {
+        height: 44px;
+        padding: 0 8px;
+    }
+
+    .titleWrapper {
+        display: none;
+    }
+
+    .centerSection {
+        gap: 8px;
+    }
+
+    .rightSection {
+        gap: 6px;
+    }
+}
+
+/* Touch-friendly targets */
+@media (hover: none) and (pointer: coarse) {
+    .refreshButton {
+        min-width: 44px;
+        min-height: 44px;
+    }
+
+    .connectionStatus {
+        min-height: 44px;
+    }
+}
